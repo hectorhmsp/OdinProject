@@ -51,6 +51,63 @@
 			background-color: rgb(91, 97, 102);
 		}
 
+		.random-info-text {
+			text-align: center;
+			font-size: 36px;
+			font-weight: bolder;
+			color: #1F2937;
+		}
+
+		.random-info-imgs,
+		.random-info-bellow {
+			display: flex;
+			justify-content: space-between;
+			width: 800px;
+			align-items: center;
+			margin-left: 350px;
+		}
+
+		.box-one {
+			width: 150px;
+			height: 150px;
+			border: solid 4px #3882F6;
+			border-radius: 10px;
+		}
+
+		.text-bellow {
+			margin-top: 10px;
+			color: gray;
+			font-size: 18px;
+			width: 156px;
+			text-align: center;
+		}
+
+		.quote-text {
+			font-size: 36px;
+			text-align: justify;
+			width: 23em;
+			font-weight: 100;
+			font-style: italic;
+			margin-left: 333px;
+			margin-top: 100px;
+			display: inline-block;
+			margin-bottom: 0;
+		}
+
+		.quote-author {
+			color: #1F2937;
+			font-size: 30px;
+			margin-left: 840px;
+		}
+
+		.call-div {
+			border: solid 1px lightblue;
+			display: inline-block;
+			margin-left: 280px;
+			margin-top: 100px;
+			width: 800px;
+		}
+
 		h1 {
 			margin-left: 200px;
 			margin-top: 100px;
@@ -88,12 +145,11 @@
 		}
 
 		.random-info {
-			background-color: lightpink;
 			height: 500px;
 		}
 
 		.quote {
-			background-color: lightblue;
+			background-color: #E5E7EB;
 			height: 435px;
 		}
 
@@ -141,13 +197,36 @@
 		</div>
 
 		<div class="random-info">
-			<p>hello worlds</p>
+			<p class="random-info-text">Some random information.</p>
+			<div class="random-info-imgs">
+				<div class="box-one"></div>
+				<div class="box-one"></div>
+				<div class="box-one"></div>
+				<div class="box-one"></div>
+			</div>
+			<div class="random-info-bellow">
+				<div class="text-bellow">this is some subtext under an illustration or image</div>
+				<div class="text-bellow">this is some subtext under an illustration or image</div>
+				<div class="text-bellow">this is some subtext under an illustration or image</div>
+				<div class="text-bellow">this is some subtext under an illustration or image</div>
+			</div>
 		</div>
 
 		<div class="quote">
+			<p class="quote-text">This is an inspiring quote, or a testimonial from a customer.
+					Maybe it's just filling up space, or maybe people will actually read it.
+					 Who knows? All I know is that it looks nice.
+			</p>
+
+			<p class="quote-author">- Thor, God of Thunder</p>
 		</div>
 
 		<div class="call-to-action">	
+			<div class="call-div">
+				<p>Call to action! It's time!</p>
+				<p>Sign up for our product by clicking that button right over there!</p>
+				<button class="button-call">Sign up</button>
+			</div>
 		</div>
 
 		<div class="footer">
