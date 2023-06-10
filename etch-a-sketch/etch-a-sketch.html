@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+			<link rel="stylesheet" href="etch-a-sketch.css" />
+    </head>
+		<body>
+
+			<div class="grid-container js-grid">
+
+			</div>
+
+			<script>
+
+				let userInput = prompt('How many squares per side?');
+
+				const jsGrid = document.querySelector('.js-grid');
+
+				function createGrids (number) {
+					return ('<div class="grid-item"></div>').repeat(number*number)
+				}
+
+				jsGrid.style.gridTemplateRows = `repeat(${userInput}, 1fr)`;
+  			jsGrid.style.gridTemplateColumns = `repeat(${userInput}, 1fr)`;
+
+				jsGrid.innerHTML = createGrids(userInput);
+				
+			</script>
+			
+		</body>
+</html>
+
+
+<!-- <script src="etch-a-sketch.js"></script> -->
