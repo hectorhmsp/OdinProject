@@ -1,22 +1,106 @@
 body {
-    background-color:rgb(173, 196, 201);
+    background-color: rgb(170, 217, 238);
 }
 
 .grid-container {
     display: grid;
-    border: solid 1px rgb(237, 223, 223);
-    border-radius: 2px;
+    background-color: white;
+    border: solid 50px #FF5E5B; 
+    border-radius: 40px;
     width: 500px;
     height: 500px;
     position: absolute;
-    top: 25px;
+    top: 75px;
     left: 500px;
 }
 
 .grid-item {
     display: grid;
-    border: solid 1px rgb(139, 142, 177);
-    border-radius: 2px;
+    border: none;
     height: auto;
     width: auto;
+}
+
+h1 {
+    margin-left: 85px;
+    margin-top: 70px;
+    border: solid 2px rgb(81, 182, 245);
+    border-radius: 10px;
+    display: inline-block;
+    padding: 10px 10px 10px 10px;
+    background-color: rgb(144, 199, 233);
+    color: white;
+}
+
+#sizeValue, 
+#sizeSlider,
+#color-picker {
+    margin-left: 130px;
+}
+
+#sizeValue {
+    margin-top: 75px;
+    margin-left: 170px;
+}
+
+#sizeSlider {
+    margin-bottom: 10px;
+}
+
+.color-div {
+    margin-top: 25px;
+    margin-left: 40px;
+    margin-bottom: 0;
+}
+
+.choose-color {
+    margin-left: 95px;
+    margin-top: 5px;
+}
+
+.clear-button {
+    padding: 10px 40px;
+    font-size: 15px;
+    width: 150px;
+    background-color: rgb(144, 199, 233);
+    border: solid 2px rgb(81, 182, 245);
+    border-radius: 10px;
+    position: absolute;
+    left: 128px;
+}
+
+.toggle-grid-button {
+    background-color: rgb(144, 199, 233);
+    width: 150px;
+    padding: 10px 10px;
+    border: solid 2px rgb(81, 182, 245);
+    border-radius: 10px;
+    white-space: nowrap;
+    font-size: 15px;
+    position: absolute;
+    top: 420px;
+    left: 128px;
+}
+
+.toggle-eraser {
+    padding: 10px 20px;
+    font-size: 15px;
+    width: 150px;
+    background-color: rgb(144, 199, 233);
+    border: solid 2px rgb(81, 182, 245);
+    border-radius: 10px;
+    position: absolute;
+    white-space: nowrap;
+    left: 128px;
+    top: 468px;
+}
+
+.clear-button:hover,
+.toggle-grid-button:hover,
+.toggle-eraser:hover {
+    background-color: rgb(158, 218, 255);
+}
+
+.clear-button:active {
+    background-color: rgb(126, 188, 226);
 }
