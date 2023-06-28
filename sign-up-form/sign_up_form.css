@@ -1,0 +1,155 @@
+body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: rgb(58,53,127);
+  color: white;
+}
+
+input, label {
+  display: block;
+  font-size: 18px;
+}
+
+form {
+  width: 940px;
+  margin-left: 492px;
+  margin-top: 245px;
+  height: 300px;
+  background-color: white;
+  padding-top: 1px;
+  color: black;
+}
+
+label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+input {
+  border: solid 1px lightgray;
+  border-radius: 4px;
+}
+
+img {
+  display: block;
+  object-fit: cover;
+  width: 500px;
+  height: 757px;
+}
+
+.logo-section {
+  position:absolute;
+  top:0px;
+  right:0px;
+  bottom:0px;
+  left:0px;
+  width: 500px;
+}
+
+.logo {
+  position:absolute;
+  top:125px;
+  right:0px;
+  bottom:0px;
+  left:0px;
+  width: 500px;
+  height: 120px;
+  background-color: black;
+  opacity: 0.4;
+  text-align: center;
+}
+
+.logo-text {
+  font-size: 40px;
+  position: absolute;
+  color: black;
+  display: inline-block;
+  margin: 0;
+  margin-top: 32px;
+  top: 125px;
+  left: 145px;
+}
+
+.create-account {
+  margin-left: 550px;
+  margin-top: 30px;
+  background-color: rgb(129, 97, 183);
+  width: 200px;
+  height: 50px;
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  border: solid 0.5px white;
+  transition: opacity 0.15s;
+}
+
+.create-account:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.create-account:active {
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.started-text {
+  position: absolute;
+  left: 550px;
+  top: 75px;
+  max-width: 500px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-left: 35px;
+  margin-top: 20px;
+  width: 550px;
+}
+
+.first {
+  margin-top: 75px;
+}
+
+.already-have {
+  margin-left: 550px;
+  margin-top: 20px;
+  font-weight: 700;
+}
+
+.log {
+  color: rgb(159, 135, 201);
+  font-weight: 700;
+  transition: opacity 0.15s;
+}
+
+.log:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.log:active {
+  opacity: 0.4;
+  cursor: pointer;
+}
+
+.icon {
+  display: block;
+  position: absolute;
+  top: 155px;
+  left: 55px;
+  width: 60px;
+  height: 60px;
+  display: inline-block;     
+}
+
+.lets-text {
+  position: absolute;
+  left: 555px;
+  top: 255px;
+  font-size: 20px;
+  font-weight: 700;
+}
