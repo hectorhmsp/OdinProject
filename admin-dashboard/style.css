@@ -172,6 +172,7 @@ input {
 .notif:hover {
 	cursor: pointer;
 	-webkit-transform: scale(1.07);
+					transform: scale(1.07);
 }
 
 .profile {
@@ -381,23 +382,28 @@ button:active {
 .hash-trs:hover {
     cursor: pointer;
     -webkit-transform: scale(1.03);
+						transform: scale(1.03);
 }
 
 .sidebar-link:hover {
 	-webkit-transform: scale(1.07);
+					transform: scale(1.07);
 }
 
 .user-big:hover {
 	-webkit-transform: scale(1.07);
+					transform: scale(1.07);
 	cursor: pointer;
 }
 
 .user:hover {
 	-webkit-transform: scale(1.07);
+					transform: scale(1.07);
 	cursor: pointer;
 }
 
 .hector:hover {
 	-webkit-transform: scale(1.07);
+					transform: scale(1.07);
 	cursor: pointer;
 }
