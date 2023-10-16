@@ -5,15 +5,20 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Library jS</title>
 	<link rel="stylesheet" href="style.css">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+
 </head>
 <body>
-	<div class="js-books-container">
+	<div class="js-form">
 	    <div class="modal" id="addBookModal">
 	      <form class="add-book-form" id="addBookForm">
-	        <h3>Add new book</h3>
+	        <h1>Add new book</h1>
 	        <input class="input" type="text" id="title" placeholder="Title" required maxlength="100" />
 	        <input class="input" type="text" id="author" placeholder="Author" required maxlength="100" />
-	        <input class="input" type="text" id="pages" placeholder="Pages" required maxlength="100" />
+	        <input class="input" type="number" id="pages" placeholder="Pages" required maxlength="100" />
 			<select name="status" id="status" class="u-full-width">
 		      <option value="Read">Read</option>
 		      <option value="Not read">Not read</option>
@@ -22,6 +27,8 @@
 	      </form>
 	    </div>
 	</div>
+
+	<div class="js-book-container"></div>
 
 
 
