@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Library jS</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div class="js-books-container">
+	    <div class="modal" id="addBookModal">
+	      <form class="add-book-form" id="addBookForm">
+	        <h3>Add new book</h3>
+	        <input class="input" type="text" id="title" placeholder="Title" required maxlength="100" />
+	        <input class="input" type="text" id="author" placeholder="Author" required maxlength="100" />
+	        <input class="input" type="text" id="pages" placeholder="Pages" required maxlength="100" />
+			<select name="status" id="status" class="u-full-width">
+		      <option value="Read">Read</option>
+		      <option value="Not read">Not read</option>
+		    </select>	        
+	        <button class="submit-button">Submit</button>
+	      </form>
+	    </div>
+	</div>
+
+
+
+	<script src="library.js"></script>
+</body>
+</html>
