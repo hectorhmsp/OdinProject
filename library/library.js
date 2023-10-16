@@ -1,12 +1,13 @@
 // TAREFAS: 
-//  > add 'read/not read' nas opções do formulário, após pages
-//  > fazer com que "Pages" só aceite tipo integer
+//  
+//  
 
  
 
 const statusSelect = document.getElementById('status');
-const jsBook = document.querySelector('.js-books-container');
+const jsForm = document.querySelector('.js-form');
 const addBookForm = document.getElementById('addBookForm'); 
+const jsBookCont = document.querySelector('.js-book-container')
 
 const bookContainerDiv = document.createElement('div');
 bookContainerDiv.className = 'book-container';
@@ -25,7 +26,7 @@ addBookForm.addEventListener('submit', function (e) {
     const pagesValue = document.getElementById('pages').value;
     const statusValue = statusSelect.value;
 
-
+    const selfBook = document.createElement('div');
 
     const newBookDiv = document.createElement('div');
     newBookDiv.className = 'book';
@@ -45,6 +46,10 @@ addBookForm.addEventListener('submit', function (e) {
     const removeButton = document.createElement('button');
     removeButton.className = 'remove-button';
     removeButton.textContent = `Remove`;
+
+    removeButton.addEventListener('click', function () {
+        bookContainerDiv.removeChild(selfBook);
+    });
 
     const isReadButton = document.createElement('button');
     isReadButton.className = 'is-read-button';
@@ -72,8 +77,9 @@ addBookForm.addEventListener('submit', function (e) {
     newBookDiv.appendChild(isReadButton);
     newBookDiv.appendChild(removeButton);
 
-    jsBook.appendChild(bookContainerDiv);
-    bookContainerDiv.appendChild(newBookDiv);
+    jsBookCont.appendChild(bookContainerDiv);
+    bookContainerDiv.appendChild(selfBook);
+    selfBook.appendChild(newBookDiv);
 
     addBookForm.reset();
 });
