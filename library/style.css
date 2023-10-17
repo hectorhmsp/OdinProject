@@ -73,3 +73,11 @@ body {
     border: solid 2px black;
     border-radius: 7px;
 }
+
+.result {
+	justify-content: center;  
+	align-items: center;  
+	display: flex;
+	font-size: 20px;
+}
+
