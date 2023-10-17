@@ -1,8 +1,24 @@
 // TAREFAS: 
-//  
-//  
+//  > salvar os status dos livros, assim como os proprios livros, no navegador
+//  > estilos (botões, p. ex.)
+//  >
 
- 
+let result = '';
+
+let books = JSON.parse(localStorage.getItem('books')) || {
+        bksRead:0,
+        bksNotRead:0,
+        total:0
+};
+
+localStorage.setItem('books', JSON.stringify(books));
+
+document.querySelector('.js-books-result').innerHTML = result;
+
+function updateTotalBooks() {
+  document.querySelector('.js-books-result')
+    .innerHTML = `Books read: ${books.bksRead} &nbsp &nbsp  Books unread: ${books.bksNotRead} &nbsp &nbsp  Total books: ${books.total}`; 
+}
 
 const statusSelect = document.getElementById('status');
 const jsForm = document.querySelector('.js-form');
@@ -17,6 +33,8 @@ function Book(name, author, pages) {
     this.author = author;
     this.pages = pages;
 }
+
+updateTotalBooks();
 
 addBookForm.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -49,6 +67,16 @@ addBookForm.addEventListener('submit', function (e) {
 
     removeButton.addEventListener('click', function () {
         bookContainerDiv.removeChild(selfBook);
+        books.total -= 1;
+
+        if (!isReadButton.classList.contains('read')) {
+            books.bksNotRead -= 1;        } else {
+            isReadButton.textContent = 'Not read';
+            books.bksRead -= 1;         
+        }
+
+        updateTotalBooks();
+
     });
 
     const isReadButton = document.createElement('button');
@@ -57,18 +85,27 @@ addBookForm.addEventListener('submit', function (e) {
     if (statusValue === 'Read') {
         isReadButton.textContent = 'Read';
         isReadButton.classList.add('read');
+        books.bksRead += 1;
+        books.total += 1;
     } else {
         isReadButton.textContent = 'Not read';
+        books.bksNotRead += 1;
+        books.total += 1;
     }
 
     isReadButton.addEventListener('click', function () {
         if (!isReadButton.classList.contains('read')) {
             isReadButton.textContent = 'Read';
             isReadButton.classList.add('read');
+            books.bksNotRead -= 1;
+            books.bksRead += 1;
         } else {
             isReadButton.textContent = 'Not read';
             isReadButton.classList.remove('read');
+            books.bksNotRead += 1;
+            books.bksRead -= 1;            
         }
+        updateTotalBooks();
     });
 
     newBookDiv.appendChild(titleDiv);
@@ -82,6 +119,8 @@ addBookForm.addEventListener('submit', function (e) {
     selfBook.appendChild(newBookDiv);
 
     addBookForm.reset();
+
+    updateTotalBooks();
 });
 
 
