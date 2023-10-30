@@ -1,0 +1,18 @@
+body {
+	background-color: lightcyan;
+}
+
+.gameboard {
+	display: grid;
+	height: 300px;
+	width: 300px;
+	grid-template-rows: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr 1fr;
+}
+
+.tile {
+	background-color: lightsalmon;
+	height: 100px;
+	width: 100px;
+	border: solid 1px black;
+}
