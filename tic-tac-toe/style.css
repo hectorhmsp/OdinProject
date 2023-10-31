@@ -1,18 +1,69 @@
 body {
-	background-color: lightcyan;
+	background-color: #DCE2F0;
+}
+
+h1 {
+	display: flex;
+	justify-content: center;
+    align-items: center;
+    margin-top: 4%;
+    font-size: 40px;
+    color: #50586C;
 }
 
 .gameboard {
 	display: grid;
-	height: 300px;
-	width: 300px;
+	height: 450px;
+	width: 450px;
 	grid-template-rows: 1fr 1fr 1fr;
 	grid-template-columns: 1fr 1fr 1fr;
+	gap: 3px;
 }
 
 .tile {
-	background-color: lightsalmon;
-	height: 100px;
-	width: 100px;
+	background-color: #50586C;
+	height: 150px;
+	width: 150px;
 	border: solid 1px black;
+	font-size:  50px;
+	border-radius: 4px;
+	color: #DCE2F0;
+}
+
+.tile:hover {
+	cursor: pointer;
+}
+
+.flex-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1%;
+}
+
+.player-results {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+    margin-top: 1%;
+    color: #50586C;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 2%;
+}
+
+.restart-button, .reset-button {
+    width: 220px;
+    height: 50px;
+    font-size: 20px;
+    border: solid 1px black;
+    border-radius: 5px;
+    background-color: #50586C;
+    color: #DCE2F0;
 }
