@@ -7,16 +7,31 @@
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
-	<div class="gameboard js-gameboard">
-		<div class="tile js-tile">a</div>
-		<div class="tile js-tile">b</div>
-		<div class="tile js-tile">c</div>
-		<div class="tile js-tile">d</div>
-		<div class="tile js-tile">e</div>
-		<div class="tile js-tile">f</div>
-		<div class="tile js-tile">g</div>
-		<div class="tile js-tile">h</div>
-		<div class="tile js-tile">i</div>
+	<h1>Tic-Tac-Toe!</h1>
+
+	<div class="flex-container">
+		<div class="gameboard js-gameboard">
+			<button class="tile js-tile" data-index="0"></button>
+			<button class="tile js-tile" data-index="1"></button>
+			<button class="tile js-tile" data-index="2"></button>
+			<button class="tile js-tile" data-index="3"></button>
+			<button class="tile js-tile" data-index="4"></button>
+			<button class="tile js-tile" data-index="5"></button>
+			<button class="tile js-tile" data-index="6"></button>
+			<button class="tile js-tile" data-index="7"></button>
+			<button class="tile js-tile" data-index="8"></button>
+		</div>
+	</div>
+
+	<div class="buttons">
+		<button class="restart-button js-restart-button">Restart</button>
+		<button class="reset-button js-reset-button">Reset score</button>
+	</div>
+
+	<div class="player-results">
+		<div class="js-player1wins"></div>
+		<div class="js-player2wins"></div>
+		<div class="js-ties"></div>
 	</div>
 
 	<script src="tic-tac-toe.js"></script>
