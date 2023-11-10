@@ -1,0 +1,82 @@
+body, html {
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	height: 100%;
+}
+
+.header-div, .footer-div {
+  	background-color: #333;
+  	color: white;
+  	padding: 20px;
+}
+
+.header-div {
+	position: absolute;
+	top: 6%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	color: white;
+	text-align: center;
+	font-size: 24px;
+}
+
+.page-content {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	color: white;
+	text-align: center;
+	font-size: 24px;
+}
+
+
+.footer-div {
+  	border-top: solid 2px black;
+	position: absolute;
+	bottom: -3%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 100%;
+	color: white;
+	text-align: center;
+	font-size: 24px;  
+}
+
+
+#image-container {
+	width: 100vw;
+	height: 100%;
+	overflow: hidden;
+}
+
+img {
+  	width: 100%;
+  	height: 100%;
+	object-fit: cover;
+  	display: block;
+  	margin: auto;
+}
+
+#overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(128, 128, 128, 0.5); /* Grey background with 50% opacity */
+}
+
+#content {
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	color: white;
+	font-size: 24px;
+}
+
