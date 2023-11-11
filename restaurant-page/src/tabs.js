@@ -10,6 +10,7 @@ const createTabs = () => {
 	content.appendChild(headerDiv);
 
 	// Create the three divs
+	const nameLogo = document.createElement('div');
 	const div1 = document.createElement('div');
 	const div2 = document.createElement('div');
 	const div3 = document.createElement('div');
@@ -20,16 +21,19 @@ const createTabs = () => {
 	div3.setAttribute('id', 'contact-btn');
 
 	// Set classes for the divs
+	nameLogo.classList.add('name-logo');
 	div1.classList.add('tab');
 	div2.classList.add('tab');
 	div3.classList.add('tab');
 
 	// Set text content for the tabs
+	nameLogo.textContent = "Lorem-Ipsum Restaurant";
 	div1.textContent = 'Home';
 	div2.textContent = 'Menu';
 	div3.textContent = 'Contact';
 
 	// Append the divs to the content div
+	headerDiv.appendChild(nameLogo);
 	headerDiv.appendChild(div1);
 	headerDiv.appendChild(div2);
 	headerDiv.appendChild(div3);

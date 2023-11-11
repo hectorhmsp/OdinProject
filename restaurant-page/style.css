@@ -1,30 +1,65 @@
+/*
+> entender o PORQUÊ do header-div e footer-div precisarem de "bottom:-6%;" ou 	"top: 6%";
+*/
+
 body, html {
 	margin: 0;
 	padding: 0;
 	overflow: hidden;
 	height: 100%;
+	font-family: Jost, sans-serif;
+}
+
+h1 {
+	margin-bottom: 0;
+	margin-top: 10;
+	font-size: 28px;
+	text-shadow: 
+		-1px -1px 0 #000,   /* Sombra superior esquerda (preta) */
+		1px -1px 0 #000,   /* Sombra superior direita (preta) */
+		-1px  1px 0 #000,   /* Sombra inferior esquerda (preta) */
+		1px  1px 0 #000;
+	
+}
+
+p {
+	margin-top: 1px;
+	margin-bottom: 1px;
+	text-shadow: 
+		-1px -1px 0 #000,   /* Sombra superior esquerda (preta) */
+		1px -1px 0 #000,   /* Sombra superior direita (preta) */
+		-1px  1px 0 #000,   /* Sombra inferior esquerda (preta) */
+		1px  1px 0 #000;
 }
 
 .header-div, .footer-div {
-  	background-color: #333;
+  	background-color: rgb(196, 205, 165);
   	color: white;
   	padding: 20px;
 }
 
+.footer-div {
+	background-color: #ceb48c;
+}
+
 .header-div {
-	position: absolute;
-	top: 6%;
+	position: fixed;
+	top: 4.5%;
 	left: 50%;
+	height: 3%;
 	transform: translate(-50%, -50%);
 	width: 100%;
 	color: white;
 	text-align: center;
 	font-size: 24px;
+	border-bottom: solid black 1px
 }
 
 .page-content {
+	display: flex;
+	flex-direction: column;
 	position: absolute;
-	top: 50%;
+	top: 46%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 100%;
@@ -35,9 +70,10 @@ body, html {
 
 
 .footer-div {
-  	border-top: solid 2px black;
-	position: absolute;
-	bottom: -3%;
+  border-top: solid 1px black;
+	position: fixed;
+	bottom: -5%;
+	height: 3%;
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 100%;
@@ -56,7 +92,7 @@ body, html {
 img {
   	width: 100%;
   	height: 100%;
-	object-fit: cover;
+		object-fit: cover;
   	display: block;
   	margin: auto;
 }
@@ -67,7 +103,7 @@ img {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background: rgba(128, 128, 128, 0.5); /* Grey background with 50% opacity */
+	background: rgba(128, 128, 128, 0.798); /* Grey background with 50% opacity */
 }
 
 #content {
@@ -80,3 +116,79 @@ img {
 	font-size: 24px;
 }
 
+.tab:hover {
+	cursor: pointer;
+}
+
+.header-div {
+	display: flex;
+  justify-content:space-evenly;
+  align-items: center;
+}
+
+.name-logo {
+	margin-right: 55%;
+	margin-left: 0;
+}
+
+.headline {
+	margin-top: -70px;
+	margin-bottom: 25px;
+	font-size: 60px;
+	font-family: 'Shadows Into Light', cursive;
+}
+
+.copy {
+	word-wrap: break-word;
+	max-width: 40%;
+	align-self: center;
+	font-size: 26px;
+}
+
+.menu-items {
+	font-size: 15px;
+	display: flex;
+	flex-direction: column;
+}
+
+.menu-item, .menu-item1 {
+	display: flex;
+	flex-direction: column;
+	word-wrap: break-word;
+	max-width: 20%;
+	align-self: center;
+	margin-top: 10px;
+	color: rgb(255, 255, 255);
+	font-weight: bold;
+	text-shadow: 
+		-1px -1px 0 #000,   /* Sombra superior esquerda (preta) */
+	 	1px -1px 0 #000,   /* Sombra superior direita (preta) */
+		-1px  1px 0 #000,   /* Sombra inferior esquerda (preta) */
+	 	1px  1px 0 #000;    /* sombra inferior direita (preta) */
+}
+
+.menu-item1 {
+	margin-top: 15px;
+}
+
+.contact {
+	font-size: 26px;
+	display: flex;
+	flex-direction: column;
+	word-wrap: break-word;
+	align-items: center;
+}
+
+.contact-item, .contact-item1 {
+	display: flex;
+	flex-direction: column;
+	word-wrap: break-word;
+	align-items: center;
+	max-width: 45%;
+	margin-bottom: 15px;
+}
+
+.contact-item1 {
+	margin-bottom: 30px;
+	font-size: 36px;
+}
