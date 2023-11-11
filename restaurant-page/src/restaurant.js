@@ -7,17 +7,14 @@ const createRestaurantHomePage = () => {
 
 	// Create and append headline element
 	const headline = document.createElement('h1');
-	headline.textContent = 'Welcome to our restaurant!';
+	headline.textContent = 'Tempero do Brasil';
 	headline.classList.add('headline');
 	pageContent.appendChild(headline);
 
 	// Create and append copy element
 	const copy = document.createElement('p');
 
-	copy.textContent = `Lorem ipsum dolor sit amet,						
-											consectetur adipiscing elit. 
-											Suspendisse maximus nulla vitae tortor rutrum fermentum.
-											Nunc ac dignissim dui. Maecenas rhoncus hendrerit consectetur. 
+	copy.textContent = `Comidas tipicamente brasileiras, regionais, preparadas na hora! 
 											`;
 
 	copy.classList.add('copy');

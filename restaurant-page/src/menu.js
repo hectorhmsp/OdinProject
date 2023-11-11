@@ -5,7 +5,7 @@ const createMenuPage = () => {
 	pageContent.classList.add('page-content');
 
 	const heading = document.createElement('h1');
-	heading.textContent = 'Our Menu';
+	heading.textContent = 'Nosso Cardápio';
 
 	// Create menu items and add them to the page-content div
 
@@ -21,7 +21,7 @@ const createMenuPage = () => {
 	menuItem1.appendChild(menuItem1description);
 	menuItem1.appendChild(menuItem1price);
 	menuItem1name.textContent = 'Feijoada';
-	menuItem1description.innerHTML = 'A traditional Brazilian stew made with black beans and various cuts of meat.';
+	menuItem1description.innerHTML = 'Cozido típico do Brasil, feito com feijão preto e vários cortes de carne';
 	menuItem1price.innerHTML = 'R$ 20';
 
 	const menuItem2 = document.createElement('div');
@@ -32,7 +32,7 @@ const createMenuPage = () => {
 	menuItem2.appendChild(menuItem2description);
 	menuItem2.appendChild(menuItem2price);
 	menuItem2name.textContent = 'Churrasco';
-	menuItem2description.innerHTML = 'A Brazilian-style barbecue with various grilled meats served with sides.';
+	menuItem2description.innerHTML = 'Carne assada no estilo brasileiro, com cortes grelhados e acompanhamentos';
 	menuItem2price.innerHTML = 'R$ 40';
 
 	const menuItem3 = document.createElement('div');
@@ -43,7 +43,7 @@ const createMenuPage = () => {
 	menuItem3.appendChild(menuItem3description);
 	menuItem3.appendChild(menuItem3price);
 	menuItem3name.textContent = 'Pão de Queijo';
-	menuItem3description.innerHTML = 'Cheese bread made with tapioca flour, originating from Minas Gerais, Brazil.';
+	menuItem3description.innerHTML = 'Pão de queijo feito com farinha de tapioca, originário de Minas Gerais, Brasil';
 	menuItem3price.innerHTML = 'R$ 20';
 
 	const menuItem4 = document.createElement('div');
@@ -53,8 +53,8 @@ const createMenuPage = () => {
 	menuItem4.appendChild(menuItem4name);
 	menuItem4.appendChild(menuItem4description);
 	menuItem4.appendChild(menuItem4price);
-	menuItem4name.textContent = 'Açai Bowl';
-	menuItem4description.innerHTML = 'A Brazilian dish made with a blend of açai berries, granola and fresh fruit.';
+	menuItem4name.textContent = 'Tijela de Açai';
+	menuItem4description.innerHTML = 'Uma sobremesa brasileira, com mistura de polpa de açai, granola e frutas frescas.';
 	menuItem4price.innerHTML = 'R$ 30';
 
 	menuItems.appendChild(menuItem1);

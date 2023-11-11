@@ -13,15 +13,15 @@ const createContactPage = () => {
 	contact.appendChild(contactText);
 	contact.appendChild(contactInfo);
 
-	contactUs.innerHTML = `Contact us!`;
-	contactText.innerHTML = `We'd love to hear from you! At Lorem Ipsum Restaurant,
-													 your satisfaction is our top priority. If you have any
-													 questions, suggestions, or feedback, please reach out
-													 to us through the following channels: 
+	contactUs.innerHTML = `Fale conosco!`;
+	contactText.innerHTML = `Adorariamos ouvir você! Aqui no Tempero do Brasil, sua satisfação 
+													 é nossa maior prioridade! Se você possui qualquer dúvida,
+													 sugestões, ou feedback, por favor, nos contate através dos seguintes
+													 canais:
 													 `;
-	contactInfo.innerHTML = `Email: loremIpsumRestaurant@gmail.com
-													 Phone: (51) 3123-4567
-													 Adress: 1234, Seaside Avenue
+	contactInfo.innerHTML = `Email: TemperoDoBrasil@gmail.com <br>
+													 Telefone: (51) 3123-4567 <br>
+													 Endereço: 1234, Avenida Fictícia
 													 `;
 
 	pageContent.appendChild(contact);

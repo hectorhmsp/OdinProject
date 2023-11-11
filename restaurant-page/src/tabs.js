@@ -27,10 +27,10 @@ const createTabs = () => {
 	div3.classList.add('tab');
 
 	// Set text content for the tabs
-	nameLogo.textContent = "Lorem-Ipsum Restaurant";
+	nameLogo.textContent = "Tempero do Brasil";
 	div1.textContent = 'Home';
-	div2.textContent = 'Menu';
-	div3.textContent = 'Contact';
+	div2.textContent = 'Cardápio';
+	div3.textContent = 'Contato';
 
 	// Append the divs to the content div
 	headerDiv.appendChild(nameLogo);
