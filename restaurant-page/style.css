@@ -32,6 +32,14 @@ p {
 		1px  1px 0 #000;
 }
 
+div { 
+	text-shadow: 
+		-1px -1px 0 #000,   /* Sombra superior esquerda (preta) */
+		1px -1px 0 #000,   /* Sombra superior direita (preta) */
+		-1px  1px 0 #000,   /* Sombra inferior esquerda (preta) */
+		1px  1px 0 #000;
+}
+
 .header-div, .footer-div {
   	background-color: rgb(196, 205, 165);
   	color: white;
@@ -134,7 +142,7 @@ img {
 .headline {
 	margin-top: -70px;
 	margin-bottom: 25px;
-	font-size: 60px;
+	font-size: 85px;
 	font-family: 'Shadows Into Light', cursive;
 }
 
