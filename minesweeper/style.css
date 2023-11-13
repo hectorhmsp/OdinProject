@@ -1,0 +1,23 @@
+body {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+}
+
+#board {
+    display: grid;
+    margin-top: 5%; 
+    width: min-content;
+}
+
+.tile {
+    width: 30px;
+    height: 30px;
+    border: solid 1px black;
+}
+
+.mine {
+    text-align: center;
+    line-height: 30px; /* Adjust this value based on the tile height */
+}
