@@ -12,12 +12,16 @@ body {
 }
 
 .tile {
-    width: 30px;
-    height: 30px;
+    width: 80px;
+    height: 80px;
     border: solid 1px black;
+    text-align: center;
+    line-height: 80px;
+    font-size: 35px;
+    background-color: lightgray;
 }
 
 .mine {
     text-align: center;
-    line-height: 30px; /* Adjust this value based on the tile height */
+    line-height: 80px; /* Adjust this value based on the tile height */
 }
