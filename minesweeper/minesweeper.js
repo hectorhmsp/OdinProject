@@ -34,11 +34,11 @@ for (let i = 0; i < rows; i++) {
       tile.style.backgroundColor = '#cccccc';
       tile.style.borderColor = '#eeeeee #999999 #999999 #eeeeee';
       tile.addEventListener('click', () => {
+        revealAllMines();
         tile.innerHTML= "&#x2600";
         tile.style.color = "#ff0000";
         tile.style.backgroundColor = '#bbbbbb';
         tile.style.borderColor = '#999999';
-        //revealAllMines(tile); perhaps? 
       });
     } else {
         displayBombCount(tile, bomb);
@@ -132,14 +132,20 @@ function displayBombCount(tile, bomb) {
 
 
 // work in progress!
-function revealAllMines(tile) {
-    if (tile.classList.contains('mine')) {
-        tile.innerHTML= "&#x2600";
+function revealAllMines() {
+  for (let i = 0; i < rows; i++) {
+    for (let j = 0; j < cols; j++) {
+      let tile = document.getElementsByClassName('tile')[i * cols + j];
+      if (minesweeperBoard[i][j] === 1) {
+        tile.innerHTML = "&#x2600";
         tile.style.color = "black";
         tile.style.backgroundColor = '#bbbbbb';
         tile.style.borderColor = '#999999';
+      }
     }
+  }
 }
+
 
 divBoard.style.gridTemplateRows = 'repeat(' + rows + ', 50px)';
 divBoard.style.gridTemplateColumns = 'repeat(' + cols + ', 50px)';
