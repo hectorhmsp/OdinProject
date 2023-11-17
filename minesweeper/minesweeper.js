@@ -1,8 +1,8 @@
 // add a "first-click" to reveal some area; 
 // add a condition to not have more than 5 mine surrounding a square, maybe? like, the numbers should go from 1 to 5 only...right?;
 // add a "counter" to let the player knows how many mines there are in the board;
-// add the option to click with the RMB to create a flag, a question mark and to remove the flag/question mark;
 // add the flag to the "counter", like, if a player flags 5 spots, let the counter = counter - 5 (if it were 10: "5 bombs remaining");
+// add a button for the player to choose the difficulty (easy, intermediate, hard);
 
 
 divBoard = document.getElementById('board');
@@ -14,6 +14,8 @@ let cols = 8;
 let numberOfMines;
 let mineFound = 0;
 let gameOver = false;
+let flag = false;
+let revealed = false;
 
 // (cols x rows) = ? mines
 // 8x8 = 10 mines   (easy)
@@ -62,46 +64,68 @@ function playGame() {
     let minesweeperBoard = createMinesweeperBoard(rows, cols);
 
     for (let i = 0; i < rows; i++) {
-      for (let j = 0; j < cols; j++) {
-        let tile = document.createElement('div');
-        tile.classList.add('tile');
-        
-        tile.innerText = "  ";
-        tile.style.backgroundColor = '#cccccc';
-        tile.style.borderColor = '#eeeeee #999999 #999999 #eeeeee';
+        for (let j = 0; j < cols; j++) {
+            let tile = document.createElement('div');
+            tile.classList.add('tile');
+            tile.flag = false;
+            tile.revealed = false;
+            
 
-        let bomb = checkForMines(i, j, minesweeperBoard);
-
-        if (minesweeperBoard[i][j] === 1) {
-            tile.classList.add('mine');
-            tile.innerHTML = " ";
+            tile.innerText = "  ";
             tile.style.backgroundColor = '#cccccc';
             tile.style.borderColor = '#eeeeee #999999 #999999 #eeeeee';
-            tile.addEventListener('click', () => {
-                if (!gameOver) {
-                    revealAllMines(tile);
-                    gameOver = true; 
-                }
-                
-                if (mineFound === 0) {
-                    tile.classList.remove('mine');
-                    tile.classList.add('mine-found');
-                    tile.innerHTML= "&#x2600";
-                    tile.style.color = "#ff0000";
-                    tile.style.backgroundColor = '#bbbbbb';
-                    tile.style.borderColor = '#999999';
-                    mineFound++;
-                } else {
-                    return;
-                }
 
-          });
-        } else {
-            displayBombCount(tile, bomb);
+            let bomb = checkForMines(i, j, minesweeperBoard);
+
+            if (minesweeperBoard[i][j] === 1) {
+                tile.classList.add('mine');
+                tile.innerHTML = " ";
+                tile.style.backgroundColor = '#cccccc';
+                tile.style.borderColor = '#eeeeee #999999 #999999 #eeeeee';
+                tile.addEventListener('click', () => {
+                    if (!gameOver) {
+                        revealAllMines(tile);
+                        gameOver = true; 
+                    }
+                    
+                    if (mineFound === 0) {
+                        tile.classList.remove('mine');
+                        tile.classList.add('mine-found');
+                        tile.innerHTML= "&#x2600";
+                        tile.style.color = "#ff0000";
+                        tile.style.backgroundColor = '#bbbbbb';
+                        tile.style.borderColor = '#999999';
+                        mineFound++;
+                    } else {
+                        return;
+                    }
+
+              });
+            } else {
+                displayBombCount(tile, bomb, flag);
+            }
+
+            tile.addEventListener('contextmenu', function(event) {
+                event.preventDefault();
+
+                if (event.button === 2 && !gameOver && !tile.revealed) {
+                    if (!tile.flag) {
+                        tile.innerText = '!';
+                        tile.style.color = 'red';
+                        tile.flag = true; 
+                    } else if (tile.flag) {
+                        if (tile.innerText === "?") {
+                            tile.innerText = " ";
+                            tile.flag = false;
+                        } else {
+                            tile.innerText = "?";
+                        }    
+                    }
+                }
+            });
+
+            divBoard.appendChild(tile);
         }
-
-        divBoard.appendChild(tile);
-      }
     }  
 }
 
@@ -147,11 +171,12 @@ function checkForMines(i, j, minesweeperBoard) {
     return bomb;
 }
 
-function displayBombCount(tile, bomb) {
+function displayBombCount(tile, bomb, flag) {
       if (bomb > 0) {
         if (bomb === 1) {
           tile.addEventListener('click', () => {
             if (!gameOver){
+                tile.revealed = true;
                 tile.innerText = `${bomb}`;
                 tile.style.color = '#3333cc';  
                 tile.style.backgroundColor = '#bbbbbb';
@@ -161,6 +186,7 @@ function displayBombCount(tile, bomb) {
         } else if (bomb === 2) {
             tile.addEventListener('click', () => {
                 if (!gameOver){
+                    tile.revealed = true;
                     tile.innerText = `${bomb}`;
                     tile.style.color = '#006600';
                     tile.style.backgroundColor = '#bbbbbb';
@@ -170,6 +196,7 @@ function displayBombCount(tile, bomb) {
         } else if (bomb === 3) {
             tile.addEventListener('click', () => {
                 if (!gameOver){
+                    tile.revealed = true;
                     tile.innerText = `${bomb}`;
                     tile.style.color = '#cc0000';
                     tile.style.backgroundColor = '#bbbbbb';
@@ -179,6 +206,7 @@ function displayBombCount(tile, bomb) {
         } else if (bomb === 4) {
             tile.addEventListener('click', () => {
                 if (!gameOver){
+                    tile.revealed = true;
                     tile.innerText = `${bomb}`;
                     tile.style.color = '#660066';
                     tile.style.backgroundColor = '#bbbbbb';
@@ -188,6 +216,7 @@ function displayBombCount(tile, bomb) {
         } else if (bomb === 5) {
             tile.addEventListener('click', () => {
                 if (!gameOver){
+                    tile.revealed = true;
                     tile.innerText = `${bomb}`;
                     tile.style.color = '#006666';
                     tile.style.backgroundColor = '#bbbbbb';
@@ -196,6 +225,7 @@ function displayBombCount(tile, bomb) {
             });
         } else {
             if (!gameOver){
+                tile.revealed = true;
                 tile.innerText = `${bomb}`;
                 tile.style.backgroundColor = '#bbbbbb';
                 tile.style.borderColor = '#999999';
@@ -203,7 +233,8 @@ function displayBombCount(tile, bomb) {
         }
       } else {
             tile.addEventListener('click', () => {
-                if (!gameOver){
+                if (!gameOver) {
+                    tile.revealed = true;
                     tile.innerText = "  ";
                     tile.style.backgroundColor = '#bbbbbb';
                     tile.style.borderColor = '#999999';
@@ -249,14 +280,3 @@ restartButton.addEventListener('click', restartGame);
 playGame();
 
 
-/*
-            tile.addEventListener('contextmenu', function(event) {
-                event.preventDefault(); 
-    
-                if (event.button === 2) {
-                    tile.innerText = '!';
-                    tile.style.color = 'red';
-                }
-            });
-
-*/
