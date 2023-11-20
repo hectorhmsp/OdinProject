@@ -7,15 +7,18 @@
 
 divBoard = document.getElementById('board');
 restartButton = document.getElementById('restart');
+counterDiv = document.getElementById('counter');
 
 
 let rows = 8;
 let cols = 8;
 let numberOfMines;
+let counter; 
 let mineFound = 0;
 let gameOver = false;
 let flag = false;
 let revealed = false;
+
 
 // (cols x rows) = ? mines
 // 8x8 = 10 mines   (easy)
@@ -26,6 +29,9 @@ let revealed = false;
 function playGame() {
 
     totalMines();
+
+    counter = numberOfMines;
+    counterDiv.innerHTML = `${counter}`;
 
     function getRandomIndex() {
         return Math.floor(Math.random() * (rows * cols));
@@ -112,19 +118,25 @@ function playGame() {
                     if (!tile.flag) {
                         tile.innerText = '!';
                         tile.style.color = 'red';
-                        tile.flag = true; 
+                        tile.flag = true;
+                        counter--; 
+                        counterDiv.innerHTML = `${counter}`;
                     } else if (tile.flag) {
                         if (tile.innerText === "?") {
                             tile.innerText = " ";
                             tile.flag = false;
                         } else {
                             tile.innerText = "?";
+                            counter++; 
+                            counterDiv.innerHTML = `${counter}`;
                         }    
                     }
                 }
             });
 
             divBoard.appendChild(tile);
+
+            
         }
     }  
 }
@@ -271,6 +283,8 @@ function restartGame () {
     gameOver = false;
     playGame();
 }
+
+
 
 
 divBoard.style.gridTemplateRows = 'repeat(' + rows + ', 50px)';
