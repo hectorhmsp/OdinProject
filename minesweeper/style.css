@@ -51,3 +51,9 @@ h1 {
 .restart-button:hover {
     cursor: pointer;
 }
+
+.counter {
+    font-size: 30px;
+    color: red;
+    margin-top: 10px;
+}
