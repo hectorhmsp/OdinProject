@@ -1,14 +1,12 @@
 // add a "first-click" to reveal some area; 
 // add a condition to not have more than 5 mine surrounding a square, maybe? like, the numbers should go from 1 to 5 only...right?;
-// add a "counter" to let the player knows how many mines there are in the board;
-// add the flag to the "counter", like, if a player flags 5 spots, let the counter = counter - 5 (if it were 10: "5 bombs remaining");
 // add a button for the player to choose the difficulty (easy, intermediate, hard);
 
 
 divBoard = document.getElementById('board');
 restartButton = document.getElementById('restart');
 counterDiv = document.getElementById('counter');
-
+counterDiv.classList.add('counter');
 
 let rows = 8;
 let cols = 8;
@@ -18,6 +16,8 @@ let mineFound = 0;
 let gameOver = false;
 let flag = false;
 let revealed = false;
+
+
 
 
 // (cols x rows) = ? mines
@@ -108,8 +108,10 @@ function playGame() {
 
               });
             } else {
-                displayBombCount(tile, bomb, flag);
+                    displayBombCount(tile, bomb, flag);           
             }
+
+
 
             tile.addEventListener('contextmenu', function(event) {
                 event.preventDefault();
@@ -184,75 +186,119 @@ function checkForMines(i, j, minesweeperBoard) {
 }
 
 function displayBombCount(tile, bomb, flag) {
-      if (bomb > 0) {
-        if (bomb === 1) {
-          tile.addEventListener('click', () => {
-            if (!gameOver){
-                tile.revealed = true;
-                tile.innerText = `${bomb}`;
-                tile.style.color = '#3333cc';  
-                tile.style.backgroundColor = '#bbbbbb';
-                tile.style.borderColor = '#999999';
+        if (bomb > 0) {
+            if (bomb === 1) {
+                tile.addEventListener('click', () => {
+                    if (!gameOver && !tile.revealed) {
+
+                        if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
+                            counter++;
+                            counterDiv.innerHTML = `${counter}`;     
+                        }
+
+                        tile.revealed = true;
+                        tile.innerText = `${bomb}`;
+                        tile.style.color = '#3333cc';  
+                        tile.style.backgroundColor = '#bbbbbb';
+                        tile.style.borderColor = '#999999';
+
+
+                    }
+                }); 
+            } else if (bomb === 2) {
+                tile.addEventListener('click', () => {
+                    if (!gameOver){
+
+                        if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
+                            counter++;
+                            counterDiv.innerHTML = `${counter}`;     
+                        }
+
+                        tile.revealed = true;
+                        tile.innerText = `${bomb}`;
+                        tile.style.color = '#006600';
+                        tile.style.backgroundColor = '#bbbbbb';
+                        tile.style.borderColor = '#999999';  
+                    }
+                });
+            } else if (bomb === 3) {
+                tile.addEventListener('click', () => {
+                    if (!gameOver){
+
+                        if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
+                            counter++;
+                            counterDiv.innerHTML = `${counter}`;     
+                        }
+
+                        tile.revealed = true;
+                        tile.innerText = `${bomb}`;
+                        tile.style.color = '#cc0000';
+                        tile.style.backgroundColor = '#bbbbbb';
+                        tile.style.borderColor = '#999999';  
+                    }
+                });
+            } else if (bomb === 4) {
+                tile.addEventListener('click', () => {
+                    if (!gameOver){
+
+                        if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
+                            counter++;
+                            counterDiv.innerHTML = `${counter}`;     
+                        }
+
+                        tile.revealed = true;
+                        tile.innerText = `${bomb}`;
+                        tile.style.color = '#660066';
+                        tile.style.backgroundColor = '#bbbbbb';
+                        tile.style.borderColor = '#999999';  
+                    }
+                });
+            } else if (bomb === 5) {
+                tile.addEventListener('click', () => {
+                    if (!gameOver){
+
+                        if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
+                            counter++;
+                            counterDiv.innerHTML = `${counter}`;     
+                        }
+
+                        tile.revealed = true;
+                        tile.innerText = `${bomb}`;
+                        tile.style.color = '#006666';
+                        tile.style.backgroundColor = '#bbbbbb';
+                        tile.style.borderColor = '#999999'; 
+                    }
+                });
+            } else {
+                if (!gameOver){
+
+                    if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
+                        counter++;
+                        counterDiv.innerHTML = `${counter}`;     
+                    }
+
+                    tile.revealed = true;
+                    tile.innerText = `${bomb}`;
+                    tile.style.backgroundColor = '#bbbbbb';
+                    tile.style.borderColor = '#999999';
+                }
             }
-          }); 
-        } else if (bomb === 2) {
-            tile.addEventListener('click', () => {
-                if (!gameOver){
-                    tile.revealed = true;
-                    tile.innerText = `${bomb}`;
-                    tile.style.color = '#006600';
-                    tile.style.backgroundColor = '#bbbbbb';
-                    tile.style.borderColor = '#999999';  
-                }
-            });
-        } else if (bomb === 3) {
-            tile.addEventListener('click', () => {
-                if (!gameOver){
-                    tile.revealed = true;
-                    tile.innerText = `${bomb}`;
-                    tile.style.color = '#cc0000';
-                    tile.style.backgroundColor = '#bbbbbb';
-                    tile.style.borderColor = '#999999';  
-                }
-            });
-        } else if (bomb === 4) {
-            tile.addEventListener('click', () => {
-                if (!gameOver){
-                    tile.revealed = true;
-                    tile.innerText = `${bomb}`;
-                    tile.style.color = '#660066';
-                    tile.style.backgroundColor = '#bbbbbb';
-                    tile.style.borderColor = '#999999';  
-                }
-            });
-        } else if (bomb === 5) {
-            tile.addEventListener('click', () => {
-                if (!gameOver){
-                    tile.revealed = true;
-                    tile.innerText = `${bomb}`;
-                    tile.style.color = '#006666';
-                    tile.style.backgroundColor = '#bbbbbb';
-                    tile.style.borderColor = '#999999'; 
-                }
-            });
         } else {
-            if (!gameOver){
-                tile.revealed = true;
-                tile.innerText = `${bomb}`;
-                tile.style.backgroundColor = '#bbbbbb';
-                tile.style.borderColor = '#999999';
-            }
-        }
-      } else {
             tile.addEventListener('click', () => {
                 if (!gameOver) {
+
+                    if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
+                        counter++;
+                        counterDiv.innerHTML = `${counter}`;     
+                    }
+
                     tile.revealed = true;
                     tile.innerText = "  ";
                     tile.style.backgroundColor = '#bbbbbb';
                     tile.style.borderColor = '#999999';
                 }
-             });
-      }
+            });
+        }
     
 }
 
@@ -285,12 +331,31 @@ function restartGame () {
 }
 
 
-
-
 divBoard.style.gridTemplateRows = 'repeat(' + rows + ', 50px)';
 divBoard.style.gridTemplateColumns = 'repeat(' + cols + ', 50px)';
 restartButton.addEventListener('click', restartGame);
 
 playGame();
 
+/*
+
+    if (firstClick) {
+
+        if (
+            (j > 0 && minesweeperBoard[i][j - 1] === 0) &&
+            (j < minesweeperBoard[i].length - 1 && minesweeperBoard[i][j + 1] === 0) &&
+            (i > 0 && minesweeperBoard[i - 1][j] === 0) &&                                     
+            (i < minesweeperBoard.length - 1 && minesweeperBoard[i + 1][j] === 0) &&
+            (i > 0 && j > 0 && minesweeperBoard[i - 1][j - 1] === 0) &&
+            (i < minesweeperBoard.length - 1 && j < minesweeperBoard[i].length - 1 && minesweeperBoard[i + 1][j + 1] === 0) &&                       
+            (i < minesweeperBoard.length - 1 && j > 0 && minesweeperBoard[i + 1][j - 1] === 0) &&                                            
+            (i > 0 && j < minesweeperBoard[i].length - 1 && minesweeperBoard[i - 1][j + 1] === 0)
+        ) {
+            tile.click();
+            firstClick = false;
+        } 
+
+    }
+
+*/
 
