@@ -1,6 +1,10 @@
+// ** TASKS ** //
 // add a "first-click" to reveal some area; 
 // add a condition to not have more than 5 mine surrounding a square, maybe? like, the numbers should go from 1 to 5 only...right?;
 // add a button for the player to choose the difficulty (easy, intermediate, hard);
+// add classes to the mines, numbered-squares, etc. for better readability;
+// add a "victory" condition (when the player clicked all of the squares without bombs or something);
+
 
 
 divBoard = document.getElementById('board');
@@ -31,7 +35,7 @@ function playGame() {
     totalMines();
 
     counter = numberOfMines;
-    counterDiv.innerHTML = `${counter}`;
+    counterDiv.innerHTML = `Mines left: ${counter}`;
 
     function getRandomIndex() {
         return Math.floor(Math.random() * (rows * cols));
@@ -75,6 +79,11 @@ function playGame() {
             tile.classList.add('tile');
             tile.flag = false;
             tile.revealed = false;
+
+
+            // Generate tile ID
+            let tileId = `row${i}-col${j}`;
+            tile.id = tileId;
             
 
             tile.innerText = "  ";
@@ -108,7 +117,7 @@ function playGame() {
 
               });
             } else {
-                    displayBombCount(tile, bomb, flag);           
+                    displayBombCount(tile, bomb, flag, i, j, minesweeperBoard);           
             }
 
 
@@ -122,7 +131,7 @@ function playGame() {
                         tile.style.color = 'red';
                         tile.flag = true;
                         counter--; 
-                        counterDiv.innerHTML = `${counter}`;
+                        counterDiv.innerHTML = `Mines left: ${counter}`;
                     } else if (tile.flag) {
                         if (tile.innerText === "?") {
                             tile.innerText = " ";
@@ -130,7 +139,7 @@ function playGame() {
                         } else {
                             tile.innerText = "?";
                             counter++; 
-                            counterDiv.innerHTML = `${counter}`;
+                            counterDiv.innerHTML = `Mines left: ${counter}`;
                         }    
                     }
                 }
@@ -185,7 +194,7 @@ function checkForMines(i, j, minesweeperBoard) {
     return bomb;
 }
 
-function displayBombCount(tile, bomb, flag) {
+function displayBombCount(tile, bomb, flag, i, j, minesweeperBoard) {
         if (bomb > 0) {
             if (bomb === 1) {
                 tile.addEventListener('click', () => {
@@ -193,7 +202,7 @@ function displayBombCount(tile, bomb, flag) {
 
                         if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
                             counter++;
-                            counterDiv.innerHTML = `${counter}`;     
+                            counterDiv.innerHTML = `Mines left: ${counter}`;     
                         }
 
                         tile.revealed = true;
@@ -207,11 +216,11 @@ function displayBombCount(tile, bomb, flag) {
                 }); 
             } else if (bomb === 2) {
                 tile.addEventListener('click', () => {
-                    if (!gameOver){
+                    if (!gameOver && !tile.revealed){
 
                         if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
                             counter++;
-                            counterDiv.innerHTML = `${counter}`;     
+                            counterDiv.innerHTML = `Mines left: ${counter}`;     
                         }
 
                         tile.revealed = true;
@@ -223,11 +232,11 @@ function displayBombCount(tile, bomb, flag) {
                 });
             } else if (bomb === 3) {
                 tile.addEventListener('click', () => {
-                    if (!gameOver){
+                    if (!gameOver && !tile.revealed){
 
                         if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
                             counter++;
-                            counterDiv.innerHTML = `${counter}`;     
+                            counterDiv.innerHTML = `Mines left: ${counter}`;     
                         }
 
                         tile.revealed = true;
@@ -239,11 +248,11 @@ function displayBombCount(tile, bomb, flag) {
                 });
             } else if (bomb === 4) {
                 tile.addEventListener('click', () => {
-                    if (!gameOver){
+                    if (!gameOver && !tile.revealed){
 
                         if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
                             counter++;
-                            counterDiv.innerHTML = `${counter}`;     
+                            counterDiv.innerHTML = `Mines left: ${counter}`;     
                         }
 
                         tile.revealed = true;
@@ -255,11 +264,11 @@ function displayBombCount(tile, bomb, flag) {
                 });
             } else if (bomb === 5) {
                 tile.addEventListener('click', () => {
-                    if (!gameOver){
+                    if (!gameOver && !tile.revealed){
 
                         if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
                             counter++;
-                            counterDiv.innerHTML = `${counter}`;     
+                            counterDiv.innerHTML = `Mines left: ${counter}`;     
                         }
 
                         tile.revealed = true;
@@ -270,11 +279,11 @@ function displayBombCount(tile, bomb, flag) {
                     }
                 });
             } else {
-                if (!gameOver){
+                if (!gameOver && !tile.revealed){
 
                     if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
                         counter++;
-                        counterDiv.innerHTML = `${counter}`;     
+                        counterDiv.innerHTML = `Mines left: ${counter}`;     
                     }
 
                     tile.revealed = true;
@@ -287,9 +296,11 @@ function displayBombCount(tile, bomb, flag) {
             tile.addEventListener('click', () => {
                 if (!gameOver) {
 
+                    revealAdjacentEmptyTiles(i, j, minesweeperBoard);
+
                     if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
                         counter++;
-                        counterDiv.innerHTML = `${counter}`;     
+                        counterDiv.innerHTML = `Mines left: ${counter}`;     
                     }
 
                     tile.revealed = true;
@@ -316,15 +327,38 @@ function revealAllMines() {
   }
 }
 
-function restartGame () {
-    for (let i = 0; i < rows; i++) {
-        for (let j = 0; j < cols; j++) {
-          let tiles = Array.from(document.getElementsByClassName('tile'));
-          tiles.forEach(tile => {
-            divBoard.removeChild(tile);
-          });
+function revealAdjacentEmptyTiles(i, j, minesweeperBoard) {
+    const directions = [
+        { row: 0, col: -1 }, // Left
+        { row: 0, col: 1 },  // Right
+        { row: -1, col: 0 }, // Up
+        { row: 1, col: 0 },  // Down
+        { row: -1, col: -1 },// Up Left
+        { row: -1, col: 1 }, // Up Right
+        { row: 1, col: -1 }, // Down Left
+        { row: 1, col: 1 },  // Down Right
+    ];
+
+    for (const dir of directions) {
+        const newRow = i + dir.row;
+        const newCol = j + dir.col;
+
+        if (
+            newRow >= 0 && newRow < minesweeperBoard.length &&
+            newCol >= 0 && newCol < minesweeperBoard[newRow].length &&
+            minesweeperBoard[newRow][newCol] === 0
+        ) {
+            document.getElementById(`row${newRow}-col${newCol}`).click();
         }
     }
+}
+
+function restartGame() {
+    const tiles = Array.from(document.getElementsByClassName('tile'));
+    tiles.forEach(tile => {
+        divBoard.removeChild(tile);
+    });
+
     mineFound = 0;
     gameOver = false;
     playGame();
@@ -336,26 +370,3 @@ divBoard.style.gridTemplateColumns = 'repeat(' + cols + ', 50px)';
 restartButton.addEventListener('click', restartGame);
 
 playGame();
-
-/*
-
-    if (firstClick) {
-
-        if (
-            (j > 0 && minesweeperBoard[i][j - 1] === 0) &&
-            (j < minesweeperBoard[i].length - 1 && minesweeperBoard[i][j + 1] === 0) &&
-            (i > 0 && minesweeperBoard[i - 1][j] === 0) &&                                     
-            (i < minesweeperBoard.length - 1 && minesweeperBoard[i + 1][j] === 0) &&
-            (i > 0 && j > 0 && minesweeperBoard[i - 1][j - 1] === 0) &&
-            (i < minesweeperBoard.length - 1 && j < minesweeperBoard[i].length - 1 && minesweeperBoard[i + 1][j + 1] === 0) &&                       
-            (i < minesweeperBoard.length - 1 && j > 0 && minesweeperBoard[i + 1][j - 1] === 0) &&                                            
-            (i > 0 && j < minesweeperBoard[i].length - 1 && minesweeperBoard[i - 1][j + 1] === 0)
-        ) {
-            tile.click();
-            firstClick = false;
-        } 
-
-    }
-
-*/
-
