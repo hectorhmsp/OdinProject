@@ -1,5 +1,5 @@
 // ** TASKS ** //
-// add a "first-click" to reveal some area; 
+//
 // add a condition to not have more than 5 mine surrounding a square, maybe? like, the numbers should go from 1 to 5 only...right?;
 // add a button for the player to choose the difficulty (easy, intermediate, hard);
 // add classes to the mines, numbered-squares, etc. for better readability;
@@ -8,18 +8,41 @@
 
 
 divBoard = document.getElementById('board');
-restartButton = document.getElementById('restart');
+easyButton = document.getElementById('easy');
+mediumButton = document.getElementById('medium');
+hardButton = document.getElementById('hard');
 counterDiv = document.getElementById('counter');
 counterDiv.classList.add('counter');
 
-let rows = 8;
-let cols = 8;
+let rows;
+let cols;
 let numberOfMines;
 let counter; 
 let mineFound = 0;
 let gameOver = false;
 let flag = false;
 let revealed = false;
+
+easyButton.addEventListener('click', () => {
+    rows = 8;
+    cols = 8;
+    restartGame();
+    playGame();
+});
+
+mediumButton.addEventListener('click', () => {
+    rows = 16;
+    cols = 16;
+    restartGame();
+    playGame();
+});
+
+hardButton.addEventListener('click', () => {
+    rows = 16;
+    cols = 30;
+    restartGame();
+    playGame();
+});
 
 
 
@@ -31,6 +54,21 @@ let revealed = false;
 
 
 function playGame() {
+
+    const baseTileSize = cols === 8 ? 50 : (cols === 16 ? 27 : 27);
+
+    document.documentElement.style.setProperty('--base-tile-size', `${baseTileSize}px`);
+
+    if (cols === 8) {
+        divBoard.style.gridTemplateRows = 'repeat(' + rows + ', 50px)';
+        divBoard.style.gridTemplateColumns = 'repeat(' + cols + ', 50px)';
+    } else if (cols === 16) {
+        divBoard.style.gridTemplateRows = 'repeat(' + rows + ', 27px)';
+        divBoard.style.gridTemplateColumns = 'repeat(' + cols + ', 27px)';
+    } else {
+        divBoard.style.gridTemplateRows = 'repeat(' + rows + ', 27px)';
+        divBoard.style.gridTemplateColumns = 'repeat(' + cols + ', 27px)';
+    }
 
     totalMines();
 
@@ -296,7 +334,7 @@ function displayBombCount(tile, bomb, flag, i, j, minesweeperBoard) {
             tile.addEventListener('click', () => {
                 if (!gameOver) {
 
-                    revealAdjacentEmptyTiles(i, j, minesweeperBoard);
+                    revealAdjacentEmptyTilesThrottled(i, j, minesweeperBoard);
 
                     if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
                         counter++;
@@ -327,7 +365,7 @@ function revealAllMines() {
   }
 }
 
-function revealAdjacentEmptyTiles(i, j, minesweeperBoard) {
+function revealAdjacentEmptyTilesThrottled(i, j, minesweeperBoard) {
     const directions = [
         { row: 0, col: -1 }, // Left
         { row: 0, col: 1 },  // Right
@@ -339,18 +377,32 @@ function revealAdjacentEmptyTiles(i, j, minesweeperBoard) {
         { row: 1, col: 1 },  // Down Right
     ];
 
-    for (const dir of directions) {
-        const newRow = i + dir.row;
-        const newCol = j + dir.col;
+    const throttleDelay = 500; // Adjust the delay as needed
 
-        if (
-            newRow >= 0 && newRow < minesweeperBoard.length &&
-            newCol >= 0 && newCol < minesweeperBoard[newRow].length &&
-            minesweeperBoard[newRow][newCol] === 0
-        ) {
-            document.getElementById(`row${newRow}-col${newCol}`).click();
+    let lastCallTime = 0;
+
+    const throttledFunction = () => {
+        const currentTime = new Date().getTime();
+
+        if (currentTime - lastCallTime >= throttleDelay) {
+            for (const dir of directions) {
+                const newRow = i + dir.row;
+                const newCol = j + dir.col;
+
+                if (
+                    newRow >= 0 && newRow < minesweeperBoard.length &&
+                    newCol >= 0 && newCol < minesweeperBoard[newRow].length &&
+                    minesweeperBoard[newRow][newCol] === 0
+                ) {
+                    document.getElementById(`row${newRow}-col${newCol}`).click();
+                }
+            }
+
+            lastCallTime = currentTime;
         }
-    }
+    };
+
+    throttledFunction();
 }
 
 function restartGame() {
@@ -361,12 +413,8 @@ function restartGame() {
 
     mineFound = 0;
     gameOver = false;
-    playGame();
 }
 
 
-divBoard.style.gridTemplateRows = 'repeat(' + rows + ', 50px)';
-divBoard.style.gridTemplateColumns = 'repeat(' + cols + ', 50px)';
-restartButton.addEventListener('click', restartGame);
 
-playGame();
+
