@@ -1,9 +1,14 @@
 // ** TASKS ** //
 //
 // add a condition to not have more than 5 mine surrounding a square, maybe? like, the numbers should go from 1 to 5 only...right?;
-// add a button for the player to choose the difficulty (easy, intermediate, hard);
 // add classes to the mines, numbered-squares, etc. for better readability;
 // add a "victory" condition (when the player clicked all of the squares without bombs or something);
+
+
+// (cols x rows) = ? mines
+// 8x8 = 10 mines   (easy)
+// 16x16 = 40 mines (medium)
+// 30x16 = 99 mines (hard)
 
 
 
@@ -47,10 +52,6 @@ hardButton.addEventListener('click', () => {
 
 
 
-// (cols x rows) = ? mines
-// 8x8 = 10 mines   (easy)
-// 16x16 = 40 mines (medium)
-// 30x16 = 99 mines (hard)
 
 
 function playGame() {
