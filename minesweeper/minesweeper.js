@@ -3,7 +3,8 @@
 // add a condition to not have more than 5 mine surrounding a square, maybe? like, the numbers should go from 1 to 5 only...right?;
 // add classes to the mines, numbered-squares, etc. for better readability;
 // add a "victory" condition (when the player clicked all of the squares without bombs or something);
-
+// add docummentation;
+// create a "better" alert than the "alert('something')". maybe a div container or something?;
 
 // (cols x rows) = ? mines
 // 8x8 = 10 mines   (easy)
@@ -25,6 +26,8 @@ let counter;
 let mineFound = 0;
 let gameOver = false;
 let flag = false;
+let revealedSquares = { count: 0};
+let allEmptySquares;
 
 easyButton.addEventListener('click', () => {
     rows = 8;
@@ -47,7 +50,23 @@ hardButton.addEventListener('click', () => {
     playGame();
 });
 
+function checkForWin() {
+    if (revealedSquares.count === allEmptySquares) {
+        // Introduce a delay before showing the alert
+        setTimeout(function () {
+            alert(`You've won!`);
+            gameOver = true;
+            mineFound = 1;
+        }, 100);
+
+    }
+}
+
+
 function playGame() {
+
+    let allSquares = rows * cols;
+
     const baseTileSize = cols === 8 ? 50 : (cols === 16 ? 27 : 27);
 
     document.documentElement.style.setProperty('--base-tile-size', `${baseTileSize}px`);
@@ -67,6 +86,8 @@ function playGame() {
 
     counter = numberOfMines;
     counterDiv.innerHTML = `Mines left: ${counter}`;
+
+    allEmptySquares = allSquares - numberOfMines;
 
     function getRandomIndex() {
         return Math.floor(Math.random() * (rows * cols));
@@ -144,7 +165,7 @@ function playGame() {
                     }
                 });
             } else {
-                displayBombCount(tile, bomb, flag, i, j, minesweeperBoard);           
+                displayBombCount(tile, bomb, flag, i, j, minesweeperBoard, revealedSquares);           
             }
 
             tile.addEventListener('contextmenu', function(event) {
@@ -171,7 +192,8 @@ function playGame() {
             });
 
             divBoard.appendChild(tile);
-        }
+        
+        }  
     }  
 }
 
@@ -216,24 +238,26 @@ function checkForMines(i, j, minesweeperBoard) {
     return bomb;
 }
 
-function displayBombCount(tile, bomb, flag, i, j, minesweeperBoard) {
+function displayBombCount(tile, bomb, flag, i, j, minesweeperBoard, revealedSquares) {
     if (bomb > 0) {
         tile.addEventListener('click', () => {
             if (!gameOver && !tile.revealed) {
-                handleTileClick(tile, i, j, flag, bomb, minesweeperBoard);
+                handleTileClick(tile, i, j, flag, bomb, minesweeperBoard, revealedSquares);
+                checkForWin();
             }
         });
     } else {
         tile.addEventListener('click', () => {
             if (!gameOver && !tile.revealed) {
-                handleTileClick(tile, i, j, flag, bomb, minesweeperBoard);
+                handleTileClick(tile, i, j, flag, bomb, minesweeperBoard, revealedSquares);
+                checkForWin();
             }
         });
     }
 }
 
 
-function handleTileClick(tile, i, j, flag, bomb, minesweeperBoard) {
+function handleTileClick(tile, i, j, flag, bomb, minesweeperBoard, revealedSquares) {
 
     if (tile.innerText !== '?' && tile.flag && !tile.revealed) {
         counter++;
@@ -260,6 +284,10 @@ function handleTileClick(tile, i, j, flag, bomb, minesweeperBoard) {
     if (bomb === 0) {
         revealAdjacentEmptyTilesThrottled(i, j, minesweeperBoard);
     }
+
+    revealedSquares.count++;
+    console.log(revealedSquares.count);
+    
 }
 
 
@@ -325,4 +353,5 @@ function restartGame() {
 
     mineFound = 0;
     gameOver = false;
+    revealedSquares.count = 0;
 }
