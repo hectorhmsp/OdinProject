@@ -25,22 +25,67 @@ addProjectButton = document.getElementById('addProjectButton');
 addProjectButton.addEventListener('click', addProject);
 
 
-function addProject () {
-
-	let editToggle = false; 
-
-	const project = document.createElement('div');
-	project.classList.add('project');
-
-	const editProject = document.createElement('div');
-	editProject.classList.add('edit-project');
-	
-	project.appendChild(editProject);
-
-	projectsDiv.appendChild(project);
+document.addEventListener('submit', (event) => {
+    // Check if the submitted form is the addProjectForm
+    if (event.target.matches('.addProjectForm')) {
+        event.preventDefault(); // Prevent the default form submission behavior
+        // Add your logic for handling the form data here
+    }
+});
 
 
+function addProject() {
+    // Create the project element
+    const project = document.createElement('div');
+    project.classList.add('project');
+
+    project.innerHTML = `
+        <form class="addProjectForm" id="addProjectForm">
+            <input class="input" type="text" id="title" placeholder="Title" required maxlength="100" />        
+            <button class="add-button">Add</button>
+            <button class="cancel-button">Cancel</button>
+        </form>
+    `;
+
+    // Append the project element to the projectsDiv
+    projectsDiv.appendChild(project);
+
+    // Get references to elements within the project
+    const titleInput = project.querySelector('#title');
+
+    // Add click event for the "Add" button
+    project.querySelector('.add-button').addEventListener('click', () => {
+        const inputValue = titleInput.value;
+        const newElement = document.createElement('h2');
+        newElement.textContent = inputValue;
+
+        // Create a new delete button for each project
+        const deleteProject = document.createElement('div');
+        deleteProject.classList.add('delete-project');
+        deleteProject.addEventListener('click', () => {
+            projectsDiv.removeChild(project);
+            taskDiv.removeChild(newElement);
+        });
+
+        // Append elements to their respective containers
+        taskDiv.appendChild(newElement);
+        project.innerHTML = `<h2>${inputValue}</h2>`;
+        project.appendChild(deleteProject);
+
+        // Remove the Add and Cancel buttons
+        const addButton = project.querySelector('.add-button');
+        const cancelButton = project.querySelector('.cancel-button');
+
+    });
+
+    // Add click event for the "Cancel" button
+    project.querySelector('.cancel-button').addEventListener('click', () => {
+        projectsDiv.removeChild(project);
+    });
 }
+
+
+
 
 
 
