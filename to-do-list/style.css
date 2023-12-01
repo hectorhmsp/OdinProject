@@ -22,17 +22,18 @@ body {
     display: flex;
     flex-direction: row;
     height: 90vh;
-    background-color: lightpink;
 }
 
 .sidebar {
     background-color: lightblue;
     height: 90vh;
-    width: 18%;
+    width: 20%;
 }
 
 .tasks {
     background-color: lightcoral;
+
+    width: 100vw;
 }
 
 .home {
@@ -45,19 +46,20 @@ body {
 }
 
 .project {
-    height: 4vh;
+	height: 50px;
     border: solid 1px black;
     background-color: lightsalmon;
     margin: 10px 30px;
     position: relative;
 }
 
-.edit-project {
-    height: 4vh;
-    background-color: black;
+.delete-project {
+    height: 5vh;
+    background-color: white;
     width: 15%;
     position: absolute;
     right: 0;
+    top: 0;
 }
 
 
