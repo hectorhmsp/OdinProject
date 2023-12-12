@@ -55,12 +55,31 @@
 		}
 
 		addProjectButton.addEventListener("click", function () {
-		  const projectName = prompt("Enter project name:");
+		  const projectName = prompt("Digite o nome do projeto: ");
 		  addProject(projectName);
 
-
 		  console.log(projects);
+
+		  const project = createProject();
+		  projectsDiv.appendChild(project);
 		});
+
+
+		function createProject() {
+		  const project = document.createElement('div');
+		  project.classList.add('project');
+
+		  // Create a new h2 element for the project
+		  const projectTitle = document.createElement('h2');
+		  projectTitle.classList.add('project-title');
+		  projectTitle.textContent = projects[projects.length - 1].name;
+
+		  // Append the title to the project div
+		  project.appendChild(projectTitle);
+
+		  return project;
+		}
+
 
 	</script>
 </body>
