@@ -30,6 +30,38 @@
 	</div>
 
 
-	<script src="script.js"></script>
+	<script>
+		
+		projectsDiv = document.getElementById('projects');
+		taskDiv = document.getElementById('tasks');
+
+		allTasksButton = document.getElementById('allTasksButton');
+		todayButton = document.getElementById('todayButton');
+		next7Button = document.getElementById('next7Button');
+		importantButton = document.getElementById('importantButton');
+		addProjectButton = document.getElementById('addProjectButton');
+
+		const projects = [];
+
+		function addProject(name) {
+		  const newProject = { name };
+		  projects.push(newProject);
+		}
+
+		function displayProjects() {
+		  for (const project of projects) {
+		    console.log(`Name: ${project.name}`);
+		  }
+		}
+
+		addProjectButton.addEventListener("click", function () {
+		  const projectName = prompt("Enter project name:");
+		  addProject(projectName);
+
+
+		  console.log(projects);
+		});
+
+	</script>
 </body>
 </html>
