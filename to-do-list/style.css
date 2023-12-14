@@ -54,12 +54,18 @@ body {
 }
 
 .delete-project {
-    height: 5vh;
+    height: 100%;
     background-color: white;
-    width: 15%;
+    width: 30%;
     position: absolute;
     right: 0;
     top: 0;
 }
 
+.add-task {
+    margin-bottom: 50px;
+}
 
+.remove-task, .new-remove-task {
+    margin-top: 30px;
+}

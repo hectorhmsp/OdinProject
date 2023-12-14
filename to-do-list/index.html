@@ -44,42 +44,169 @@
 		const projects = [];
 
 		function addProject(name) {
-		  const newProject = { name };
-		  projects.push(newProject);
-		}
-
-		function displayProjects() {
-		  for (const project of projects) {
-		    console.log(`Name: ${project.name}`);
-		  }
+			const newProject = { name, isTaskAdded: false, tasks: [] };
+			projects.push(newProject);
 		}
 
 		addProjectButton.addEventListener("click", function () {
-		  const projectName = prompt("Digite o nome do projeto: ");
-		  addProject(projectName);
+			const projectName = prompt("Digite o nome do projeto: ");
 
-		  console.log(projects);
+			if (projectName !== null) { // Executar apenas caso o usuário não clique em "cancelar" no prompt
+				addProject(projectName);
+				
+				const lastIndex = projects.length - 1; // Armazena o último índice
+				const project = createProject(lastIndex); // Passa o último índice como argumento
+				projectsDiv.appendChild(project);
 
-		  const project = createProject();
-		  projectsDiv.appendChild(project);
+				console.log(projects);
+			}
+
 		});
 
+		function createProject(index) {
+			const project = document.createElement('div');
+			project.classList.add('project');
 
-		function createProject() {
-		  const project = document.createElement('div');
-		  project.classList.add('project');
+			// Create a new h2 element for the project
+			const projectTitle = document.createElement('h2');
+			projectTitle.classList.add('project-title');
+			projectTitle.textContent = projects[index].name;
+			console.log(projectTitle.textContent);
 
-		  // Create a new h2 element for the project
-		  const projectTitle = document.createElement('h2');
-		  projectTitle.classList.add('project-title');
-		  projectTitle.textContent = projects[projects.length - 1].name;
+			const deleteProject = document.createElement('div');
+			deleteProject.classList.add('delete-project');
+			deleteProject.addEventListener('click', () => {
+				// Encontrar o projeto pai do botão delete
+				const projectElement = event.target.closest('.project');
 
-		  // Append the title to the project div
-		  project.appendChild(projectTitle);
+				// Remover o projeto da array
+				removeProject(projects.find(project => project.name === projectElement.querySelector('.project-title').textContent));
 
-		  return project;
+				// Remover o elemento do DOM
+				projectsDiv.removeChild(project);
+				
+				const taskHeader = document.querySelector('.task-header');
+
+				if ((taskDiv.innerHTML === '') || (taskHeader.innerHTML === projectTitle.textContent)) {
+					taskDiv.innerHTML = '';
+					console.log(projects);
+				}
+
+			});
+
+			// Append the title and the delete-button to the project div
+			project.appendChild(projectTitle);
+			project.appendChild(deleteProject);
+
+			projectTitle.addEventListener('click', () => addTask(projectTitle.textContent));
+
+			return project;
 		}
 
+		function addTask(projectName) {
+
+			// Clear existing content in taskDiv
+			taskDiv.innerHTML = '';	
+
+			const taskHeader = document.createElement('h2');
+			taskHeader.classList.add('task-header');
+			taskHeader.textContent = projectName;
+
+			// Create a new div for "(edit)"
+			const editDiv = document.createElement('div');
+			editDiv.textContent = '(edit)';
+
+			// Create a new div for "Add Task"
+			const addTaskDiv = document.createElement('div');
+			addTaskDiv.classList.add('add-task');
+			addTaskDiv.id = 'addTask';
+			addTaskDiv.textContent = '+ Add Task';
+			addTaskDiv.addEventListener('click', () => { 
+				//Tornar isTaskAdded verdadeiro
+				const project = projects.find(proj => proj.name === projectName);
+				if (project) {
+					project.isTaskAdded = true;
+
+					const newTask = prompt("Digite a nova tarefa: ");
+					if (newTask) {
+						project.tasks.push(newTask);
+						
+						// Adiciona um "remove-task"
+						const removeTask = document.createElement('div');
+						removeTask.textContent = '(remove-task)';
+						removeTask.classList.add('remove-task');
+
+						// Adiciona um "edit-task"
+						const editTask = document.createElement('div');
+						editTask.textContent = '(edit task)';
+						editTask.classList.add('edit-task');
+
+						// Adiciona a nova task
+						const newDiv = document.createElement('div');
+						newDiv.textContent = newTask;
+
+						taskDiv.appendChild(removeTask);
+						taskDiv.appendChild(editTask);
+						taskDiv.appendChild(newDiv);
+
+					}
+				}
+			})
+
+			// Create a separate div for each task
+			const addedTaskDiv = document.createElement('div');
+			addedTaskDiv.classList.add('task-div')
+
+			// Append the elements to addedTaskDiv
+			addedTaskDiv.appendChild(taskHeader);
+			addedTaskDiv.appendChild(editDiv);
+			addedTaskDiv.appendChild(addTaskDiv);
+
+			// Append the addedTaskDiv to the taskDiv
+			taskDiv.appendChild(addedTaskDiv);
+
+			const project = projects.find(proj => proj.name === projectName);
+			if (project && project.tasks.length > 0) {
+				project.tasks.forEach(task => {
+					const newTaskDiv = document.createElement('div');
+					newTaskDiv.textContent = task;
+					newTaskDiv.classList.add('task');
+
+					// Adiciona um novo "edit-task"
+					const newEditTask = document.createElement('div');
+					newEditTask.textContent = '(edit task)';
+					newEditTask.classList.add('new-edit-task');
+					newEditTask.addEventListener('click', () => {
+						// Lógica para edição ou outras ações desejadas ao clicar na tarefa	
+					});
+
+
+					// Adiciona um novo "remove-task"
+					const newRemoveTask = document.createElement('div');
+					newRemoveTask.textContent = '(remove-task)';
+					newRemoveTask.classList.add('new-remove-task');
+					newRemoveTask.addEventListener('click', () => {
+						// Lógica para remoção da tarefa clicada
+					});
+
+					taskDiv.appendChild(newRemoveTask);
+					taskDiv.appendChild(newEditTask)
+					taskDiv.appendChild(newTaskDiv);
+				});
+			}					
+
+			
+		}
+			
+		function removeProject(project) {
+			const projectIndex = projects.indexOf(project);
+
+			if (projectIndex !== -1) {
+				projects.splice(projectIndex, 1);
+			}
+		}
+
+		
 
 	</script>
 </body>
