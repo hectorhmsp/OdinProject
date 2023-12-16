@@ -30,8 +30,11 @@
 	</div>
 
 
-	<script>
-		
+	<script type="module">
+		import { format } from 'https://cdn.skypack.dev/date-fns';
+
+		let projectsDiv, taskDiv, allTasksButton, todayButton, next7Button, importantButton, addProjectButton;
+
 		projectsDiv = document.getElementById('projects');
 		taskDiv = document.getElementById('tasks');
 
@@ -49,7 +52,7 @@
 		}
 
 		addProjectButton.addEventListener("click", function () {
-			const projectName = promptWithMaxLength("Digite o nome do projeto: (máx. 12 caracteres) ", 12);
+			const projectName = promptWithMaxLength("Digite o nome do projeto: (máx. 10 caracteres) ", 10);
 
 			if (projectName !== null) { // Executar apenas caso o usuário não clique em "cancelar" no prompt
 				addProject(projectName);
@@ -98,12 +101,12 @@
 			project.appendChild(projectTitle);
 			project.appendChild(deleteProject);
 
-			projectTitle.addEventListener('click', () => addTask(projectTitle.textContent));
+			projectTitle.addEventListener('click', () => addTask(projectTitle.textContent, projectTitle));
 
 			return project;
 		}
 
-		function addTask(projectName) {
+		function addTask(projectName, projectTitle) {
 
 			// Clear existing content in taskDiv
 			taskDiv.innerHTML = '';	
@@ -115,6 +118,18 @@
 			// Create a new div for "(edit)"
 			const editDiv = document.createElement('div');
 			editDiv.textContent = '(edit)';
+			editDiv.classList.add('edit-project');
+			editDiv.addEventListener('click', () => {
+				const project = projects.find(proj => proj.name === projectName);
+				if (project) {
+					const newProjectName = promptWithMaxLength("Digite o novo nome do projeto: (máx. 10 caracteres) ", 10);
+					if (newProjectName !== null) {
+						taskHeader.textContent = newProjectName;
+						projectTitle.textContent = newProjectName;
+						project.name = newProjectName;
+					}
+				}
+			});
 
 			// Create a new div for "Add Task"
 			const addTaskDiv = document.createElement('div');
@@ -127,7 +142,9 @@
 
 					const newTask = prompt("Digite a nova tarefa: ");
 					if (newTask) {
-						project.tasks.push(newTask);
+
+						const newTaskObject = { task: newTask, taskDate: null };
+						project.tasks.push(newTaskObject);
 						
 						// Adiciona um "remove-task"
 						const removeTask = document.createElement('div');
@@ -136,8 +153,9 @@
 						removeTask.addEventListener('click', () => {
 							taskDiv.removeChild(newDiv);
 							taskDiv.removeChild(editTask);
+							taskDiv.removeChild(dateInput);
 
-							const taskIndex = project.tasks.indexOf(newTask);
+							const taskIndex = project.tasks.indexOf(newTaskObject);
 							
 							if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
 							
@@ -153,8 +171,7 @@
 
 							if (editTaskPrompt !== null) { 
 								newDiv.textContent = editTaskPrompt;
-								const taskIndex = project.tasks.indexOf(newTask);
-								if (taskIndex !== -1) { project.tasks[taskIndex] = editTaskPrompt; }
+								newTaskObject.task = editTaskPrompt;
 							}
 						});
 
@@ -162,9 +179,24 @@
 						const newDiv = document.createElement('div');
 						newDiv.textContent = newTask;
 
-						taskDiv.appendChild(removeTask);
-						taskDiv.appendChild(editTask);
+						// Adiciona o "no-date"
+						const dateInput = document.createElement('input');
+						dateInput.type = 'date';					
+						dateInput.addEventListener('change', () => {
+							// Acesse a data selecionada usando o valor do campo
+							const selectedDate = dateInput.value;
+
+							// Atualize a data no objeto da tarefa
+							newTaskObject.taskDate = selectedDate;
+
+							console.log('Data selecionada:', selectedDate);
+						});
+
 						taskDiv.appendChild(newDiv);
+						taskDiv.appendChild(editTask);
+						taskDiv.appendChild(dateInput);
+						taskDiv.appendChild(removeTask);
+						
 
 					}
 				}
@@ -184,9 +216,9 @@
 
 			const project = projects.find(proj => proj.name === projectName);
 			if (project && project.tasks.length > 0) {
-				project.tasks.forEach(task => {
+				project.tasks.forEach((task, taskIndex) => {
 					const newTaskDiv = document.createElement('div');
-					newTaskDiv.textContent = task;
+					newTaskDiv.textContent = task.task;
 					newTaskDiv.classList.add('task');
 
 					// Adiciona um novo "edit-task"
@@ -199,11 +231,22 @@
 
 						if (editTaskPrompt !== null) {
 							newTaskDiv.textContent = editTaskPrompt;
-							const taskIndex = project.tasks.indexOf(task);
-							if (taskIndex !== -1) { project.tasks[taskIndex] = editTaskPrompt; }
+							project.tasks[taskIndex].task = editTaskPrompt; 
 						}
 					});
 
+					const newDateInput = document.createElement('input');
+					newDateInput.type = 'date';
+					if (task.taskDate) { newDateInput.value = task.taskDate };
+					newDateInput.addEventListener('change', () => {
+						// Acesse a data selecionada usando o valor do campo
+						const selectedDate = newDateInput.value;
+
+						// Atualize a data no objeto da tarefa
+						project.tasks[taskIndex].taskDate = selectedDate;
+
+						console.log('Data selecionada:', selectedDate);
+					});
 
 					// Adiciona um novo "remove-task"
 					const newRemoveTask = document.createElement('div');
@@ -212,17 +255,20 @@
 					newRemoveTask.addEventListener('click', () => {
 						taskDiv.removeChild(newTaskDiv);
 						taskDiv.removeChild(newEditTask);
+						taskDiv.removeChild(newDateInput);
+						
 
-						const taskIndex = project.tasks.indexOf(task);
-
-						if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
+						project.tasks.splice(taskIndex, 1); 
 
 						taskDiv.removeChild(newRemoveTask);
 					});
 
-					taskDiv.appendChild(newRemoveTask);
-					taskDiv.appendChild(newEditTask)
 					taskDiv.appendChild(newTaskDiv);
+					taskDiv.appendChild(newEditTask);
+					taskDiv.appendChild(newDateInput);
+					taskDiv.appendChild(newRemoveTask);
+				
+
 				});
 			}					
 
@@ -249,6 +295,8 @@
 
 			return userInput;
 		}
+
+		// <input type="date" required="" value="">
 
 	</script>
 </body>
