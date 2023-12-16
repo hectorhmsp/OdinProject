@@ -49,7 +49,7 @@
 		}
 
 		addProjectButton.addEventListener("click", function () {
-			const projectName = prompt("Digite o nome do projeto: ");
+			const projectName = promptWithMaxLength("Digite o nome do projeto: (máx. 12 caracteres) ", 12);
 
 			if (projectName !== null) { // Executar apenas caso o usuário não clique em "cancelar" no prompt
 				addProject(projectName);
@@ -122,10 +122,8 @@
 			addTaskDiv.id = 'addTask';
 			addTaskDiv.textContent = '+ Add Task';
 			addTaskDiv.addEventListener('click', () => { 
-				//Tornar isTaskAdded verdadeiro
 				const project = projects.find(proj => proj.name === projectName);
 				if (project) {
-					project.isTaskAdded = true;
 
 					const newTask = prompt("Digite a nova tarefa: ");
 					if (newTask) {
@@ -135,11 +133,30 @@
 						const removeTask = document.createElement('div');
 						removeTask.textContent = '(remove-task)';
 						removeTask.classList.add('remove-task');
+						removeTask.addEventListener('click', () => {
+							taskDiv.removeChild(newDiv);
+							taskDiv.removeChild(editTask);
+
+							const taskIndex = project.tasks.indexOf(newTask);
+							
+							if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
+							
+							taskDiv.removeChild(removeTask);
+						});
 
 						// Adiciona um "edit-task"
 						const editTask = document.createElement('div');
 						editTask.textContent = '(edit task)';
 						editTask.classList.add('edit-task');
+						editTask.addEventListener('click', () => {
+							const editTaskPrompt = prompt("Edite o nome da tarefa: ");
+
+							if (editTaskPrompt !== null) { 
+								newDiv.textContent = editTaskPrompt;
+								const taskIndex = project.tasks.indexOf(newTask);
+								if (taskIndex !== -1) { project.tasks[taskIndex] = editTaskPrompt; }
+							}
+						});
 
 						// Adiciona a nova task
 						const newDiv = document.createElement('div');
@@ -178,6 +195,13 @@
 					newEditTask.classList.add('new-edit-task');
 					newEditTask.addEventListener('click', () => {
 						// Lógica para edição ou outras ações desejadas ao clicar na tarefa	
+						const editTaskPrompt = prompt("Edite o nome da tarefa: ");
+
+						if (editTaskPrompt !== null) {
+							newTaskDiv.textContent = editTaskPrompt;
+							const taskIndex = project.tasks.indexOf(task);
+							if (taskIndex !== -1) { project.tasks[taskIndex] = editTaskPrompt; }
+						}
 					});
 
 
@@ -186,7 +210,14 @@
 					newRemoveTask.textContent = '(remove-task)';
 					newRemoveTask.classList.add('new-remove-task');
 					newRemoveTask.addEventListener('click', () => {
-						// Lógica para remoção da tarefa clicada
+						taskDiv.removeChild(newTaskDiv);
+						taskDiv.removeChild(newEditTask);
+
+						const taskIndex = project.tasks.indexOf(task);
+
+						if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
+
+						taskDiv.removeChild(newRemoveTask);
 					});
 
 					taskDiv.appendChild(newRemoveTask);
@@ -206,7 +237,18 @@
 			}
 		}
 
-		
+		function promptWithMaxLength(message, maxLength) {
+			let userInput;
+
+			do {
+				userInput = prompt(message);
+				if (userInput && userInput.length > maxLength) {
+					alert(`O texto não pode ter mais que ${maxLength} caracteres. Por favor, tente novamente.`);
+				}
+			} while (userInput && userInput.length > maxLength);
+
+			return userInput;
+		}
 
 	</script>
 </body>
