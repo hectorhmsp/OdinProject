@@ -26,7 +26,7 @@
 	            <button class="add-project-button" id="addProjectButton">Add Project</button>
 	        </div>
 	    </div>
-	    <div class="tasks" id="tasks"></div>
+	    <div class="tasks" id="tasks"><h1>Yay, no tasks!</h1></div>
 	</div>
 
 
@@ -47,7 +47,7 @@
 		const projects = [];
 
 		function addProject(name) {
-			const newProject = { name, isTaskAdded: false, tasks: [] };
+			const newProject = { name, tasks: [] };
 			projects.push(newProject);
 		}
 
@@ -90,7 +90,11 @@
 				
 				const taskHeader = document.querySelector('.task-header');
 
-				if ((taskDiv.innerHTML === '') || (taskHeader.innerHTML === projectTitle.textContent)) {
+				if (
+					(taskDiv.innerHTML === '') ||
+				 	(taskHeader.innerHTML === projectTitle.textContent) ||
+					(taskHeader.innerHTML === 'All Tasks')
+				   ) {
 					taskDiv.innerHTML = '';
 					console.log(projects);
 				}
@@ -111,7 +115,7 @@
 			// Clear existing content in taskDiv
 			taskDiv.innerHTML = '';	
 
-			const taskHeader = document.createElement('h2');
+			const taskHeader = document.createElement('h1');
 			taskHeader.classList.add('task-header');
 			taskHeader.textContent = projectName;
 
@@ -143,9 +147,26 @@
 					const newTask = prompt("Digite a nova tarefa: ");
 					if (newTask) {
 
-						const newTaskObject = { task: newTask, taskDate: null };
+						const newTaskObject = { task: newTask, taskDate: null, isTaskImportant: false };
 						project.tasks.push(newTaskObject);
-						
+
+						// Adiciona um "important" button
+						const importantTask = document.createElement('div');
+						importantTask.classList.add('important-task');
+						importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
+						importantTask.addEventListener('click', () => {
+							if (newTaskObject.isTaskImportant !== undefined) {
+								newTaskObject.isTaskImportant = !newTaskObject.isTaskImportant;
+								console.log(`O status da tarefa atual é: ${newTaskObject.isTaskImportant}`);
+
+								if (newTaskObject.isTaskImportant) {
+									importantTask.textContent = 'A TASK É IMPORTANTE!';
+								} else {
+									importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
+								}
+							} 
+						});
+
 						// Adiciona um "remove-task"
 						const removeTask = document.createElement('div');
 						removeTask.textContent = '(remove-task)';
@@ -154,6 +175,7 @@
 							taskDiv.removeChild(newDiv);
 							taskDiv.removeChild(editTask);
 							taskDiv.removeChild(dateInput);
+							taskDiv.removeChild(importantTask);
 
 							const taskIndex = project.tasks.indexOf(newTaskObject);
 							
@@ -196,11 +218,11 @@
 						taskDiv.appendChild(editTask);
 						taskDiv.appendChild(dateInput);
 						taskDiv.appendChild(removeTask);
-						
+						taskDiv.appendChild(importantTask);
 
 					}
 				}
-			})
+			});
 
 			// Create a separate div for each task
 			const addedTaskDiv = document.createElement('div');
@@ -235,6 +257,29 @@
 						}
 					});
 
+					// Adiciona um "important" button
+					const newImportantTask = document.createElement('div');					
+					newImportantTask.classList.add('new-important-task');
+
+					if (project.tasks[taskIndex].isTaskImportant) {
+						newImportantTask.textContent = 'A TASK É IMPORTANTE!';
+					} else {
+						newImportantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
+					}
+
+					newImportantTask.addEventListener('click', () => {
+						if (project.tasks[taskIndex].isTaskImportant !== undefined) {
+							project.tasks[taskIndex].isTaskImportant = !project.tasks[taskIndex].isTaskImportant;
+							console.log(`O status da tarefa atual é: ${project.tasks[taskIndex].isTaskImportant}`);
+
+							if (project.tasks[taskIndex].isTaskImportant) {
+								newImportantTask.textContent = 'A TASK É IMPORTANTE!';
+							} else {
+								newImportantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
+							}
+						}
+					});
+
 					const newDateInput = document.createElement('input');
 					newDateInput.type = 'date';
 					if (task.taskDate) { newDateInput.value = task.taskDate };
@@ -256,7 +301,7 @@
 						taskDiv.removeChild(newTaskDiv);
 						taskDiv.removeChild(newEditTask);
 						taskDiv.removeChild(newDateInput);
-						
+						taskDiv.removeChild(newImportantTask);
 
 						project.tasks.splice(taskIndex, 1); 
 
@@ -267,7 +312,7 @@
 					taskDiv.appendChild(newEditTask);
 					taskDiv.appendChild(newDateInput);
 					taskDiv.appendChild(newRemoveTask);
-				
+					taskDiv.appendChild(newImportantTask);
 
 				});
 			}					
@@ -296,7 +341,102 @@
 			return userInput;
 		}
 
-		// <input type="date" required="" value="">
+
+		allTasksButton.addEventListener('click', () => {
+			// Limpa o conteúdo atual em taskDiv
+			taskDiv.innerHTML = '';
+
+			let tasksExist = false;
+
+			const taskHeader = document.createElement('h1');
+			taskHeader.classList.add('task-header');
+			taskHeader.id = "all-tasks-id";
+			taskHeader.textContent = "All Tasks";
+			taskDiv.appendChild(taskHeader);
+
+			projects.forEach(project => {
+				project.tasks.forEach(task => {
+					// Adiciona elementos HTML para cada tarefa
+					const newDiv = document.createElement('div');
+					newDiv.textContent = task.task;
+
+					const editTask = document.createElement('div');
+					editTask.textContent = '(edit task)';
+					editTask.classList.add('edit-task');
+					editTask.addEventListener('click', () => {
+						const editTaskPrompt = prompt("Edite o nome da tarefa: ");
+
+						if (editTaskPrompt !== null) {
+							newDiv.textContent = editTaskPrompt;
+							task.task = editTaskPrompt;
+						}
+					});
+
+					const dateInput = document.createElement('input');
+					dateInput.type = 'date';
+					dateInput.value = task.taskDate || '';
+					dateInput.addEventListener('change', () => {
+						const selectedDate = dateInput.value;
+						task.taskDate = selectedDate;
+						console.log('Data selecionada:', selectedDate);
+					});
+
+					const removeTask = document.createElement('div');
+					removeTask.textContent = '(remove-task)';
+					removeTask.classList.add('remove-task');
+					removeTask.addEventListener('click', () => {
+						taskDiv.removeChild(newDiv);
+						taskDiv.removeChild(editTask);
+						taskDiv.removeChild(dateInput);
+						taskDiv.removeChild(importantTask);
+
+						const taskIndex = project.tasks.indexOf(task);
+						if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
+
+						taskDiv.removeChild(removeTask);
+					});
+
+					const importantTask = document.createElement('div');
+					importantTask.classList.add('important-task');
+
+					if (task.isTaskImportant) {
+						importantTask.textContent = 'A TASK É IMPORTANTE!';
+					} else {
+						importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
+					}
+
+					importantTask.addEventListener('click', () => {
+						if (task.isTaskImportant !== undefined) {
+							task.isTaskImportant = !task.isTaskImportant;
+							console.log(`O status da tarefa atual é: ${task.isTaskImportant}`);
+
+							if (task.isTaskImportant) {
+								importantTask.textContent = 'A TASK É IMPORTANTE!';
+							} else {
+								importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
+							}
+						}
+					});
+
+					taskDiv.appendChild(newDiv);
+					taskDiv.appendChild(editTask);
+					taskDiv.appendChild(dateInput);
+					taskDiv.appendChild(removeTask);
+					taskDiv.appendChild(importantTask);
+
+					tasksExist = true;
+				});
+			});
+
+			if (!tasksExist) {
+				const noTasksMessage = document.createElement('h2');
+				noTasksMessage.textContent = 'Yay, no tasks!';
+				taskDiv.appendChild(noTasksMessage);
+			}
+
+		});
+
+
 
 	</script>
 </body>

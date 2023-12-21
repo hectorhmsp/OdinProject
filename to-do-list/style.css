@@ -66,14 +66,18 @@ body {
     margin-bottom: 50px;
 }
 
-.remove-task, .new-remove-task {
-    margin-bottom: 30px;
-}
-
 .task-header {
     margin-bottom: 0;
 }
 
+#all-tasks-id {
+    margin-bottom: 50px;
+}
+
 .edit-project {
     margin-bottom: 20px;
+}
+
+.important-task, .new-important-task {
+    margin-bottom: 30px;
 }
