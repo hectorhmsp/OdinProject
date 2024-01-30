@@ -1,0 +1,151 @@
+body {
+	background-color: #ede0d4;
+	margin: 0;
+	font-family: 'Quicksand', sans-serif;
+}
+
+.header {
+	width: 100%;
+	height: 15vh;
+	background-color: #9c6644;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+
+}
+
+.header-left-sect, .header-right-sect {
+	width: 550px;
+	height: 70%;
+	background-color: #e6ccb2;
+	margin: 20px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	border: none;
+	border-radius: 12px;
+}
+
+.category {
+	background-color: #7f5539;
+	width: 100%;
+	height: 5vh;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	font-size: 20px;
+}
+
+.specific-cat {
+	padding: 12px;
+	color: white;
+}
+
+.store-name {
+	padding: 40px;
+	text-align: center;
+	font-size: 30px;
+}
+
+.search-bar, .search-button {
+	margin-top: 12%;
+	height: 40px;
+	font-size: 15px;
+	border-radius: 13px;
+	border: none;
+}
+
+.search-button {
+	height: 45.43px;
+	margin-right: 20px;
+}
+
+.login, .cart {
+	padding: 40px;
+	text-align: center;
+}
+
+footer {
+	height: 320px;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	font-size: 30px;
+	background-color: #9c6644;
+	padding-top: 40px;
+	color: white;
+}
+
+main {
+	height: 2000px;
+}
+
+img {
+	width: 100%;
+	height: 550px;
+	object-fit: cover;
+	filter: blur(3px);
+}
+
+.precos-imperdiveis {
+	color: #9c6644;
+	font-size: 45px;
+	text-wrap: balance;
+	font-family: 'Quicksand', sans-serif;
+	font-weight: bold;
+  	text-shadow: 
+    	-1px -1px 0.5px rgb(0,0,0),
+    	1px -1px 0.5px rgb(0,0,0),
+    	-1px 1px 0.5px rgb(0,0,0),
+    	1px 1px 0.5px rgb(0,0,0);
+}
+
+.comprar-button {
+	width: 175px;
+	height: 55px;
+	margin-top: 30px;
+	background-color: #7f5539;
+	color: white;
+	font-size: 20px;
+	border: solid 1px white;
+	border-radius: 12px;
+}
+
+
+.first-image-text-container {
+	position: relative;
+	left: 15%;
+	z-index: 1;
+	width: 500px;
+	top: -20%;
+	height: 250px;
+}
+
+.footer-box {
+	/* 
+	border: solid 1px black; (para ver a borda)
+	*/
+	width: 25vw;
+	text-align: left;
+	padding-top: 0px;
+	font-family: 'Quicksand', sans-serif;
+	font-size: 25px;
+}
+
+.footer-box-primeiro {
+	margin-left: 7.5%;
+}
+
+.footer-text { 
+	font-size: 20px;
+	padding-top: 10px;
+}
+
+.footer-text-01 {
+	margin-top: 40px;
+}
+
+
+.store-name:hover, .footer-text:hover, .comprar-button:hover, .specific-cat:hover {
+	cursor: pointer;
+}
