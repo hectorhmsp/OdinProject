@@ -31,7 +31,7 @@
 
 
 	<script type="module">
-		import { format } from 'https://cdn.skypack.dev/date-fns';
+		import { format , compareAsc , add} from 'https://cdn.skypack.dev/date-fns';
 
 		let projectsDiv, taskDiv, allTasksButton, todayButton, next7Button, importantButton, addProjectButton;
 
@@ -66,6 +66,32 @@
 
 		});
 
+		function getTodayDate() {
+			// valor recebido no site: "2024-03-08", string  
+			
+			let dataAtual = new Date();
+			let dia = dataAtual.getDate();
+			let mes = dataAtual.getMonth() + 1;
+			let ano = dataAtual.getFullYear();
+
+			if (dia < 10) {
+				dia = '0' + dia;
+			}
+			if (mes < 10) {
+				mes = '0' + mes;
+			}
+
+			let diaAtual = ano + '-' + mes + '-' + dia;
+
+			return diaAtual;
+
+			//const result = compareAsc(new Date(selectedDate), new Date(diaAtual));
+
+		}
+
+
+		console.log(getTodayDate());
+
 		function createProject(index) {
 			const project = document.createElement('div');
 			project.classList.add('project');
@@ -77,6 +103,7 @@
 			console.log(projectTitle.textContent);
 
 			const deleteProject = document.createElement('div');
+			deleteProject.innerText = "deletar";
 			deleteProject.classList.add('delete-project');
 			deleteProject.addEventListener('click', () => {
 				// Encontrar o projeto pai do botão delete
@@ -212,6 +239,21 @@
 							newTaskObject.taskDate = selectedDate;
 
 							console.log('Data selecionada:', selectedDate);
+							console.log(typeof(selectedDate));
+
+							
+							//comparando as datas e testando os "7 dias"
+							const result = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
+							if (result === 0){
+								console.log('as datas são iguais!');
+							} else if (result === 1) {
+								const novaData = add(new Date(selectedDate), {
+									days: 7,
+								});
+								console.log('esta é a nova data: ' + novaData);
+							} else {
+								console.log('a data selecionada está no passado!');
+							}
 						});
 
 						taskDiv.appendChild(newDiv);
