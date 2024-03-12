@@ -89,8 +89,13 @@
 
 		}
 
+		let dataSeteDias = add(new Date(getTodayDate()), {
+			days: 8,
+		})
+		let dataSeteDiasFormat = format(new Date(dataSeteDias), 'yyyy-MM-dd');
+		console.log('data daqui há 7 dias: ' + dataSeteDiasFormat);		
 
-		console.log(getTodayDate());
+
 
 		function createProject(index) {
 			const project = document.createElement('div');
@@ -174,7 +179,9 @@
 					const newTask = prompt("Digite a nova tarefa: ");
 					if (newTask) {
 
-						const newTaskObject = { task: newTask, taskDate: null, isTaskImportant: false };
+
+						// adicionei o "isTaskWithinSevenDays"
+						const newTaskObject = { task: newTask, taskDate: null, isTaskImportant: false, isTaskWithinSevenDays: false};
 						project.tasks.push(newTaskObject);
 
 						// Adiciona um "important" button
@@ -237,23 +244,26 @@
 
 							// Atualize a data no objeto da tarefa
 							newTaskObject.taskDate = selectedDate;
-
-							console.log('Data selecionada:', selectedDate);
-							console.log(typeof(selectedDate));
-
-							
+												
 							//comparando as datas e testando os "7 dias"
-							const result = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
-							if (result === 0){
-								console.log('as datas são iguais!');
-							} else if (result === 1) {
-								const novaData = add(new Date(selectedDate), {
-									days: 7,
-								});
-								console.log('esta é a nova data: ' + novaData);
+							// compareAsc:
+							// 1  = primeiraData depois da segundaData
+							// -1 = primeiraData antes da segundaData
+							// 0  = datas iguais
+					
+
+							let firstCompare = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
+							if (firstCompare === 1 || firstCompare === 0) {
+								let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
+								if (secondCompare === 1 || secondCompare === 0) {
+									console.log('a data está dentro dos 7 dias!');
+									newTaskObject.isTaskWithinSevenDays = true;
+								}			
 							} else {
 								console.log('a data selecionada está no passado!');
 							}
+							
+
 						});
 
 						taskDiv.appendChild(newDiv);
@@ -333,6 +343,7 @@
 						project.tasks[taskIndex].taskDate = selectedDate;
 
 						console.log('Data selecionada:', selectedDate);
+
 					});
 
 					// Adiciona um novo "remove-task"
@@ -420,6 +431,18 @@
 					dateInput.addEventListener('change', () => {
 						const selectedDate = dateInput.value;
 						task.taskDate = selectedDate;
+						
+						let firstCompare = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
+						if (firstCompare === 1 || firstCompare === 0) {
+							let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
+							if (secondCompare === 1 || secondCompare === 0) {
+								console.log('a data está dentro dos 7 dias!');
+								task.isTaskWithinSevenDays = true;
+							}
+						} else {
+							console.log('a data selecionada está no passado!');
+						}
+
 						console.log('Data selecionada:', selectedDate);
 					});
 
@@ -479,6 +502,112 @@
 		});
 
 
+		next7Button.addEventListener('click', () => {
+			taskDiv.innerHTML = '';
+
+			const next7Header = document.createElement('h1');
+			next7Header.classList.add('next7-header');
+			next7Header.id = "next7-id";
+			next7Header.textContent = "Next 7 days";
+			taskDiv.appendChild(next7Header);			
+		
+			projects.forEach(project => {
+				project.tasks.forEach(task => {
+					if (task.isTaskWithinSevenDays === true) {
+						// Adiciona elementos HTML para cada tarefa
+						const newDiv = document.createElement('div');
+						newDiv.textContent = task.task;
+
+						const editTask = document.createElement('div');
+						editTask.textContent = '(edit task)';
+						editTask.classList.add('edit-task');
+						editTask.addEventListener('click', () => {
+							const editTaskPrompt = prompt("Edite o nome da tarefa: ");
+
+							if (editTaskPrompt !== null) {
+								newDiv.textContent = editTaskPrompt;
+								task.task = editTaskPrompt;
+							}
+						});
+
+						const dateInput = document.createElement('input');
+						dateInput.type = 'date';
+						dateInput.value = task.taskDate || '';
+						dateInput.addEventListener('change', () => {
+							const selectedDate = dateInput.value;
+							task.taskDate = selectedDate;
+							console.log('Data selecionada:', selectedDate);
+
+							let firstCompare = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
+							if (firstCompare === 1 || firstCompare === 0) {
+								let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
+								if (secondCompare === 1 || secondCompare === 0) {
+									console.log('a data está dentro dos 7 dias!');
+									task.isTaskWithinSevenDays = true;
+								} else {
+									// testar algo aqui, talvez? pra mudar se a data alterada for anterior ou posterior...
+								}
+							} else {
+								console.log('a data selecionada está no passado!');
+							}
+
+							if (task.isTaskWithinSevenDays === false) {
+								console.log('do something here to delete the task div from the next 7 days');
+							}
+
+						});
+
+						const removeTask = document.createElement('div');
+						removeTask.textContent = '(remove-task)';
+						removeTask.classList.add('remove-task');
+						removeTask.addEventListener('click', () => {
+							taskDiv.removeChild(newDiv);
+							taskDiv.removeChild(editTask);
+							taskDiv.removeChild(dateInput);
+							taskDiv.removeChild(importantTask);
+
+							const taskIndex = project.tasks.indexOf(task);
+							if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
+
+							taskDiv.removeChild(removeTask);
+						});
+
+						const importantTask = document.createElement('div');
+						importantTask.classList.add('important-task');
+
+						if (task.isTaskImportant) {
+							importantTask.textContent = 'A TASK É IMPORTANTE!';
+						} else {
+							importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
+						}
+
+						importantTask.addEventListener('click', () => {
+							if (task.isTaskImportant !== undefined) {
+								task.isTaskImportant = !task.isTaskImportant;
+								console.log(`O status da tarefa atual é: ${task.isTaskImportant}`);
+
+								if (task.isTaskImportant) {
+									importantTask.textContent = 'A TASK É IMPORTANTE!';
+								} else {
+									importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
+								}
+							}
+						});
+
+						taskDiv.appendChild(newDiv);
+						taskDiv.appendChild(editTask);
+						taskDiv.appendChild(dateInput);
+						taskDiv.appendChild(removeTask);
+						taskDiv.appendChild(importantTask);
+					}
+
+
+
+				});
+			});		
+		
+		});
+		
 
 	</script>
 </body>

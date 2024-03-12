@@ -12,7 +12,7 @@ body {
 }
 
 .header {
-    background-color: lightgray;
+    background-color: #b8d3ff;
     height: 10vh;
     width: 100%;
     margin: 0;
@@ -25,20 +25,20 @@ body {
 }
 
 .sidebar {
-    background-color: lightblue;
+    background-color: #3f8da7;
     height: 90vh;
     width: 30%;
 }
 
 .tasks {
-    background-color: lightcoral;
+    background-color: #93c4f4;
 
     width: 100vw;
 }
 
 .home {
     height: 30vh;
-    background-color: lightgreen;
+    background-color: #8db0e9;
 }
 
 .add-project-button {
@@ -48,7 +48,7 @@ body {
 .project {
 	height: 50px;
     border: solid 1px black;
-    background-color: lightsalmon;
+    background-color: #93c4f4;
     margin: 10px 30px;
     position: relative;
 }
