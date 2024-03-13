@@ -46,7 +46,7 @@ body {
 }
 
 .project {
-	height: 50px;
+    height: 50px;
     border: solid 1px black;
     background-color: #93c4f4;
     margin: 10px 30px;
