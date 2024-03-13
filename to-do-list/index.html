@@ -113,7 +113,7 @@
 			deleteProject.addEventListener('click', () => {
 				// Encontrar o projeto pai do botão delete
 				const projectElement = event.target.closest('.project');
-
+			
 				// Remover o projeto da array
 				removeProject(projects.find(project => project.name === projectElement.querySelector('.project-title').textContent));
 
@@ -122,14 +122,26 @@
 				
 				const taskHeader = document.querySelector('.task-header');
 
+
+
 				if (
 					(taskDiv.innerHTML === '') ||
-				 	(taskHeader.innerHTML === projectTitle.textContent) ||
-					(taskHeader.innerHTML === 'All Tasks')
+				 	(taskHeader.innerHTML === projectTitle.textContent)
 				   ) {
 					taskDiv.innerHTML = '';
 					console.log(projects);
+				} else if (taskHeader.innerText === 'All Tasks') { 
+					allTasksButton.click(); console.log('dentro do task'); 
+				} else if (taskHeader.innerText === 'Today!') { 
+					todayButton.click();
+				} else if (taskHeader.innerText === 'Next 7 days') { 
+					next7Button.click();
+				} else if (taskHeader.innerText === 'Important!') { 
+					importantButton.click(); 
 				}
+				
+				
+
 
 			});
 
@@ -191,7 +203,7 @@
 						importantTask.addEventListener('click', () => {
 							if (newTaskObject.isTaskImportant !== undefined) {
 								newTaskObject.isTaskImportant = !newTaskObject.isTaskImportant;
-								console.log(`O status da tarefa atual é: ${newTaskObject.isTaskImportant}`);
+								console.log(`A tarefa atual é importante: ${newTaskObject.isTaskImportant}`);
 
 								if (newTaskObject.isTaskImportant) {
 									importantTask.textContent = 'A TASK É IMPORTANTE!';
@@ -328,7 +340,7 @@
 					newImportantTask.addEventListener('click', () => {
 						if (project.tasks[taskIndex].isTaskImportant !== undefined) {
 							project.tasks[taskIndex].isTaskImportant = !project.tasks[taskIndex].isTaskImportant;
-							console.log(`O status da tarefa atual é: ${project.tasks[taskIndex].isTaskImportant}`);
+							console.log(`A tarefa atual é importante: ${project.tasks[taskIndex].isTaskImportant}`);
 
 							if (project.tasks[taskIndex].isTaskImportant) {
 								newImportantTask.textContent = 'A TASK É IMPORTANTE!';
@@ -504,7 +516,7 @@
 					importantTask.addEventListener('click', () => {
 						if (task.isTaskImportant !== undefined) {
 							task.isTaskImportant = !task.isTaskImportant;
-							console.log(`O status da tarefa atual é: ${task.isTaskImportant}`);
+							console.log(`A tarefa atual é importante: ${task.isTaskImportant}`);
 
 							if (task.isTaskImportant) {
 								importantTask.textContent = 'A TASK É IMPORTANTE!';
@@ -537,7 +549,7 @@
 			taskDiv.innerHTML = '';
 
 			const next7Header = document.createElement('h1');
-			next7Header.classList.add('next7-header');
+			next7Header.classList.add('task-header');
 			next7Header.id = "next7-id";
 			next7Header.textContent = "Next 7 days";
 			taskDiv.appendChild(next7Header);			
@@ -628,7 +640,7 @@
 						importantTask.addEventListener('click', () => {
 							if (task.isTaskImportant !== undefined) {
 								task.isTaskImportant = !task.isTaskImportant;
-								console.log(`O status da tarefa atual é: ${task.isTaskImportant}`);
+								console.log(`A tarefa atual é importante: ${task.isTaskImportant}`);
 
 								if (task.isTaskImportant) {
 									importantTask.textContent = 'A TASK É IMPORTANTE!';
@@ -657,7 +669,7 @@
 			taskDiv.innerHTML = '';
 
 			const todayHeader = document.createElement('h1');
-			todayHeader.classList.add('today-header');
+			todayHeader.classList.add('task-header');
 			todayHeader.id = "today-id";
 			todayHeader.textContent = "Today!";
 			taskDiv.appendChild(todayHeader);			
@@ -732,7 +744,7 @@
 						importantTask.addEventListener('click', () => {
 							if (task.isTaskImportant !== undefined) {
 								task.isTaskImportant = !task.isTaskImportant;
-								console.log(`O status da tarefa atual é: ${task.isTaskImportant}`);
+								console.log(`A tarefa atual é importante: ${task.isTaskImportant}`);
 
 								if (task.isTaskImportant) {
 									importantTask.textContent = 'A TASK É IMPORTANTE!';
@@ -756,6 +768,112 @@
 		
 		});
 
+
+		importantButton.addEventListener('click', () => {
+			taskDiv.innerHTML = '';
+
+			const importantHeader = document.createElement('h1');
+			importantHeader.classList.add('task-header');
+			importantHeader.id = "important-id";
+			importantHeader.textContent = "Important!";
+			taskDiv.appendChild(importantHeader);
+
+			projects.forEach(project => {
+				project.tasks.forEach(task => {
+					if (task.isTaskImportant) {
+						// Adiciona elementos HTML para cada tarefa
+						const newDiv = document.createElement('div');
+						newDiv.textContent = task.task;
+
+						const editTask = document.createElement('div');
+						editTask.textContent = '(edit task)';
+						editTask.classList.add('edit-task');
+						editTask.addEventListener('click', () => {
+							const editTaskPrompt = prompt("Edite o nome da tarefa: ");
+
+							if (editTaskPrompt !== null) {
+								newDiv.textContent = editTaskPrompt;
+								task.task = editTaskPrompt;
+							}
+						});
+
+						const dateInput = document.createElement('input');
+						dateInput.type = 'date';
+						dateInput.value = task.taskDate || '';
+						dateInput.addEventListener('change', () => {
+							const selectedDate = dateInput.value;
+							task.taskDate = selectedDate;
+							console.log('Data selecionada:', selectedDate);
+
+							let firstCompare = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
+
+							if (firstCompare === 0) {
+								task.isTaskWithinSevenDays = true;
+							} else {
+								task.isTaskWithinSevenDays = false;
+							}
+						});
+
+						const removeTask = document.createElement('div');
+						removeTask.textContent = '(remove-task)';
+						removeTask.classList.add('remove-task');
+						removeTask.addEventListener('click', () => {
+							taskDiv.removeChild(newDiv);
+							taskDiv.removeChild(editTask);
+							taskDiv.removeChild(dateInput);
+							taskDiv.removeChild(importantTask);
+
+							const taskIndex = project.tasks.indexOf(task);
+							if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
+
+							taskDiv.removeChild(removeTask);
+						});
+
+						const importantTask = document.createElement('div');
+						importantTask.classList.add('important-task');
+
+						if (task.isTaskImportant) {
+							importantTask.textContent = 'A TASK É IMPORTANTE!';
+						} else {
+							importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
+						}
+
+						importantTask.addEventListener('click', () => {
+							if (task.isTaskImportant !== undefined) {
+								task.isTaskImportant = !task.isTaskImportant;
+								console.log(`A tarefa atual é importante: ${task.isTaskImportant}`);
+
+								if (task.isTaskImportant) {
+									importantTask.textContent = 'A TASK É IMPORTANTE!';
+								} else {
+									importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
+								}
+							}
+
+							if (task.isTaskImportant === false) {
+								console.log(task.isTaskImportant);
+								taskDiv.removeChild(newDiv);
+								taskDiv.removeChild(editTask);
+								taskDiv.removeChild(dateInput);
+								taskDiv.removeChild(importantTask);
+								taskDiv.removeChild(removeTask);								
+							}
+						});
+
+						taskDiv.appendChild(newDiv);
+						taskDiv.appendChild(editTask);
+						taskDiv.appendChild(dateInput);
+						taskDiv.appendChild(removeTask);
+						taskDiv.appendChild(importantTask);
+					}
+
+				});
+
+
+
+			});
+		});
+		
 
 
 	</script>
