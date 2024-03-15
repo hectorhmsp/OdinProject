@@ -158,7 +158,7 @@ jsBookCont.addEventListener('click', function (event) {
 // ADICIONAR O JSON!!
 
 
-import { format, compareAsc, add } from 'https://cdn.skypack.dev/date-fns';
+import  { format, compareAsc, add }  from 'https://cdn.skypack.dev/date-fns@3.4.0';
 
 let projectsDiv, taskDiv, allTasksButton, todayButton, next7Button, importantButton, addProjectButton;
 
