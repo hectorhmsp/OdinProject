@@ -27,13 +27,19 @@
 	            <button class="add-project-button btn btn-primary" id="addProjectButton">Add Project</button>
 	        </div>
 	    </div>
-	    <div class="tasks" id="tasks"><h1>Yay, no tasks!</h1></div>
+	    <div class="tasks" id="tasks"><h1></h1></div>
 	</div>
 
 
 
 	<script type="module">
+
 		import  { format, compareAsc, add }  from 'https://cdn.skypack.dev/date-fns@3.4.0';
+
+
+		// Chama a função para carregar os dados do localStorage ao carregar a página
+		window.addEventListener('load', loadTasksFromLocal);
+
 
 		let projectsDiv, taskDiv, allTasksButton, todayButton, next7Button, importantButton, addProjectButton;
 
@@ -47,6 +53,74 @@
 		addProjectButton = document.getElementById('addProjectButton');
 
 		const projects = [];
+
+		function saveTasksToLocal() {
+			// Converte o array de projetos para JSON
+			const tasksJSON = JSON.stringify(projects);
+			// Salva os dados no localStorage
+			localStorage.setItem('tasks', tasksJSON);
+		}
+
+
+		function loadTasksFromLocal() {
+			// Obtém os dados salvos no localStorage
+			const tasksJSON = localStorage.getItem('tasks');
+			// Verifica se há dados salvos
+			if (tasksJSON) {
+				console.log(tasksJSON);
+
+				// Converte os dados JSON de volta para um array de projetos
+				const loadedTasks = JSON.parse(tasksJSON);
+				// Limpa os projetos existentes e adiciona os projetos carregados
+				projects.length = 0;
+				projects.push(...loadedTasks);
+				// Atualiza a interface do usuário com as tarefas carregadas
+				updateUI();
+			}
+		}
+
+		function updateUI() {
+			// Limpa o conteúdo atual em projectsDiv
+			projectsDiv.innerHTML = '';
+
+			// Percorre todos os projetos
+			projects.forEach((project, index) => {
+				// Cria o elemento para representar o projeto
+				const projectElement = createProject(index);
+
+				// Adiciona o projeto à div de projetos
+				projectsDiv.appendChild(projectElement);
+
+				// Percorre todas as tarefas do projeto
+				project.tasks.forEach(task => {
+					// Cria um elemento para cada tarefa
+					const taskElement = document.createElement('div');
+					taskElement.textContent = task.task;
+
+					// Adiciona a tarefa ao projectElement
+					projectElement.appendChild(taskElement);
+				});
+			});
+
+			// Recria o botão addProjectsButton e o adiciona ao projectsDiv
+			const addProjectsButton = document.createElement('button');
+			addProjectsButton.textContent = 'Adicionar Projeto';
+			addProjectsButton.addEventListener('click', function () {
+				const projectName = promptWithMaxLength("Digite o nome do projeto: (máx. 10 caracteres) ", 10);
+
+				if (projectName !== null) {
+					addProject(projectName);
+					const lastIndex = projects.length - 1;
+					const project = createProject(lastIndex);
+					projectsDiv.appendChild(project);
+					saveTasksToLocal();
+				}
+			});
+
+			projectsDiv.appendChild(addProjectsButton);
+			
+		}
+
 
 		function addProject(name) {
 		    const newProject = { name, tasks: [] };
@@ -138,6 +212,8 @@
 		        } else if (taskHeader.innerText === 'Important!') {
 		            importantButton.click();
 		        }
+
+				saveTasksToLocal();
 		    });
 
 		    // Append the title and the delete-button to the project div
@@ -145,6 +221,8 @@
 		    project.appendChild(deleteProject);
 
 		    projectTitle.addEventListener('click', () => addTask(projectTitle.textContent, projectTitle));
+
+			saveTasksToLocal();
 
 		    return project;
 		}
@@ -170,8 +248,10 @@
 		                taskHeader.textContent = newProjectName;
 		                projectTitle.textContent = newProjectName;
 		                project.name = newProjectName;
+						saveTasksToLocal();
 		            }
 		        }
+
 		    });
 
 		    // Create a new div for "Add Task"
@@ -202,7 +282,9 @@
 		                        } else {
 		                            importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
 		                        }
-		                    }
+
+		                    	saveTasksToLocal();
+							}
 		                });
 
 		                // Adiciona um "remove-task"
@@ -220,6 +302,8 @@
 		                    if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
 
 		                    taskDiv.removeChild(removeTask);
+
+							saveTasksToLocal();
 		                });
 
 		                // Adiciona um "edit-task"
@@ -233,6 +317,8 @@
 		                        newDiv.textContent = editTaskPrompt;
 		                        newTaskObject.task = editTaskPrompt;
 		                    }
+
+							saveTasksToLocal();
 		                });
 
 		                // Adiciona a nova task
@@ -253,17 +339,22 @@
 
 		                    if (firstCompare === 0) {
 		                        newTaskObject.isTaskWithinSevenDays = true;
+								saveTasksToLocal();
 		                    } else if (firstCompare === 1 || firstCompare === 0) {
 		                        let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
 		                        newTaskObject.isTaskWithinSevenDays = true;
+								saveTasksToLocal();
 		                        if (secondCompare === 1 || secondCompare === 0) {
 		                            console.log('a data está dentro dos 7 dias!');
 		                            newTaskObject.isTaskWithinSevenDays = true;
+									saveTasksToLocal();
 		                        } else {
 		                            newTaskObject.isTaskWithinSevenDays = false;
+									saveTasksToLocal();
 		                        }
 		                    } else {
 		                        newTaskObject.isTaskWithinSevenDays = false;
+								saveTasksToLocal();
 		                    }
 
 		                });
@@ -273,7 +364,7 @@
 		                taskDiv.appendChild(dateInput);
 		                taskDiv.appendChild(removeTask);
 		                taskDiv.appendChild(importantTask);
-
+						saveTasksToLocal();
 		            }
 		        }
 		    });
@@ -309,6 +400,7 @@
 		                    newTaskDiv.textContent = editTaskPrompt;
 		                    project.tasks[taskIndex].task = editTaskPrompt;
 		                }
+						saveTasksToLocal();
 		            });
 
 		            // Adiciona um "important" button
@@ -331,7 +423,9 @@
 		                    } else {
 		                        newImportantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
 		                    }
-		                }
+
+		                	saveTasksToLocal();
+						}
 		            });
 
 		            const newDateInput = document.createElement('input');
@@ -349,22 +443,27 @@
 
 		                if (firstCompare === 0) {
 		                    task.isTaskWithinSevenDays = true;
+							saveTasksToLocal();
 		                } else if (firstCompare === 1 || firstCompare === 0) {
 		                    let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
 		                    task.isTaskWithinSevenDays = true;
+							saveTasksToLocal();
 		                    if (secondCompare === 1 || secondCompare === 0) {
 		                        console.log('a data está dentro dos 7 dias!');
 		                        task.isTaskWithinSevenDays = true;
+								saveTasksToLocal();
 		                    } else {
 		                        task.isTaskWithinSevenDays = false;
+								saveTasksToLocal();
 		                    }
 		                } else {
 		                    console.log('a data selecionada está no passado!');
 		                    task.isTaskWithinSevenDays = false;
+							saveTasksToLocal();
 		                }
 
 		                console.log('Data selecionada:', selectedDate);
-
+						saveTasksToLocal();
 		            });
 
 		            // Adiciona um novo "remove-task"
@@ -380,6 +479,8 @@
 		                project.tasks.splice(taskIndex, 1);
 
 		                taskDiv.removeChild(newRemoveTask);
+
+						saveTasksToLocal();
 		            });
 
 		            taskDiv.appendChild(newTaskDiv);
@@ -387,11 +488,12 @@
 		            taskDiv.appendChild(newDateInput);
 		            taskDiv.appendChild(newRemoveTask);
 		            taskDiv.appendChild(newImportantTask);
+					saveTasksToLocal();
 
 		        });
 		    }
 
-
+			saveTasksToLocal();
 		}
 
 		function removeProject(project) {
@@ -400,6 +502,8 @@
 		    if (projectIndex !== -1) {
 		        projects.splice(projectIndex, 1);
 		    }
+
+			saveTasksToLocal();
 		}
 
 		function promptWithMaxLength(message, maxLength) {
@@ -460,6 +564,7 @@
 		                        newDiv.textContent = editTaskPrompt;
 		                        task.task = editTaskPrompt;
 		                    }
+							saveTasksToLocal();
 		                });
 
 		                const dateInput = document.createElement('input');
@@ -477,13 +582,24 @@
 		                    if (taskHeader.textContent === 'Next 7 days') {
 		                        if (firstCompare === 0) {
 		                            task.isTaskWithinSevenDays = true;
-		                        } else if (firstCompare === 1 || firstCompare === 0) {
+									saveTasksToLocal();
+		                        } else if (firstCompare === -1) {
+									taskDiv.removeChild(newDiv);
+									taskDiv.removeChild(editTask);
+									taskDiv.removeChild(dateInput);
+									taskDiv.removeChild(importantTask);
+									taskDiv.removeChild(removeTask); 
+									task.isTaskWithinSevenDays = false;
+									saveTasksToLocal();
+								} else if (firstCompare === 1 || firstCompare === 0) {
 		                            let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
 		                            task.isTaskWithinSevenDays = true;
+									saveTasksToLocal();
 
 		                            if (secondCompare === 1 || secondCompare === 0) {
 		                                console.log('a data está dentro dos 7 dias!');
 		                                task.isTaskWithinSevenDays = true;
+										saveTasksToLocal();
 		                            } else {
 		                                task.isTaskWithinSevenDays = false;
 		                                taskDiv.removeChild(newDiv);
@@ -491,6 +607,7 @@
 		                                taskDiv.removeChild(dateInput);
 		                                taskDiv.removeChild(importantTask);
 		                                taskDiv.removeChild(removeTask);
+										saveTasksToLocal();
 		                            }
 		                        } else {
 		                            task.isTaskWithinSevenDays = false;
@@ -503,43 +620,77 @@
 		                            taskDiv.removeChild(removeTask);
 
 		                            console.log('a data selecionada está no passado!');
+									saveTasksToLocal();
 		                        }
 		                    }
 		                    else if (taskHeader.textContent === 'All Tasks') {
 		                        if (firstCompare === 0) {
 		                            task.isTaskWithinSevenDays = true;
+									saveTasksToLocal();
 		                        } else if (firstCompare === 1 || firstCompare === 0) {
 		                            let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
 		                            task.isTaskWithinSevenDays = true;
-
+									saveTasksToLocal();
 		                            if (secondCompare === 1 || secondCompare === 0) {
 		                                console.log('a data está dentro dos 7 dias!');
 		                                task.isTaskWithinSevenDays = true;
+										saveTasksToLocal();
 		                            } else {
 		                                task.isTaskWithinSevenDays = false;
+										saveTasksToLocal();
 		                            }
 		                        } else {
 		                            task.isTaskWithinSevenDays = false;
 		                            console.log('a data selecionada está no passado!');
+									saveTasksToLocal();
 		                        }
 		                    }
 		                    else if (taskHeader.textContent === "Today!") {
 		                        if (firstCompare === 0) {
 		                            task.isTaskWithinSevenDays = true;
-		                        } else {
-		                            task.isTaskWithinSevenDays = false;
-		                            taskDiv.removeChild(newDiv);
-		                            taskDiv.removeChild(editTask);
-		                            taskDiv.removeChild(dateInput);
-		                            taskDiv.removeChild(importantTask);
-		                            taskDiv.removeChild(removeTask);
+									saveTasksToLocal();
+		                        } else if (firstCompare === -1) {
+									taskDiv.removeChild(newDiv);
+									taskDiv.removeChild(editTask);
+									taskDiv.removeChild(dateInput);
+									taskDiv.removeChild(importantTask);
+									taskDiv.removeChild(removeTask);
+									task.isTaskWithinSevenDays = false;
+									saveTasksToLocal();
+								} else if (firstCompare === 1 || firstCompare === 0) {
+									let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
+									task.isTaskWithinSevenDays = true;
+									taskDiv.removeChild(newDiv);
+									taskDiv.removeChild(editTask);
+									taskDiv.removeChild(dateInput);
+									taskDiv.removeChild(importantTask);
+									taskDiv.removeChild(removeTask);
+
+									saveTasksToLocal();
+
+									if (secondCompare === 1 || secondCompare === 0) {
+										console.log('a data está dentro dos 7 dias!');
+										task.isTaskWithinSevenDays = true;
+										saveTasksToLocal();
+									} else {
+										task.isTaskWithinSevenDays = false;
+										taskDiv.removeChild(newDiv);
+										taskDiv.removeChild(editTask);
+										taskDiv.removeChild(dateInput);
+										taskDiv.removeChild(importantTask);
+										taskDiv.removeChild(removeTask);
+										saveTasksToLocal();
+
+									}
 		                        }
 		                    }
 		                    else if (taskHeader.textContent === "Important!") {
 		                        if (firstCompare === 0) {
 		                            task.isTaskWithinSevenDays = true;
+									saveTasksToLocal();
 		                        } else {
 		                            task.isTaskWithinSevenDays = false;
+									saveTasksToLocal();
 		                        }
 		                    }
 
@@ -558,6 +709,7 @@
 		                    if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
 
 		                    taskDiv.removeChild(removeTask);
+							saveTasksToLocal();
 		                });
 
 		                const importantTask = document.createElement('div');
@@ -568,6 +720,7 @@
 		                } else {
 		                    importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
 		                }
+						saveTasksToLocal();
 
 		                importantTask.addEventListener('click', () => {
 		                    if (task.isTaskImportant !== undefined) {
@@ -579,6 +732,7 @@
 		                        } else {
 		                            importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
 		                        }
+								saveTasksToLocal();
 		                    }
 
 		                    const taskHeader = document.querySelector('.task-header');
@@ -593,6 +747,7 @@
 		                        taskDiv.removeChild(dateInput);
 		                        taskDiv.removeChild(importantTask);
 		                        taskDiv.removeChild(removeTask);
+								saveTasksToLocal();
 		                    }
 		                });
 
@@ -603,8 +758,11 @@
 		                taskDiv.appendChild(importantTask);
 
 		                tasksExist = true;
+						saveTasksToLocal();
 		            };
 		        });
+
+				saveTasksToLocal();
 		    });
 
 		    if (!tasksExist) {
