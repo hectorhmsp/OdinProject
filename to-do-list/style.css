@@ -43,14 +43,18 @@ body {
 .home {
     height: 30vh;
     background-color: #bbd5ff;
+    display: flex;
+    flex-direction: column;
 }
 
 .add-project-button {
-    width: 80%;
+    width: 60%;
     align-self: center;
     margin-bottom: 50px;
     margin-top: 10px;
     padding: 5px;
+    border: solid 1px black;
+    border-radius: 4px;
 }
 
 .project {
@@ -95,13 +99,33 @@ body {
     margin-bottom: 30px;
 }
 
-#allTasksButton, #todayButton, #next7Button, #importantButton {
-    border: solid 0.5px black;
+
+.toggle-btn {
     margin: 3px;
-    border-radius: 5px;
     padding: 7px;
+    width: 100%;
+    align-self: center;
+    margin-top: 10px;
+    background-color: #bbd5ff;
+    border: none;
 }
 
-#allTasksButton, #todayButton, #next7Button, #importantButton:hover {
+.all-tasks-button:hover, .today-button:hover, .next-7-button:hover, .important-button:hover {
     cursor: pointer;
+    background-color: #7a98ff;
+    width: 90%;
+    border: solid 0.5px black;
+    border-radius: 3px;
 }
+
+
+
+.toggle-btn.clicked {
+    cursor: pointer;
+    background-color: #778cd3;
+    width: 90%;
+    border: solid 0.5px black;
+    border-radius: 3px;
+}
+
+
