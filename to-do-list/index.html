@@ -17,10 +17,10 @@
 	<div class="main" id="main">
 	    <div class="sidebar" id="sidebar">
 	        <div class="home">
-	            <button class="btn-outline-primary all-tasks-button" id="allTasksButton">All Tasks</button>
-	            <button class="btn-outline-primary today-button" id="todayButton">Today</button>
-	            <button class="btn-outline-primary next-7-button" id="next7Button">Next 7 Days</button>
-	            <button class="btn-outline-primary important-button" id="importantButton">Important</button>
+	            <button class="toggle-btn btn-outline-primary all-tasks-button" id="allTasksButton">All Tasks</button>
+	            <button class="toggle-btn btn-outline-primary today-button" id="todayButton">Today</button>
+	            <button class="toggle-btn btn-outline-primary next-7-button" id="next7Button">Next 7 Days</button>
+	            <button class="toggle-btn btn-outline-primary important-button" id="importantButton">Important</button>
 	        </div>
 	        <div class="projects" id="projects">
 	            <button class="add-project-button btn btn-primary" id="addProjectButton">Add Project</button>
@@ -33,6 +33,17 @@
 
 	<script type="module">
 
+		/*
+
+		TAREFAS:
+
+		>> escolher uma paleta de cores
+		>> inserir algum IF para o toggle dos botões (incluindo projects)
+		>> inserir svg's/icones 
+		>> inserir made by "Hector" + github no footer
+
+		*/
+
 		import  { format, compareAsc, add }  from 'https://cdn.skypack.dev/date-fns@3.4.0';
 
 
@@ -41,6 +52,21 @@
 
 		// Para limpar o JSON: 
 		// localStorage.removeItem('tasks');
+
+		document.addEventListener('DOMContentLoaded', function() {
+		  const buttons = document.querySelectorAll('.toggle-btn');
+
+		  buttons.forEach(button => {
+		    button.addEventListener('click', function() {
+		      // Remove 'clicked' class from all buttons
+		      buttons.forEach(btn => btn.classList.remove('clicked'));
+		      
+		      // Add 'clicked' class to the clicked button
+		      this.classList.add('clicked');
+		    });
+		  });
+		});
+
 
 		let projectsDiv, taskDiv, allTasksButton, todayButton, next7Button, importantButton, addProjectButton;
 
@@ -169,11 +195,11 @@
 		    // Create a new h2 element for the project
 		    const projectTitle = document.createElement('h2');
 		    projectTitle.classList.add('project-title');
+
 		    projectTitle.textContent = projects[index].name;
 		    console.log(projectTitle.textContent);
 
 		    const deleteProject = document.createElement('div');
-		    deleteProject.innerText = "deletar";
 		    deleteProject.classList.add('delete-project');
 		    deleteProject.addEventListener('click', () => {
 		        // Encontrar o projeto pai do botão delete
@@ -239,6 +265,7 @@
 		            if (newProjectName !== null) {
 		                taskHeader.textContent = newProjectName;
 		                projectTitle.textContent = newProjectName;
+		                projectTitle.classList.add('toggle-btn');
 		                project.name = newProjectName;
 						saveTasksToLocal();
 		            }
@@ -782,6 +809,7 @@
 		    buttonClickFirst('Important!');
 		    buttonClickForEach(true);
 		});
+
 	</script>
 
 </body>
