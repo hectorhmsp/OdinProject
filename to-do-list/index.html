@@ -27,7 +27,7 @@
 	            <button class="add-project-button btn btn-primary" id="addProjectButton">Add Project</button>
 	        </div>
 	    </div>
-	    <div class="tasks" id="tasks"><h1></h1></div>
+	    <div class="tasks" id="tasks"></div>
 	</div>
 
 
@@ -40,6 +40,8 @@
 		// Chama a função para carregar os dados do localStorage ao carregar a página
 		window.addEventListener('load', loadTasksFromLocal);
 
+		// Para limpar o JSON: 
+		// localStorage.removeItem('tasks');
 
 		let projectsDiv, taskDiv, allTasksButton, todayButton, next7Button, importantButton, addProjectButton;
 
@@ -81,30 +83,10 @@
 
 		function updateUI() {
 			// Limpa o conteúdo atual em projectsDiv
-			projectsDiv.innerHTML = '';
-
-			// Percorre todos os projetos
-			projects.forEach((project, index) => {
-				// Cria o elemento para representar o projeto
-				const projectElement = createProject(index);
-
-				// Adiciona o projeto à div de projetos
-				projectsDiv.appendChild(projectElement);
-
-				// Percorre todas as tarefas do projeto
-				project.tasks.forEach(task => {
-					// Cria um elemento para cada tarefa
-					const taskElement = document.createElement('div');
-					taskElement.textContent = task.task;
-
-					// Adiciona a tarefa ao projectElement
-					projectElement.appendChild(taskElement);
-				});
-			});
+			projectsDiv.innerHTML = '<button class="add-project-button btn btn-primary" id="addProjectButton">Add Project</button>';
 
 			// Recria o botão addProjectsButton e o adiciona ao projectsDiv
-			const addProjectsButton = document.createElement('button');
-			addProjectsButton.textContent = 'Adicionar Projeto';
+			const addProjectsButton = document.getElementById('addProjectButton');
 			addProjectsButton.addEventListener('click', function () {
 				const projectName = promptWithMaxLength("Digite o nome do projeto: (máx. 10 caracteres) ", 10);
 
@@ -115,9 +97,19 @@
 					projectsDiv.appendChild(project);
 					saveTasksToLocal();
 				}
+				console.log(projects);
 			});
 
 			projectsDiv.appendChild(addProjectsButton);
+
+			// Percorre todos os projetos
+			projects.forEach((project, index) => {
+				// Cria o elemento para representar o projeto
+				const projectElement = createProject(index);
+
+				// Adiciona o projeto à div de projetos
+				projectsDiv.appendChild(projectElement);
+			});
 			
 		}
 
@@ -136,6 +128,7 @@
 		        const lastIndex = projects.length - 1; // Armazena o último índice
 		        const project = createProject(lastIndex); // Passa o último índice como argumento
 		        projectsDiv.appendChild(project);
+		        saveTasksToLocal();
 
 		        console.log(projects);
 		    }
