@@ -18,6 +18,10 @@ body {
     margin: 0;
 }
 
+.page-name {
+    margin-left: 30%;
+}
+
 .main {
     display: flex;
     flex-direction: row;
@@ -42,7 +46,11 @@ body {
 }
 
 .add-project-button {
-    display: block;
+    width: 80%;
+    align-self: center;
+    margin-bottom: 50px;
+    margin-top: 10px;
+    padding: 5px;
 }
 
 .project {
@@ -51,6 +59,11 @@ body {
     background-color: #93c4f4;
     margin: 10px 30px;
     position: relative;
+}
+
+.projects {
+    display: flex;
+    flex-direction: column;
 }
 
 .delete-project {
@@ -67,7 +80,7 @@ body {
 }
 
 .task-header {
-    margin-bottom: 0px;
+    margin-bottom: 50px;
 }
 
 #all-tasks-id {
@@ -80,4 +93,15 @@ body {
 
 .important-task, .new-important-task {
     margin-bottom: 30px;
+}
+
+#allTasksButton, #todayButton, #next7Button, #importantButton {
+    border: solid 0.5px black;
+    margin: 3px;
+    border-radius: 5px;
+    padding: 7px;
+}
+
+#allTasksButton, #todayButton, #next7Button, #importantButton:hover {
+    cursor: pointer;
 }
