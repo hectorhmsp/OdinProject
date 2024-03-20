@@ -51,10 +51,11 @@ body {
     width: 60%;
     align-self: center;
     margin-bottom: 50px;
-    margin-top: 10px;
-    padding: 5px;
+    margin-top: 20px;
+    padding: 10px;
     border: solid 1px black;
     border-radius: 4px;
+    background: #bbd5ff;
 }
 
 .project {
@@ -63,6 +64,17 @@ body {
     background-color: #93c4f4;
     margin: 10px 30px;
     position: relative;
+    border-radius: 3px;
+}
+
+.project:hover {
+    cursor: pointer;
+}
+
+.project-title {
+    margin: 0;
+    margin-left: 20px;
+    margin-top: 10px;
 }
 
 .projects {
@@ -72,11 +84,14 @@ body {
 
 .delete-project {
     height: 100%;
-    background-color: white;
-    width: 30%;
+    width: 15%;
     position: absolute;
     right: 0;
     top: 0;
+}
+
+.delete-project:hover {
+    cursor: pointer;
 }
 
 .add-task {
@@ -101,13 +116,7 @@ body {
 
 
 .toggle-btn {
-    margin: 3px;
-    padding: 7px;
-    width: 100%;
-    align-self: center;
-    margin-top: 10px;
     background-color: #bbd5ff;
-    border: none;
 }
 
 .all-tasks-button:hover, .today-button:hover, .next-7-button:hover, .important-button:hover {
@@ -118,14 +127,27 @@ body {
     border-radius: 3px;
 }
 
+.all-tasks-button, .today-button, .next-7-button, .important-button {
+    margin: 3px;
+    padding: 7px;
+    width: 90%;
+    align-self: center;
+    margin-top: 10px;
+    border-radius: 3px;
+    font-size: 20px;
+    border: none;
+}
 
 
 .toggle-btn.clicked {
     cursor: pointer;
     background-color: #778cd3;
-    width: 90%;
-    border: solid 0.5px black;
     border-radius: 3px;
 }
 
 
+.trash-svg {
+    width: 30px;
+    margin-top: 10px;
+    margin-left: 5px;
+}
