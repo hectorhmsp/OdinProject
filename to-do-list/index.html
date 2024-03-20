@@ -263,9 +263,11 @@
 		}
 
 		function addTask(projectName, projectTitle) {
-
 		    // Clear existing content in taskDiv
 		    taskDiv.innerHTML = '';
+
+			const specificTask = document.createElement('div');
+			specificTask.classList.add('specific-task');
 
 		    const taskHeader = document.createElement('h1');
 		    taskHeader.classList.add('task-header-proj');
@@ -299,6 +301,11 @@
 		        if (project) {
 		            const newTask = prompt("Digite a nova tarefa: ");
 		            if (newTask) {
+
+						const specificTask = document.createElement('div');
+						specificTask.classList.add('specific-task');
+
+
 		                // adicionei o "isTaskWithinSevenDays"
 		                const newTaskObject = { task: newTask, taskDate: null, isTaskImportant: false, isTaskWithinSevenDays: false };
 		                project.tasks.push(newTaskObject);
@@ -327,16 +334,27 @@
 		                removeTask.textContent = '(remove-task)';
 		                removeTask.classList.add('remove-task');
 		                removeTask.addEventListener('click', () => {
-		                    taskDiv.removeChild(newDiv);
+							/*
+							taskDiv.removeChild(newDiv);
 		                    taskDiv.removeChild(editTask);
 		                    taskDiv.removeChild(dateInput);
 		                    taskDiv.removeChild(importantTask);
+							*/
+
+							specificTask.removeChild(newDiv);
+							specificTask.removeChild(editTask);
+							specificTask.removeChild(dateInput);
+							specificTask.removeChild(importantTask);
 
 		                    const taskIndex = project.tasks.indexOf(newTaskObject);
 
 		                    if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
 
-		                    taskDiv.removeChild(removeTask);
+							specificTask.removeChild(removeTask);
+
+		                    // taskDiv.removeChild(removeTask);
+
+							taskDiv.removeChild(specificTask);
 
 							saveTasksToLocal();
 		                });
@@ -394,11 +412,23 @@
 
 		                });
 
+						/*
 		                taskDiv.appendChild(newDiv);
 		                taskDiv.appendChild(editTask);
 		                taskDiv.appendChild(dateInput);
 		                taskDiv.appendChild(removeTask);
 		                taskDiv.appendChild(importantTask);
+						*/
+
+
+						specificTask.appendChild(newDiv);
+						specificTask.appendChild(editTask);
+						specificTask.appendChild(dateInput);
+						specificTask.appendChild(removeTask);
+						specificTask.appendChild(importantTask);	
+						
+						taskDiv.appendChild(specificTask);
+
 						saveTasksToLocal();
 		            }
 		        }
@@ -419,6 +449,11 @@
 		    const project = projects.find(proj => proj.name === projectName);
 		    if (project && project.tasks.length > 0) {
 		        project.tasks.forEach((task, taskIndex) => {
+
+					const specificTask = document.createElement('div');
+					specificTask.classList.add('specific-task');
+
+
 		            const newTaskDiv = document.createElement('div');
 		            newTaskDiv.textContent = task.task;
 		            newTaskDiv.classList.add('task');
@@ -506,23 +541,43 @@
 		            newRemoveTask.textContent = '(remove-task)';
 		            newRemoveTask.classList.add('new-remove-task');
 		            newRemoveTask.addEventListener('click', () => {
-		                taskDiv.removeChild(newTaskDiv);
+		                /*
+						taskDiv.removeChild(newTaskDiv);
 		                taskDiv.removeChild(newEditTask);
 		                taskDiv.removeChild(newDateInput);
 		                taskDiv.removeChild(newImportantTask);
+						*/
+
+						specificTask.removeChild(newTaskDiv);
+						specificTask.removeChild(newEditTask);
+						specificTask.removeChild(newDateInput);
+						specificTask.removeChild(newImportantTask);						
 
 		                project.tasks.splice(taskIndex, 1);
 
-		                taskDiv.removeChild(newRemoveTask);
+						specificTask.removeChild(newRemoveTask);
+		                //taskDiv.removeChild(newRemoveTask);
+						taskDiv.removeChild(specificTask);
 
 						saveTasksToLocal();
 		            });
 
+					/*
 		            taskDiv.appendChild(newTaskDiv);
 		            taskDiv.appendChild(newEditTask);
 		            taskDiv.appendChild(newDateInput);
 		            taskDiv.appendChild(newRemoveTask);
 		            taskDiv.appendChild(newImportantTask);
+					*/
+
+					specificTask.appendChild(newTaskDiv);
+					specificTask.appendChild(newEditTask);
+					specificTask.appendChild(newDateInput);
+					specificTask.appendChild(newRemoveTask);
+					specificTask.appendChild(newImportantTask);
+
+					taskDiv.appendChild(specificTask);
+
 					saveTasksToLocal();
 
 		        });
@@ -585,6 +640,10 @@
 		                (checkWithinSevenDays && task.taskDate === getTodayDate() && taskHeader.innerText === "Today!") ||
 		                (task.isTaskImportant && taskHeader.innerText === "Important!")
 		            ) {
+
+						const specificTask = document.createElement('div');
+						specificTask.classList.add('specific-task');
+
 		                // Adiciona elementos HTML para cada tarefa
 		                const newDiv = document.createElement('div');
 		                newDiv.textContent = task.task;
@@ -619,11 +678,22 @@
 		                            task.isTaskWithinSevenDays = true;
 									saveTasksToLocal();
 		                        } else if (firstCompare === -1) {
+									/*
 									taskDiv.removeChild(newDiv);
 									taskDiv.removeChild(editTask);
 									taskDiv.removeChild(dateInput);
 									taskDiv.removeChild(importantTask);
 									taskDiv.removeChild(removeTask); 
+									*/
+
+									specificTask.removeChild(newDiv);
+									specificTask.removeChild(editTask);
+									specificTask.removeChild(dateInput);
+									specificTask.removeChild(importantTask);
+									specificTask.removeChild(removeTask); 
+
+									taskDiv.removeChild(specificTask);
+
 									task.isTaskWithinSevenDays = false;
 									saveTasksToLocal();
 								} else if (firstCompare === 1 || firstCompare === 0) {
@@ -637,22 +707,42 @@
 										saveTasksToLocal();
 		                            } else {
 		                                task.isTaskWithinSevenDays = false;
-		                                taskDiv.removeChild(newDiv);
+										/*
+										taskDiv.removeChild(newDiv);
 		                                taskDiv.removeChild(editTask);
 		                                taskDiv.removeChild(dateInput);
 		                                taskDiv.removeChild(importantTask);
 		                                taskDiv.removeChild(removeTask);
+										*/
+
+										specificTask.removeChild(newDiv);
+										specificTask.removeChild(editTask);
+										specificTask.removeChild(dateInput);
+										specificTask.removeChild(importantTask);
+										specificTask.removeChild(removeTask); 
+
+										taskDiv.removeChild(specificTask);
 										saveTasksToLocal();
 		                            }
 		                        } else {
 		                            task.isTaskWithinSevenDays = false;
 		                            createNoTasksYay();
 
+									/*
 		                            taskDiv.removeChild(newDiv);
 		                            taskDiv.removeChild(editTask);
 		                            taskDiv.removeChild(dateInput);
 		                            taskDiv.removeChild(importantTask);
 		                            taskDiv.removeChild(removeTask);
+									*/
+
+									specificTask.removeChild(newDiv);
+									specificTask.removeChild(editTask);
+									specificTask.removeChild(dateInput);
+									specificTask.removeChild(importantTask);
+									specificTask.removeChild(removeTask); 									
+
+									taskDiv.removeChild(specificTask);
 
 		                            console.log('a data selecionada está no passado!');
 									saveTasksToLocal();
@@ -685,21 +775,42 @@
 		                            task.isTaskWithinSevenDays = true;
 									saveTasksToLocal();
 		                        } else if (firstCompare === -1) {
+									/*
 									taskDiv.removeChild(newDiv);
 									taskDiv.removeChild(editTask);
 									taskDiv.removeChild(dateInput);
 									taskDiv.removeChild(importantTask);
 									taskDiv.removeChild(removeTask);
+									*/
+
+									specificTask.removeChild(newDiv);
+									specificTask.removeChild(editTask);
+									specificTask.removeChild(dateInput);
+									specificTask.removeChild(importantTask);
+									specificTask.removeChild(removeTask); 									
+
+									taskDiv.removeChild(specificTask);
+
 									task.isTaskWithinSevenDays = false;
 									saveTasksToLocal();
 								} else if (firstCompare === 1 || firstCompare === 0) {
 									let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
 									task.isTaskWithinSevenDays = true;
+									/*
 									taskDiv.removeChild(newDiv);
 									taskDiv.removeChild(editTask);
 									taskDiv.removeChild(dateInput);
 									taskDiv.removeChild(importantTask);
 									taskDiv.removeChild(removeTask);
+									*/
+
+									specificTask.removeChild(newDiv);
+									specificTask.removeChild(editTask);
+									specificTask.removeChild(dateInput);
+									specificTask.removeChild(importantTask);
+									specificTask.removeChild(removeTask); 									
+
+									taskDiv.removeChild(specificTask);
 
 									saveTasksToLocal();
 
@@ -709,11 +820,22 @@
 										saveTasksToLocal();
 									} else {
 										task.isTaskWithinSevenDays = false;
+										/*
 										taskDiv.removeChild(newDiv);
 										taskDiv.removeChild(editTask);
 										taskDiv.removeChild(dateInput);
 										taskDiv.removeChild(importantTask);
 										taskDiv.removeChild(removeTask);
+										*/
+
+										specificTask.removeChild(newDiv);
+										specificTask.removeChild(editTask);
+										specificTask.removeChild(dateInput);
+										specificTask.removeChild(importantTask);
+										specificTask.removeChild(removeTask); 
+
+										taskDiv.removeChild(specificTask);
+
 										saveTasksToLocal();
 
 									}
@@ -735,15 +857,19 @@
 		                removeTask.textContent = '(remove-task)';
 		                removeTask.classList.add('remove-task');
 		                removeTask.addEventListener('click', () => {
-		                    taskDiv.removeChild(newDiv);
-		                    taskDiv.removeChild(editTask);
-		                    taskDiv.removeChild(dateInput);
-		                    taskDiv.removeChild(importantTask);
+							/*
+							taskDiv.removeChild(newDiv);
+							taskDiv.removeChild(editTask);
+							taskDiv.removeChild(dateInput);
+							taskDiv.removeChild(importantTask);
+							*/
 
 		                    const taskIndex = project.tasks.indexOf(task);
 		                    if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
 
-		                    taskDiv.removeChild(removeTask);
+		                    //taskDiv.removeChild(removeTask);
+							
+							taskDiv.removeChild(specificTask);
 							saveTasksToLocal();
 		                });
 
@@ -777,20 +903,40 @@
 		                    ) {
 		                        console.log(task.isTaskImportant);
 		                        console.log('deu merda...');
-		                        taskDiv.removeChild(newDiv);
-		                        taskDiv.removeChild(editTask);
-		                        taskDiv.removeChild(dateInput);
-		                        taskDiv.removeChild(importantTask);
-		                        taskDiv.removeChild(removeTask);
+								/*
+								taskDiv.removeChild(newDiv);
+								taskDiv.removeChild(editTask);
+								taskDiv.removeChild(dateInput);
+								taskDiv.removeChild(importantTask);
+								taskDiv.removeChild(removeTask);
+								*/
+
+								specificTask.removeChild(newDiv);
+								specificTask.removeChild(editTask);
+								specificTask.removeChild(dateInput);
+								specificTask.removeChild(importantTask);
+								specificTask.removeChild(removeTask); 								
+
+								taskDiv.removeChild(specificTask);
 								saveTasksToLocal();
 		                    }
 		                });
 
+						/*
 		                taskDiv.appendChild(newDiv);
 		                taskDiv.appendChild(editTask);
 		                taskDiv.appendChild(dateInput);
 		                taskDiv.appendChild(removeTask);
 		                taskDiv.appendChild(importantTask);
+						*/
+
+						specificTask.appendChild(newDiv);
+						specificTask.appendChild(editTask);
+						specificTask.appendChild(dateInput);
+						specificTask.appendChild(removeTask);
+						specificTask.appendChild(importantTask);
+
+						taskDiv.appendChild(specificTask);
 
 		                tasksExist = true;
 						saveTasksToLocal();
