@@ -191,6 +191,23 @@
 		function createProject(index) {
 		    const project = document.createElement('div');
 		    project.classList.add('project');
+		    
+		    project.classList.add('toggle-btn');
+
+			project.addEventListener('click', function() {
+			  const buttons = document.querySelectorAll('.toggle-btn');
+
+			  buttons.forEach(button => {
+			    button.addEventListener('click', function() {
+			      // Remove 'clicked' class from all buttons
+			      buttons.forEach(btn => btn.classList.remove('clicked'));
+			      
+			      // Add 'clicked' class to the clicked button
+			      this.classList.add('clicked');
+			    });
+			  });
+			});		    
+			
 
 		    // Create a new h2 element for the project
 		    const projectTitle = document.createElement('h2');
@@ -201,6 +218,7 @@
 
 		    const deleteProject = document.createElement('div');
 		    deleteProject.classList.add('delete-project');
+	     	deleteProject.innerHTML = `<img src="trash_svg.svg" alt="Ícone SVG" class="trash-svg" />`;
 		    deleteProject.addEventListener('click', () => {
 		        // Encontrar o projeto pai do botão delete
 		        const projectElement = event.target.closest('.project');
@@ -230,7 +248,6 @@
 		        } else if (taskHeader.innerText === 'Important!') {
 		            importantButton.click();
 		        }
-
 				saveTasksToLocal();
 		    });
 
@@ -265,7 +282,6 @@
 		            if (newProjectName !== null) {
 		                taskHeader.textContent = newProjectName;
 		                projectTitle.textContent = newProjectName;
-		                projectTitle.classList.add('toggle-btn');
 		                project.name = newProjectName;
 						saveTasksToLocal();
 		            }
