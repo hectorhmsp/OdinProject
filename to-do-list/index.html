@@ -33,14 +33,19 @@
 
 	<script type="module">
 
+		// FOLD ALL:   (CTRL+K) + (CTRL+1)
+		// UNFOLD ALL: (CTRL+K) + (CTRL+J)
+
 		/*
 
 		TAREFAS:
 
+		>> ATUAL: deixar correto a "addImportantTask" function
 		>> escolher uma paleta de cores
-		>> inserir algum IF para o toggle dos botões (incluindo projects)
-		>> inserir svg's/icones 
 		>> inserir made by "Hector" + github no footer
+		>> alterar problema nos primeiros clicks/dois clicks no mesmo projeto (nos projects, etc.)
+		>> deixar o código mais dinâmico (sem ter que alterar em uns 4, 5 lugares quando muda uma funcionalidade)
+
 
 		*/
 
@@ -138,7 +143,6 @@
 			
 		}
 
-
 		function addProject(name) {
 		    const newProject = { name, tasks: [] };
 		    projects.push(newProject);
@@ -187,6 +191,35 @@
 		});
 		let dataSeteDiasFormat = format(new Date(dataSeteDias), 'yyyy-MM-dd');
 		console.log('data daqui há 7 dias: ' + dataSeteDiasFormat);
+
+		function addImportantTask (isTaskImportant) {
+		    const importantTask = document.createElement('div');
+		    importantTask.classList.add('important-task');
+
+		    // essa parte precisa ser adaptada:
+		    if (isTaskImportant) {
+		        importantTask.innerHTML = `<img src="star_filled.svg" alt="Ícone SVG" class="star-filled-svg" />`;
+		    } else {
+		        importantTask.innerHTML = `<img src="star_empty.svg" alt="Ícone SVG" class="star-empty-svg" />`;
+		    }
+
+		    importantTask.addEventListener('click', () => {
+		        if (isTaskImportant !== undefined) {
+		            isTaskImportant = !isTaskImportant;
+		            console.log(`A tarefa atual é importante: ${isTaskImportant}`);
+
+		            if (isTaskImportant) {
+		                importantTask.innerHTML = `<img src="star_filled.svg" alt="Ícone SVG" class="star-filled-svg" />`;
+		            } else {
+		                importantTask.innerHTML = `<img src="star_empty.svg" alt="Ícone SVG" class="star-empty-svg" />`;
+		            }
+
+		            saveTasksToLocal();
+		        }
+		    });
+
+		    return importantTask;
+		}
 
 		function createProject(index) {
 		    const project = document.createElement('div');
@@ -273,11 +306,7 @@
 		    taskHeader.classList.add('task-header-proj');
 		    taskHeader.textContent = projectName;
 
-		    // Create a new div for "(edit)"
-		    const editDiv = document.createElement('div');
-		    editDiv.textContent = '(edit)';
-		    editDiv.classList.add('edit-project');
-		    editDiv.addEventListener('click', () => {
+		    taskHeader.addEventListener('click', () => {
 		        const project = projects.find(proj => proj.name === projectName);
 		        if (project) {
 		            const newProjectName = promptWithMaxLength("Digite o novo nome do projeto: (máx. 10 caracteres) ", 10);
@@ -311,38 +340,16 @@
 		                project.tasks.push(newTaskObject);
 
 		                // Adiciona um "important" button
-		                const importantTask = document.createElement('div');
-		                importantTask.classList.add('important-task');
-		                importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
-		                importantTask.addEventListener('click', () => {
-		                    if (newTaskObject.isTaskImportant !== undefined) {
-		                        newTaskObject.isTaskImportant = !newTaskObject.isTaskImportant;
-		                        console.log(`A tarefa atual é importante: ${newTaskObject.isTaskImportant}`);
-
-		                        if (newTaskObject.isTaskImportant) {
-		                            importantTask.textContent = 'A TASK É IMPORTANTE!';
-		                        } else {
-		                            importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
-		                        }
-
-		                    	saveTasksToLocal();
-							}
-		                });
+		                const importantTask = addImportantTask(newTaskObject.isTaskImportant);
 
 		                // Adiciona um "remove-task"
 		                const removeTask = document.createElement('div');
-		                removeTask.textContent = '(remove-task)';
+		                removeTask.innerHTML = `<img src="cancel.svg" alt="Ícone SVG" class="cancel-svg" />`;
 		                removeTask.classList.add('remove-task');
 		                removeTask.addEventListener('click', () => {
-							/*
-							taskDiv.removeChild(newDiv);
-		                    taskDiv.removeChild(editTask);
-		                    taskDiv.removeChild(dateInput);
-		                    taskDiv.removeChild(importantTask);
-							*/
 
 							specificTask.removeChild(newDiv);
-							specificTask.removeChild(editTask);
+							//specificTask.removeChild(editTask);
 							specificTask.removeChild(dateInput);
 							specificTask.removeChild(importantTask);
 
@@ -359,11 +366,13 @@
 							saveTasksToLocal();
 		                });
 
-		                // Adiciona um "edit-task"
-		                const editTask = document.createElement('div');
-		                editTask.textContent = '(edit task)';
-		                editTask.classList.add('edit-task');
-		                editTask.addEventListener('click', () => {
+		                // Adiciona a nova task
+		                const newDiv = document.createElement('div');
+		                newDiv.classList.add('new-div-task');
+		                newDiv.textContent = newTask;
+
+
+		                newDiv.addEventListener('click', () => {
 		                    const editTaskPrompt = prompt("Edite o nome da tarefa: ");
 
 		                    if (editTaskPrompt !== null) {
@@ -374,9 +383,6 @@
 							saveTasksToLocal();
 		                });
 
-		                // Adiciona a nova task
-		                const newDiv = document.createElement('div');
-		                newDiv.textContent = newTask;
 
 		                // Adiciona o "no-date"
 		                const dateInput = document.createElement('input');
@@ -412,17 +418,9 @@
 
 		                });
 
-						/*
-		                taskDiv.appendChild(newDiv);
-		                taskDiv.appendChild(editTask);
-		                taskDiv.appendChild(dateInput);
-		                taskDiv.appendChild(removeTask);
-		                taskDiv.appendChild(importantTask);
-						*/
-
 
 						specificTask.appendChild(newDiv);
-						specificTask.appendChild(editTask);
+						//specificTask.appendChild(editTask);
 						specificTask.appendChild(dateInput);
 						specificTask.appendChild(removeTask);
 						specificTask.appendChild(importantTask);	
@@ -440,7 +438,7 @@
 
 		    // Append the elements to addedTaskDiv
 		    addedTaskDiv.appendChild(taskHeader);
-		    addedTaskDiv.appendChild(editDiv);
+		    //addedTaskDiv.appendChild(editDiv);
 		    addedTaskDiv.appendChild(addTaskDiv);
 
 		    // Append the addedTaskDiv to the taskDiv
@@ -456,13 +454,10 @@
 
 		            const newTaskDiv = document.createElement('div');
 		            newTaskDiv.textContent = task.task;
-		            newTaskDiv.classList.add('task');
+		            newTaskDiv.classList.add('new-div-task');
 
-		            // Adiciona um novo "edit-task"
-		            const newEditTask = document.createElement('div');
-		            newEditTask.textContent = '(edit task)';
-		            newEditTask.classList.add('new-edit-task');
-		            newEditTask.addEventListener('click', () => {
+
+		            newTaskDiv.addEventListener('click', () => {
 		                // Lógica para edição ou outras ações desejadas ao clicar na tarefa 
 		                const editTaskPrompt = prompt("Edite o nome da tarefa: ");
 
@@ -474,29 +469,10 @@
 		            });
 
 		            // Adiciona um "important" button
-		            const newImportantTask = document.createElement('div');
-		            newImportantTask.classList.add('new-important-task');
+		            const importantTask = addImportantTask(project.tasks[taskIndex].isTaskImportant);
+		            //newImportantTask.classList.add('new-important-task');
 
-		            if (project.tasks[taskIndex].isTaskImportant) {
-		                newImportantTask.textContent = 'A TASK É IMPORTANTE!';
-		            } else {
-		                newImportantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
-		            }
 
-		            newImportantTask.addEventListener('click', () => {
-		                if (project.tasks[taskIndex].isTaskImportant !== undefined) {
-		                    project.tasks[taskIndex].isTaskImportant = !project.tasks[taskIndex].isTaskImportant;
-		                    console.log(`A tarefa atual é importante: ${project.tasks[taskIndex].isTaskImportant}`);
-
-		                    if (project.tasks[taskIndex].isTaskImportant) {
-		                        newImportantTask.textContent = 'A TASK É IMPORTANTE!';
-		                    } else {
-		                        newImportantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
-		                    }
-
-		                	saveTasksToLocal();
-						}
-		            });
 
 		            const newDateInput = document.createElement('input');
 		            newDateInput.type = 'date';
@@ -538,43 +514,27 @@
 
 		            // Adiciona um novo "remove-task"
 		            const newRemoveTask = document.createElement('div');
-		            newRemoveTask.textContent = '(remove-task)';
+		            newRemoveTask.innerHTML = `<img src="cancel.svg" alt="Ícone SVG" class="cancel-svg" />`;
 		            newRemoveTask.classList.add('new-remove-task');
 		            newRemoveTask.addEventListener('click', () => {
-		                /*
-						taskDiv.removeChild(newTaskDiv);
-		                taskDiv.removeChild(newEditTask);
-		                taskDiv.removeChild(newDateInput);
-		                taskDiv.removeChild(newImportantTask);
-						*/
 
 						specificTask.removeChild(newTaskDiv);
-						specificTask.removeChild(newEditTask);
 						specificTask.removeChild(newDateInput);
-						specificTask.removeChild(newImportantTask);						
+						specificTask.removeChild(importantTask);						
 
 		                project.tasks.splice(taskIndex, 1);
 
 						specificTask.removeChild(newRemoveTask);
-		                //taskDiv.removeChild(newRemoveTask);
 						taskDiv.removeChild(specificTask);
 
 						saveTasksToLocal();
 		            });
 
-					/*
-		            taskDiv.appendChild(newTaskDiv);
-		            taskDiv.appendChild(newEditTask);
-		            taskDiv.appendChild(newDateInput);
-		            taskDiv.appendChild(newRemoveTask);
-		            taskDiv.appendChild(newImportantTask);
-					*/
 
 					specificTask.appendChild(newTaskDiv);
-					specificTask.appendChild(newEditTask);
 					specificTask.appendChild(newDateInput);
 					specificTask.appendChild(newRemoveTask);
-					specificTask.appendChild(newImportantTask);
+					specificTask.appendChild(importantTask);
 
 					taskDiv.appendChild(specificTask);
 
@@ -646,12 +606,10 @@
 
 		                // Adiciona elementos HTML para cada tarefa
 		                const newDiv = document.createElement('div');
+		                newDiv.classList.add('new-div-task');
 		                newDiv.textContent = task.task;
 
-		                const editTask = document.createElement('div');
-		                editTask.textContent = '(edit task)';
-		                editTask.classList.add('edit-task');
-		                editTask.addEventListener('click', () => {
+		                newDiv.addEventListener('click', () => {
 		                    const editTaskPrompt = prompt("Edite o nome da tarefa: ");
 
 		                    if (editTaskPrompt !== null) {
@@ -678,16 +636,7 @@
 		                            task.isTaskWithinSevenDays = true;
 									saveTasksToLocal();
 		                        } else if (firstCompare === -1) {
-									/*
-									taskDiv.removeChild(newDiv);
-									taskDiv.removeChild(editTask);
-									taskDiv.removeChild(dateInput);
-									taskDiv.removeChild(importantTask);
-									taskDiv.removeChild(removeTask); 
-									*/
-
 									specificTask.removeChild(newDiv);
-									specificTask.removeChild(editTask);
 									specificTask.removeChild(dateInput);
 									specificTask.removeChild(importantTask);
 									specificTask.removeChild(removeTask); 
@@ -707,16 +656,8 @@
 										saveTasksToLocal();
 		                            } else {
 		                                task.isTaskWithinSevenDays = false;
-										/*
-										taskDiv.removeChild(newDiv);
-		                                taskDiv.removeChild(editTask);
-		                                taskDiv.removeChild(dateInput);
-		                                taskDiv.removeChild(importantTask);
-		                                taskDiv.removeChild(removeTask);
-										*/
 
 										specificTask.removeChild(newDiv);
-										specificTask.removeChild(editTask);
 										specificTask.removeChild(dateInput);
 										specificTask.removeChild(importantTask);
 										specificTask.removeChild(removeTask); 
@@ -728,16 +669,7 @@
 		                            task.isTaskWithinSevenDays = false;
 		                            createNoTasksYay();
 
-									/*
-		                            taskDiv.removeChild(newDiv);
-		                            taskDiv.removeChild(editTask);
-		                            taskDiv.removeChild(dateInput);
-		                            taskDiv.removeChild(importantTask);
-		                            taskDiv.removeChild(removeTask);
-									*/
-
 									specificTask.removeChild(newDiv);
-									specificTask.removeChild(editTask);
 									specificTask.removeChild(dateInput);
 									specificTask.removeChild(importantTask);
 									specificTask.removeChild(removeTask); 									
@@ -775,16 +707,8 @@
 		                            task.isTaskWithinSevenDays = true;
 									saveTasksToLocal();
 		                        } else if (firstCompare === -1) {
-									/*
-									taskDiv.removeChild(newDiv);
-									taskDiv.removeChild(editTask);
-									taskDiv.removeChild(dateInput);
-									taskDiv.removeChild(importantTask);
-									taskDiv.removeChild(removeTask);
-									*/
 
 									specificTask.removeChild(newDiv);
-									specificTask.removeChild(editTask);
 									specificTask.removeChild(dateInput);
 									specificTask.removeChild(importantTask);
 									specificTask.removeChild(removeTask); 									
@@ -796,16 +720,8 @@
 								} else if (firstCompare === 1 || firstCompare === 0) {
 									let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
 									task.isTaskWithinSevenDays = true;
-									/*
-									taskDiv.removeChild(newDiv);
-									taskDiv.removeChild(editTask);
-									taskDiv.removeChild(dateInput);
-									taskDiv.removeChild(importantTask);
-									taskDiv.removeChild(removeTask);
-									*/
 
 									specificTask.removeChild(newDiv);
-									specificTask.removeChild(editTask);
 									specificTask.removeChild(dateInput);
 									specificTask.removeChild(importantTask);
 									specificTask.removeChild(removeTask); 									
@@ -820,16 +736,7 @@
 										saveTasksToLocal();
 									} else {
 										task.isTaskWithinSevenDays = false;
-										/*
-										taskDiv.removeChild(newDiv);
-										taskDiv.removeChild(editTask);
-										taskDiv.removeChild(dateInput);
-										taskDiv.removeChild(importantTask);
-										taskDiv.removeChild(removeTask);
-										*/
-
 										specificTask.removeChild(newDiv);
-										specificTask.removeChild(editTask);
 										specificTask.removeChild(dateInput);
 										specificTask.removeChild(importantTask);
 										specificTask.removeChild(removeTask); 
@@ -854,48 +761,21 @@
 		                });
 
 		                const removeTask = document.createElement('div');
-		                removeTask.textContent = '(remove-task)';
+		                removeTask.innerHTML = `<img src="cancel.svg" alt="Ícone SVG" class="cancel-svg" />`;
 		                removeTask.classList.add('remove-task');
 		                removeTask.addEventListener('click', () => {
-							/*
-							taskDiv.removeChild(newDiv);
-							taskDiv.removeChild(editTask);
-							taskDiv.removeChild(dateInput);
-							taskDiv.removeChild(importantTask);
-							*/
 
 		                    const taskIndex = project.tasks.indexOf(task);
 		                    if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
-
-		                    //taskDiv.removeChild(removeTask);
 							
 							taskDiv.removeChild(specificTask);
 							saveTasksToLocal();
 		                });
 
-		                const importantTask = document.createElement('div');
+		                const importantTask = addImportantTask(task.isTaskImportant);
 		                importantTask.classList.add('important-task');
 
-		                if (task.isTaskImportant) {
-		                    importantTask.textContent = 'A TASK É IMPORTANTE!';
-		                } else {
-		                    importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
-		                }
-						saveTasksToLocal();
-
 		                importantTask.addEventListener('click', () => {
-		                    if (task.isTaskImportant !== undefined) {
-		                        task.isTaskImportant = !task.isTaskImportant;
-		                        console.log(`A tarefa atual é importante: ${task.isTaskImportant}`);
-
-		                        if (task.isTaskImportant) {
-		                            importantTask.textContent = 'A TASK É IMPORTANTE!';
-		                        } else {
-		                            importantTask.textContent = 'A TASK NÃO É IMPORTANTE!';
-		                        }
-								saveTasksToLocal();
-		                    }
-
 		                    const taskHeader = document.querySelector('.task-header');
 
 		                    if (
@@ -903,16 +783,8 @@
 		                    ) {
 		                        console.log(task.isTaskImportant);
 		                        console.log('deu merda...');
-								/*
-								taskDiv.removeChild(newDiv);
-								taskDiv.removeChild(editTask);
-								taskDiv.removeChild(dateInput);
-								taskDiv.removeChild(importantTask);
-								taskDiv.removeChild(removeTask);
-								*/
 
 								specificTask.removeChild(newDiv);
-								specificTask.removeChild(editTask);
 								specificTask.removeChild(dateInput);
 								specificTask.removeChild(importantTask);
 								specificTask.removeChild(removeTask); 								
@@ -922,16 +794,7 @@
 		                    }
 		                });
 
-						/*
-		                taskDiv.appendChild(newDiv);
-		                taskDiv.appendChild(editTask);
-		                taskDiv.appendChild(dateInput);
-		                taskDiv.appendChild(removeTask);
-		                taskDiv.appendChild(importantTask);
-						*/
-
 						specificTask.appendChild(newDiv);
-						specificTask.appendChild(editTask);
 						specificTask.appendChild(dateInput);
 						specificTask.appendChild(removeTask);
 						specificTask.appendChild(importantTask);
