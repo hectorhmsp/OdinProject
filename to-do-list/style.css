@@ -114,11 +114,6 @@ body {
     margin-bottom: 20px;
 }
 
-.important-task, .new-important-task {
-    margin-bottom: 30px;
-}
-
-
 .toggle-btn {
     background-color: #bbd5ff;
 }
@@ -138,7 +133,7 @@ body {
     align-self: center;
     margin-top: 10px;
     border-radius: 3px;
-    font-size: 20px;
+    font-size: 15px;
     border: none;
 }
 
@@ -156,8 +151,13 @@ body {
     margin-left: 5px;
 }
 
+.star-filled-svg, .star-empty-svg, .cancel-svg {
+    width: 30px;
+}
+
 .specific-task {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
 }
