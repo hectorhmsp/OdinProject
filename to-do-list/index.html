@@ -254,10 +254,18 @@
 				specificTask.removeChild(removeTask);
 		}
 
+		function addNewElement(tipo, classe, textContent, id) {
+		    const newElement = document.createElement(tipo);
+		    newElement.classList.add(classe);
+		    newElement.textContent = textContent;
+		    newElement.id = id;
+
+		    return newElement;
+		}
+
 		function createProject(index) {
 		    const project = document.createElement('div');
 		    project.classList.add('project');
-		    
 		    project.classList.add('toggle-btn');
 
 			project.addEventListener('click', function() {
@@ -269,7 +277,7 @@
 			      buttons.forEach(btn => btn.classList.remove('clicked'));
 			      
 			      // Add 'clicked' class to the clicked button
-			      this.classList.add('clicked');
+			      button.classList.add('clicked');
 			    });
 			  });
 			});		    
@@ -354,19 +362,14 @@
 		    });
 
 		    // Create a new div for "Add Task"
-		    const addTaskDiv = document.createElement('div');
-		    addTaskDiv.classList.add('add-task');
-		    addTaskDiv.id = 'addTask';
-		    addTaskDiv.textContent = '+ Add Task';
+		    const addTaskDiv = addNewElement('div', 'add-task', '+ Add Task', 'addTask');
 		    addTaskDiv.addEventListener('click', () => {
 		        const project = projects.find(proj => proj.name === projectName);
 		        if (project) {
 		            const newTask = prompt("Digite a nova tarefa: ");
 		            if (newTask) {
 
-						const specificTask = document.createElement('div');
-						specificTask.classList.add('specific-task');
-
+						const specificTask = addNewElement('div', 'specific-task');
 
 		                // adicionei o "isTaskWithinSevenDays"
 		                const newTaskObject = { task: newTask, taskDate: null, isTaskImportant: false, isTaskWithinSevenDays: false };
@@ -378,10 +381,7 @@
 						const removeTask = addRemoveTask(newTaskObject, project, taskDiv, specificTask);
 
 		                // Adiciona a nova task
-		                const newDiv = document.createElement('div');
-		                newDiv.classList.add('new-div-task');
-		                newDiv.textContent = newTask;
-
+		                const newDiv = addNewElement('div', 'new-div-task', newTask);
 
 		                newDiv.addEventListener('click', () => {
 		                    const editTaskPrompt = prompt("Edite o nome da tarefa: ");
@@ -439,13 +439,10 @@
 		    });
 
 		    // Create a separate div for each task
-		    const addedTaskDiv = document.createElement('div');
-		    addedTaskDiv.classList.add('task-div')
+		    const addedTaskDiv = addNewElement('div', 'task-div');
 
-		    // Append the elements to addedTaskDiv
 		    addedTaskDiv.appendChild(taskHeader);
-		    //addedTaskDiv.appendChild(editDiv);
-		    addedTaskDiv.appendChild(addTaskDiv);
+			addedTaskDiv.appendChild(addTaskDiv);
 
 		    // Append the addedTaskDiv to the taskDiv
 		    taskDiv.appendChild(addedTaskDiv);
@@ -454,14 +451,9 @@
 		    if (project && project.tasks.length > 0) {
 		        project.tasks.forEach((task, taskIndex) => {
 
-					const specificTask = document.createElement('div');
-					specificTask.classList.add('specific-task');
+					const specificTask = addNewElement('div', 'specific-task');
 
-
-		            const newTaskDiv = document.createElement('div');
-		            newTaskDiv.textContent = task.task;
-		            newTaskDiv.classList.add('new-div-task');
-
+					const newTaskDiv = addNewElement('div', 'new-div-task', task.task);
 
 		            newTaskDiv.addEventListener('click', () => {
 		                // Lógica para edição ou outras ações desejadas ao clicar na tarefa 
@@ -477,8 +469,6 @@
 		            // Adiciona um "important" button
 		            const importantTask = addImportantTask(project.tasks[taskIndex]);
 		            //newImportantTask.classList.add('new-important-task');
-
-
 
 		            const newDateInput = document.createElement('input');
 		            newDateInput.type = 'date';
@@ -587,13 +577,9 @@
 		                (task.isTaskImportant && taskHeader.innerText === "Important!")
 		            ) {
 
-						const specificTask = document.createElement('div');
-						specificTask.classList.add('specific-task');
+		            	const specificTask = addNewElement('div', 'specific-task');
 
-		                // Adiciona elementos HTML para cada tarefa
-		                const newDiv = document.createElement('div');
-		                newDiv.classList.add('new-div-task');
-		                newDiv.textContent = task.task;
+		                const newDiv = addNewElement('div', 'new-div-task', task.task);
 
 		                newDiv.addEventListener('click', () => {
 		                    const editTaskPrompt = prompt("Edite o nome da tarefa: ");
@@ -741,7 +727,6 @@
 		                        ((taskHeader !== null) && (task.isTaskImportant === false) && (taskHeader.textContent === "Important!"))
 		                    ) {
 		                        console.log(task.isTaskImportant);
-		                        console.log('deu merda...');
 
 								specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);							
 
