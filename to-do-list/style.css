@@ -161,4 +161,9 @@ body {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    width: 90%;
+    border: solid 1px black;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
 }

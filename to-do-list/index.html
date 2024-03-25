@@ -42,10 +42,8 @@
 
 		TAREFAS:
 
-		>> ATUAL: criar algo como "specificTaskFunction()"
 		>> escolher uma paleta de cores
 		>> inserir made by "Hector" + github no footer
-		>> alterar problema nos primeiros clicks/dois clicks no mesmo projeto (nos projects, etc.)
 		>> deixar o código mais dinâmico (sem ter que alterar em uns 4, 5 lugares quando muda uma funcionalidade)
 
 
@@ -57,22 +55,26 @@
 		// Chama a função para carregar os dados do localStorage ao carregar a página
 		window.addEventListener('load', loadTasksFromLocal);
 
+		document.addEventListener('click', function (event) {
+			const clickedButton = event.target.closest('.toggle-btn');
+
+			// Verificar se o clique foi em um botão de projeto ou nos botões adicionais
+			if (clickedButton && clickedButton.classList.contains('toggle-btn')) {
+				const buttons = document.querySelectorAll('.toggle-btn');
+
+				// Remover 'clicked' class de todos os botões
+				buttons.forEach(btn => {
+					btn.classList.remove('clicked');
+				});
+
+				// Adicionar 'clicked' class ao botão clicado
+				clickedButton.classList.add('clicked');
+			}
+		});
+
+
 		// Para limpar o JSON: 
 		// localStorage.removeItem('tasks');
-
-		document.addEventListener('DOMContentLoaded', function() {
-		  const buttons = document.querySelectorAll('.toggle-btn');
-
-		  buttons.forEach(button => {
-		    button.addEventListener('click', function() {
-		      // Remove 'clicked' class from all buttons
-		      buttons.forEach(btn => btn.classList.remove('clicked'));
-		      
-		      // Add 'clicked' class to the clicked button
-		      this.classList.add('clicked');
-		    });
-		  });
-		});
 
 
 		let projectsDiv, taskDiv, allTasksButton, todayButton, next7Button, importantButton, addProjectButton;
@@ -268,21 +270,6 @@
 		    project.classList.add('project');
 		    project.classList.add('toggle-btn');
 
-			project.addEventListener('click', function() {
-			  const buttons = document.querySelectorAll('.toggle-btn');
-
-			  buttons.forEach(button => {
-			    button.addEventListener('click', function() {
-			      // Remove 'clicked' class from all buttons
-			      buttons.forEach(btn => btn.classList.remove('clicked'));
-			      
-			      // Add 'clicked' class to the clicked button
-			      button.classList.add('clicked');
-			    });
-			  });
-			});		    
-			
-
 		    // Create a new h2 element for the project
 		    const projectTitle = document.createElement('h2');
 		    projectTitle.classList.add('project-title');
@@ -329,7 +316,7 @@
 		    project.appendChild(projectTitle);
 		    project.appendChild(deleteProject);
 
-		    projectTitle.addEventListener('click', () => addTask(projectTitle.textContent, projectTitle));
+		    project.addEventListener('click', () => addTask(projectTitle.textContent, projectTitle));
 
 			saveTasksToLocal();
 
