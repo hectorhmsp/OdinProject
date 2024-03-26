@@ -206,9 +206,9 @@
 
 			// Verificar se a tarefa é importante
 			if (task.isTaskImportant) {
-				importantTask.innerHTML = `<img src="star_filled.svg" alt="Ícone SVG" class="star-filled-svg" />`;
+				importantTask.innerHTML = `<img src="img/star_filled.svg" alt="Ícone SVG" class="star-filled-svg" />`;
 			} else {
-				importantTask.innerHTML = `<img src="star_empty.svg" alt="Ícone SVG" class="star-empty-svg" />`;
+				importantTask.innerHTML = `<img src="img/star_empty.svg" alt="Ícone SVG" class="star-empty-svg" />`;
 			}
 
 			importantTask.addEventListener('click', () => {
@@ -218,9 +218,9 @@
 
 				// Atualizar a visualização do ícone
 				if (task.isTaskImportant) {
-					importantTask.innerHTML = `<img src="star_filled.svg" alt="Ícone SVG" class="star-filled-svg" />`;
+					importantTask.innerHTML = `<img src="img/star_filled.svg" alt="Ícone SVG" class="star-filled-svg" />`;
 				} else {
-					importantTask.innerHTML = `<img src="star_empty.svg" alt="Ícone SVG" class="star-empty-svg" />`;
+					importantTask.innerHTML = `<img src="img/star_empty.svg" alt="Ícone SVG" class="star-empty-svg" />`;
 				}
 
 				// Salvar as tarefas localmente após a alteração
@@ -232,7 +232,7 @@
 
 		function addRemoveTask(task, project, taskDiv, specificTask) {
 			const removeTask = document.createElement('div');
-			removeTask.innerHTML = `<img src="cancel.svg" alt="Ícone SVG" class="cancel-svg" />`;
+			removeTask.innerHTML = `<img src="img/cancel.svg" alt="Ícone SVG" class="cancel-svg" />`;
 			removeTask.classList.add('remove-task');
 			removeTask.addEventListener('click', () => {
 				const taskIndex = project.tasks.indexOf(task);
@@ -283,7 +283,7 @@
 
 		    const deleteProject = document.createElement('div');
 		    deleteProject.classList.add('delete-project');
-	     	deleteProject.innerHTML = `<img src="trash_svg.svg" alt="Ícone SVG" class="trash-svg" />`;
+	     	deleteProject.innerHTML = `<img src="img/trash_svg.svg" alt="Ícone SVG" class="trash-svg" />`;
 		    deleteProject.addEventListener('click', () => {
 		        // Encontrar o projeto pai do botão delete
 		        const projectElement = event.target.closest('.project');
