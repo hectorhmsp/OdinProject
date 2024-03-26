@@ -17,10 +17,22 @@
 	<div class="main" id="main">
 	    <div class="sidebar" id="sidebar">
 	        <div class="home">
-	            <button class="toggle-btn btn-outline-primary all-tasks-button" id="allTasksButton">All Tasks</button>
-	            <button class="toggle-btn btn-outline-primary today-button" id="todayButton">Today</button>
-	            <button class="toggle-btn btn-outline-primary next-7-button" id="next7Button">Next 7 Days</button>
-	            <button class="toggle-btn btn-outline-primary important-button" id="importantButton">Important</button>
+	            <button class="toggle-btn btn-outline-primary all-tasks-button" id="allTasksButton">
+					<img src="img/all-tasks.svg" alt="Ícone SVG" class="all-tasks-svg" />
+					All Tasks
+				</button>
+	            <button class="toggle-btn btn-outline-primary today-button" id="todayButton">
+					<img src="img/today.svg" alt="Ícone SVG" class="today-svg" />
+					Today
+				</button>
+	            <button class="toggle-btn btn-outline-primary next-7-button" id="next7Button">
+					<img src="img/next-7.svg" alt="Ícone SVG" class="next-7-svg" />
+					Next 7 Days
+				</button>
+	            <button class="toggle-btn btn-outline-primary important-button" id="importantButton">
+					<img src="img/star_filled.svg" alt="Ícone SVG" class="important-svg" />
+					Important
+				</button>
 	        </div>
 	        <div class="projects" id="projects">
 	            <button class="add-project-button btn btn-primary" id="addProjectButton">Add Project</button>
@@ -30,7 +42,7 @@
 	</div>
  
 	<footer class="footer">
-		FOOTER (GITHUB/LOGO/ETC)
+		Created by hectorhmsp
 	</footer>
 
 
@@ -57,7 +69,10 @@
 
 
 		// Chama a função para carregar os dados do localStorage ao carregar a página
-		window.addEventListener('load', loadTasksFromLocal);
+		window.addEventListener('load', () =>  {
+			loadTasksFromLocal();
+			allTasksButton.click();
+		});
 
 		document.addEventListener('click', function (event) {
 			const clickedButton = event.target.closest('.toggle-btn');

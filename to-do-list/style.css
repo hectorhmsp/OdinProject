@@ -12,12 +12,20 @@ body {
 }
 
 .footer {
-    background-color: lightblue;
-    min-height: 10vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background-color: #978d7f;
+    color: white;
+    font-size: 18px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .header {
-    background-color: #7aaaf7;
+    background-color: #ead7c3;
     height: 10vh;
     width: 100%;
     margin: 0;
@@ -35,19 +43,19 @@ body {
 }
 
 .sidebar {
-    background-color: #3f8da7;
+    background-color: #dce0d9;
     width: 30%;
 }
 
 .tasks {
-    background-color: #93c4f4;
+    background-color: #fbf6ef;
 
     width: 100vw;
 }
 
 .home {
     height: 30vh;
-    background-color: #bbd5ff;
+    background-color: #dce0d9;
     display: flex;
     flex-direction: column;
 }
@@ -60,13 +68,13 @@ body {
     padding: 10px;
     border: solid 1px black;
     border-radius: 4px;
-    background: #bbd5ff;
+    background: #ead7c3;
 }
 
 .project {
     height: 50px;
     border: solid 1px black;
-    background-color: #93c4f4;
+    background-color: #ead7c3;
     margin: 10px 30px;
     position: relative;
     border-radius: 3px;
@@ -124,12 +132,12 @@ body {
 }
 
 .toggle-btn {
-    background-color: #bbd5ff;
+    background-color: #ead7c3;
 }
 
 .all-tasks-button:hover, .today-button:hover, .next-7-button:hover, .important-button:hover {
     cursor: pointer;
-    background-color: #7a98ff;
+    background-color: #c7ab8d;
     width: 90%;
     border: solid 0.5px black;
     border-radius: 3px;
@@ -137,19 +145,21 @@ body {
 
 .all-tasks-button, .today-button, .next-7-button, .important-button {
     margin: 3px;
-    padding: 7px;
+    padding: 3px;
     width: 90%;
     align-self: center;
     margin-top: 10px;
-    border-radius: 3px;
+    background-color: #ead7c3;
     font-size: 15px;
-    border: none;
+    border: solid 0.5px black;
+    display: flex;
+    flex-direction: row;
 }
 
 
 .toggle-btn.clicked {
     cursor: pointer;
-    background-color: #778cd3;
+    background-color: #978d7f;
     border-radius: 3px;
 }
 
@@ -161,7 +171,12 @@ body {
 }
 
 .star-filled-svg, .star-empty-svg, .cancel-svg {
-    width: 30px;
+    width: 25px;
+}
+
+.all-tasks-svg, .today-svg, .next-7-svg, .important-svg {
+    height: 25px;
+    margin-right: 25px;
 }
 
 .specific-task {
