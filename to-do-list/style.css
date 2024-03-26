@@ -3,6 +3,7 @@ html {
     height: 100%;
     margin: 0;
     padding: 0;
+    font-family: "Inter", sans-serif;
 }
 
 body {
@@ -17,11 +18,11 @@ body {
     justify-content: center;
     gap: 10px;
     width: 100%;
-    background-color: #978d7f;
-    color: white;
-    font-size: 18px;
+    background-color: #ead7c3;
+    font-size: 25px;
     padding-top: 20px;
     padding-bottom: 20px;
+    height: 10px;
 }
 
 .header {
@@ -29,10 +30,15 @@ body {
     height: 10vh;
     width: 100%;
     margin: 0;
+    font-family: "Alegreya Sans", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 .page-name {
-    margin-left: 30%;
+    padding-top: 10px;
+    margin: 0;
+    margin-left: 21px;
 }
 
 .main {
@@ -61,23 +67,28 @@ body {
 }
 
 .add-project-button {
-    width: 60%;
-    align-self: center;
-    margin-bottom: 50px;
-    margin-top: 20px;
-    padding: 10px;
+    width: 40%;
+    margin-left: 21px;
+    margin-bottom: 10px;
+    margin-top: 10px;
     border: solid 1px black;
     border-radius: 4px;
     background: #ead7c3;
+    font-family: "Inter", sans-serif;
+    font-size: 17px;
+    height: 35px;
 }
 
 .project {
-    height: 50px;
+    height: 40px;
     border: solid 1px black;
     background-color: #ead7c3;
-    margin: 10px 30px;
+    margin: 10px 21px;
     position: relative;
     border-radius: 3px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
 }
 
 .project:hover {
@@ -86,21 +97,14 @@ body {
 
 .project-title {
     margin: 0;
-    margin-left: 20px;
-    margin-top: 10px;
+    padding: 0;
+    padding-left: 15px;
+    font-size: 20px;
 }
 
 .projects {
     display: flex;
     flex-direction: column;
-}
-
-.delete-project {
-    height: 100%;
-    width: 15%;
-    position: absolute;
-    right: 0;
-    top: 0;
 }
 
 .delete-project:hover {
@@ -154,6 +158,9 @@ body {
     border: solid 0.5px black;
     display: flex;
     flex-direction: row;
+    border-radius: 3px;
+    font-family: "Inter", sans-serif;
+    align-items: center;
 }
 
 
@@ -165,17 +172,18 @@ body {
 
 
 .trash-svg {
-    width: 30px;
-    margin-top: 10px;
-    margin-left: 5px;
+    width: 25px;
+    position: absolute;
+    right: 7px;
+    bottom: 7px;
 }
 
 .star-filled-svg, .star-empty-svg, .cancel-svg {
     width: 25px;
 }
 
-.all-tasks-svg, .today-svg, .next-7-svg, .important-svg {
-    height: 25px;
+.all-tasks-svg, .today-svg, .next-7-svg, .important-svg, .github-svg, .tasks-svg {
+    height: 20px;
     margin-right: 25px;
 }
 
@@ -190,6 +198,8 @@ body {
     margin-right: auto;
     margin-bottom: 20px;
     padding: 5px;
+    background: #ead7c3;
+    border-radius: 3px;
 }
 
 .new-div-task {
@@ -202,4 +212,35 @@ body {
 
 .cancel-svg:hover, .star-empty-svg:hover, .star-filled-svg:hover {
     cursor: pointer;
+}
+
+.tasks-svg {
+    margin: 0;
+    padding: 0;
+    padding-left: 15px;
+}
+
+.home-header {
+    font-size: 25px;
+    padding-left: 21px;
+    padding-top: 10px;
+}
+
+.projects-sidebar-header {
+    margin-top: 35px;
+    font-size: 25px;
+    margin-left: 21px;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper {
+    flex: 1;
+}
+
+footer {
+    flex-shrink: 0;
 }

@@ -8,7 +8,9 @@
 
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+	<link
+		href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,100;0,300;0,400;0,500;0,700;0,800;0,900;1,100;1,300;1,400;1,500;1,700;1,800;1,900&family=Inter:wght@100..900&family=Jost&family=Montserrat&family=Shadows+Into+Light&display=swap"
+		rel="stylesheet">
 
 </head>
 <body>
@@ -17,6 +19,7 @@
 	<div class="main" id="main">
 	    <div class="sidebar" id="sidebar">
 	        <div class="home">
+				<div class="home-header">Home</div>
 	            <button class="toggle-btn btn-outline-primary all-tasks-button" id="allTasksButton">
 					<img src="img/all-tasks.svg" alt="Ícone SVG" class="all-tasks-svg" />
 					All Tasks
@@ -35,6 +38,7 @@
 				</button>
 	        </div>
 	        <div class="projects" id="projects">
+				<div class="projects-sidebar-header">Projects</div>
 	            <button class="add-project-button btn btn-primary" id="addProjectButton">Add Project</button>
 	        </div>
 	    </div>
@@ -43,6 +47,9 @@
  
 	<footer class="footer">
 		Created by hectorhmsp
+		<a href="https://github.com/hectorhmsp/OdinProject">
+			<img src="img/github.svg" alt="Ícone SVG" class="github-svg" />
+		</a>
 	</footer>
 
 
@@ -136,7 +143,7 @@
 
 		function updateUI() {
 			// Limpa o conteúdo atual em projectsDiv
-			projectsDiv.innerHTML = '<button class="add-project-button btn btn-primary" id="addProjectButton">Add Project</button>';
+			projectsDiv.innerHTML = '<button class="add-project-button btn btn-primary" id="addProjectButton">Add Project</button><div class="projects-sidebar-header" > Projects</div >';
 
 			// Recria o botão addProjectsButton e o adiciona ao projectsDiv
 			const addProjectsButton = document.getElementById('addProjectButton');
@@ -296,6 +303,10 @@
 		    projectTitle.textContent = projects[index].name;
 		    console.log(projectTitle.textContent);
 
+			const projectSvg = document.createElement('div');
+			projectSvg.classList.add('project-svg');
+			projectSvg.innerHTML = `<img src="img/tasks.svg" alt="Ícone SVG" class="tasks-svg" />`;
+
 		    const deleteProject = document.createElement('div');
 		    deleteProject.classList.add('delete-project');
 	     	deleteProject.innerHTML = `<img src="img/trash_svg.svg" alt="Ícone SVG" class="trash-svg" />`;
@@ -332,8 +343,10 @@
 		    });
 
 		    // Append the title and the delete-button to the project div
-		    project.appendChild(projectTitle);
+		    project.appendChild(projectSvg);
+			project.appendChild(projectTitle);
 		    project.appendChild(deleteProject);
+			
 
 		    project.addEventListener('click', () => addTask(projectTitle.textContent, projectTitle));
 
