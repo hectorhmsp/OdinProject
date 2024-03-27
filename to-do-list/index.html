@@ -66,727 +66,728 @@
 
 
 		*/
+			import  { format, compareAsc, add }  from 'https://cdn.skypack.dev/date-fns@3.4.0';
 
-		import  { format, compareAsc, add }  from 'https://cdn.skypack.dev/date-fns@3.4.0';
+
+			// Chama a função para carregar os dados do localStorage ao carregar a página
+			window.addEventListener('load', () =>  {
+				loadTasksFromLocal();
+				allTasksButton.click();
+			});
+
+			document.addEventListener('click', function (event) {
+				const clickedButton = event.target.closest('.toggle-btn');
+
+				// Verificar se o clique foi em um botão de projeto ou nos botões adicionais
+				if (clickedButton && clickedButton.classList.contains('toggle-btn')) {
+					const buttons = document.querySelectorAll('.toggle-btn');
+
+					// Remover 'clicked' class de todos os botões
+					buttons.forEach(btn => {
+						btn.classList.remove('clicked');
+					});
+
+					// Adicionar 'clicked' class ao botão clicado
+					clickedButton.classList.add('clicked');
+				}
+			});
 
 
-		// Chama a função para carregar os dados do localStorage ao carregar a página
-		window.addEventListener('load', () =>  {
-			loadTasksFromLocal();
-			allTasksButton.click();
-		});
+			// Para limpar o JSON: 
+			// localStorage.removeItem('tasks');
 
-		document.addEventListener('click', function (event) {
-			const clickedButton = event.target.closest('.toggle-btn');
 
-			// Verificar se o clique foi em um botão de projeto ou nos botões adicionais
-			if (clickedButton && clickedButton.classList.contains('toggle-btn')) {
-				const buttons = document.querySelectorAll('.toggle-btn');
+			let projectsDiv, taskDiv, allTasksButton, todayButton, next7Button, importantButton, addProjectButton;
 
-				// Remover 'clicked' class de todos os botões
-				buttons.forEach(btn => {
-					btn.classList.remove('clicked');
+			projectsDiv = document.getElementById('projects');
+			taskDiv = document.getElementById('tasks');
+
+			allTasksButton = document.getElementById('allTasksButton');
+			todayButton = document.getElementById('todayButton');
+			next7Button = document.getElementById('next7Button');
+			importantButton = document.getElementById('importantButton');
+			addProjectButton = document.getElementById('addProjectButton');
+
+			const projects = [];
+
+			function saveTasksToLocal() {
+				// Converte o array de projetos para JSON
+				const tasksJSON = JSON.stringify(projects);
+				// Salva os dados no localStorage
+				localStorage.setItem('tasks', tasksJSON);
+			}
+
+
+			function loadTasksFromLocal() {
+				// Obtém os dados salvos no localStorage
+				const tasksJSON = localStorage.getItem('tasks');
+				// Verifica se há dados salvos
+				if (tasksJSON) {
+					console.log(tasksJSON);
+
+					// Converte os dados JSON de volta para um array de projetos
+					const loadedTasks = JSON.parse(tasksJSON);
+					// Limpa os projetos existentes e adiciona os projetos carregados
+					projects.length = 0;
+					projects.push(...loadedTasks);
+					// Atualiza a interface do usuário com as tarefas carregadas
+					updateUI();
+				}
+			}
+
+			function updateUI() {
+				// Limpa o conteúdo atual em projectsDiv
+				projectsDiv.innerHTML = '<button class="add-project-button btn btn-primary" id="addProjectButton">Add Project</button><div class="projects-sidebar-header" > Projects</div >';
+
+				// Recria o botão addProjectsButton e o adiciona ao projectsDiv
+				const addProjectsButton = document.getElementById('addProjectButton');
+				addProjectsButton.addEventListener('click', function () {
+					const projectName = promptWithMaxLength("Digite o nome do projeto: (máx. 10 caracteres) ", 10);
+
+					if (projectName !== null) {
+						addProject(projectName);
+						const lastIndex = projects.length - 1;
+						const project = createProject(lastIndex);
+						projectsDiv.appendChild(project);
+						saveTasksToLocal();
+					}
+					console.log(projects);
 				});
 
-				// Adicionar 'clicked' class ao botão clicado
-				clickedButton.classList.add('clicked');
+				projectsDiv.appendChild(addProjectsButton);
+
+				// Percorre todos os projetos
+				projects.forEach((project, index) => {
+					// Cria o elemento para representar o projeto
+					const projectElement = createProject(index);
+
+					// Adiciona o projeto à div de projetos
+					projectsDiv.appendChild(projectElement);
+				});
+
 			}
-		});
 
-
-		// Para limpar o JSON: 
-		// localStorage.removeItem('tasks');
-
-
-		let projectsDiv, taskDiv, allTasksButton, todayButton, next7Button, importantButton, addProjectButton;
-
-		projectsDiv = document.getElementById('projects');
-		taskDiv = document.getElementById('tasks');
-
-		allTasksButton = document.getElementById('allTasksButton');
-		todayButton = document.getElementById('todayButton');
-		next7Button = document.getElementById('next7Button');
-		importantButton = document.getElementById('importantButton');
-		addProjectButton = document.getElementById('addProjectButton');
-
-		const projects = [];
-
-		function saveTasksToLocal() {
-			// Converte o array de projetos para JSON
-			const tasksJSON = JSON.stringify(projects);
-			// Salva os dados no localStorage
-			localStorage.setItem('tasks', tasksJSON);
-		}
-
-
-		function loadTasksFromLocal() {
-			// Obtém os dados salvos no localStorage
-			const tasksJSON = localStorage.getItem('tasks');
-			// Verifica se há dados salvos
-			if (tasksJSON) {
-				console.log(tasksJSON);
-
-				// Converte os dados JSON de volta para um array de projetos
-				const loadedTasks = JSON.parse(tasksJSON);
-				// Limpa os projetos existentes e adiciona os projetos carregados
-				projects.length = 0;
-				projects.push(...loadedTasks);
-				// Atualiza a interface do usuário com as tarefas carregadas
-				updateUI();
+			function addProject(name) {
+				const newProject = { name, tasks: [] };
+				projects.push(newProject);
 			}
-		}
 
-		function updateUI() {
-			// Limpa o conteúdo atual em projectsDiv
-			projectsDiv.innerHTML = '<button class="add-project-button btn btn-primary" id="addProjectButton">Add Project</button><div class="projects-sidebar-header" > Projects</div >';
-
-			// Recria o botão addProjectsButton e o adiciona ao projectsDiv
-			const addProjectsButton = document.getElementById('addProjectButton');
-			addProjectsButton.addEventListener('click', function () {
+			addProjectButton.addEventListener("click", function () {
 				const projectName = promptWithMaxLength("Digite o nome do projeto: (máx. 10 caracteres) ", 10);
 
-				if (projectName !== null) {
+				if (projectName !== null) { // Executar apenas caso o usuário não clique em "cancelar" no prompt
 					addProject(projectName);
-					const lastIndex = projects.length - 1;
-					const project = createProject(lastIndex);
+
+					const lastIndex = projects.length - 1; // Armazena o último índice
+					const project = createProject(lastIndex); // Passa o último índice como argumento
 					projectsDiv.appendChild(project);
 					saveTasksToLocal();
+
+					console.log(projects);
 				}
-				console.log(projects);
+
 			});
 
-			projectsDiv.appendChild(addProjectsButton);
+			function getTodayDate() {
+				// valor recebido no site: "2024-03-08", string  
 
-			// Percorre todos os projetos
-			projects.forEach((project, index) => {
-				// Cria o elemento para representar o projeto
-				const projectElement = createProject(index);
+				let dataAtual = new Date();
+				let dia = dataAtual.getDate();
+				let mes = dataAtual.getMonth() + 1;
+				let ano = dataAtual.getFullYear();
 
-				// Adiciona o projeto à div de projetos
-				projectsDiv.appendChild(projectElement);
-			});
-			
-		}
+				if (dia < 10) {
+					dia = '0' + dia;
+				}
+				if (mes < 10) {
+					mes = '0' + mes;
+				}
 
-		function addProject(name) {
-		    const newProject = { name, tasks: [] };
-		    projects.push(newProject);
-		}
+				let diaAtual = ano + '-' + mes + '-' + dia;
 
-		addProjectButton.addEventListener("click", function () {
-		    const projectName = promptWithMaxLength("Digite o nome do projeto: (máx. 10 caracteres) ", 10);
+				return diaAtual;
 
-		    if (projectName !== null) { // Executar apenas caso o usuário não clique em "cancelar" no prompt
-		        addProject(projectName);
-
-		        const lastIndex = projects.length - 1; // Armazena o último índice
-		        const project = createProject(lastIndex); // Passa o último índice como argumento
-		        projectsDiv.appendChild(project);
-		        saveTasksToLocal();
-
-		        console.log(projects);
-		    }
-
-		});
-
-		function getTodayDate() {
-		    // valor recebido no site: "2024-03-08", string  
-
-		    let dataAtual = new Date();
-		    let dia = dataAtual.getDate();
-		    let mes = dataAtual.getMonth() + 1;
-		    let ano = dataAtual.getFullYear();
-
-		    if (dia < 10) {
-		        dia = '0' + dia;
-		    }
-		    if (mes < 10) {
-		        mes = '0' + mes;
-		    }
-
-		    let diaAtual = ano + '-' + mes + '-' + dia;
-
-		    return diaAtual;
-
-		    //const result = compareAsc(new Date(selectedDate), new Date(diaAtual));
-		}
-
-		let dataSeteDias = add(new Date(getTodayDate()), {
-		    days: 8,
-		});
-		let dataSeteDiasFormat = format(new Date(dataSeteDias), 'yyyy-MM-dd');
-		console.log('data daqui há 7 dias: ' + dataSeteDiasFormat);
-
-		function addImportantTask(task) {
-			const importantTask = document.createElement('div');
-			importantTask.classList.add('important-task');
-
-			// Verificar se a tarefa é importante
-			if (task.isTaskImportant) {
-				importantTask.innerHTML = `<img src="img/star_filled.svg" alt="Ícone SVG" class="star-filled-svg" />`;
-			} else {
-				importantTask.innerHTML = `<img src="img/star_empty.svg" alt="Ícone SVG" class="star-empty-svg" />`;
+				//const result = compareAsc(new Date(selectedDate), new Date(diaAtual));
 			}
 
-			importantTask.addEventListener('click', () => {
-				// Alternar a importância da tarefa
-				task.isTaskImportant = !task.isTaskImportant;
-				console.log(`A tarefa atual é importante: ${task.isTaskImportant}`);
+			let dataSeteDias = add(new Date(getTodayDate()), {
+				days: 8,
+			});
+			let dataSeteDiasFormat = format(new Date(dataSeteDias), 'yyyy-MM-dd');
+			console.log('data daqui há 7 dias: ' + dataSeteDiasFormat);
 
-				// Atualizar a visualização do ícone
+			function addImportantTask(task) {
+				const importantTask = document.createElement('div');
+				importantTask.classList.add('important-task');
+
+				// Verificar se a tarefa é importante
 				if (task.isTaskImportant) {
 					importantTask.innerHTML = `<img src="img/star_filled.svg" alt="Ícone SVG" class="star-filled-svg" />`;
 				} else {
 					importantTask.innerHTML = `<img src="img/star_empty.svg" alt="Ícone SVG" class="star-empty-svg" />`;
 				}
 
-				// Salvar as tarefas localmente após a alteração
+				importantTask.addEventListener('click', () => {
+					// Alternar a importância da tarefa
+					task.isTaskImportant = !task.isTaskImportant;
+					console.log(`A tarefa atual é importante: ${task.isTaskImportant}`);
+
+					// Atualizar a visualização do ícone
+					if (task.isTaskImportant) {
+						importantTask.innerHTML = `<img src="img/star_filled.svg" alt="Ícone SVG" class="star-filled-svg" />`;
+					} else {
+						importantTask.innerHTML = `<img src="img/star_empty.svg" alt="Ícone SVG" class="star-empty-svg" />`;
+					}
+
+					// Salvar as tarefas localmente após a alteração
+					saveTasksToLocal();
+				});
+
+				return importantTask;
+			}
+
+			function addRemoveTask(task, project, taskDiv, specificTask) {
+				const removeTask = document.createElement('div');
+				removeTask.innerHTML = `<img src="img/cancel.svg" alt="Ícone SVG" class="cancel-svg" />`;
+				removeTask.classList.add('remove-task');
+				removeTask.addEventListener('click', () => {
+					const taskIndex = project.tasks.indexOf(task);
+
+					if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1); }
+
+					taskDiv.removeChild(specificTask);
+					saveTasksToLocal();
+				});
+
+				return removeTask;
+			}
+
+			function specificTaskAppend(specificTask, div, dateInput, removeTask, importantTask) {
+				specificTask.appendChild(div);
+				specificTask.appendChild(dateInput);
+				specificTask.appendChild(removeTask);
+				specificTask.appendChild(importantTask);
+			}
+
+			function specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask) {
+					specificTask.removeChild(newDiv);
+					specificTask.removeChild(dateInput);
+					specificTask.removeChild(importantTask);
+					specificTask.removeChild(removeTask);
+			}
+
+			function addNewElement(tipo, classe, textContent, id) {
+				const newElement = document.createElement(tipo);
+				newElement.classList.add(classe);
+				newElement.textContent = textContent;
+				newElement.id = id;
+
+				return newElement;
+			}
+
+			function createProject(index) {
+				const project = document.createElement('div');
+				project.classList.add('project');
+				project.classList.add('toggle-btn');
+
+				// Create a new h2 element for the project
+				const projectTitle = document.createElement('h2');
+				projectTitle.classList.add('project-title');
+
+				projectTitle.textContent = projects[index].name;
+				console.log(projectTitle.textContent);
+
+				const projectSvg = document.createElement('div');
+				projectSvg.classList.add('project-svg');
+				projectSvg.innerHTML = `<img src="img/tasks.svg" alt="Ícone SVG" class="tasks-svg" />`;
+
+				const deleteProject = document.createElement('div');
+				deleteProject.classList.add('delete-project');
+				deleteProject.innerHTML = `<img src="img/trash_svg.svg" alt="Ícone SVG" class="trash-svg" />`;
+				deleteProject.addEventListener('click', () => {
+					// Encontrar o projeto pai do botão delete
+					const projectElement = event.target.closest('.project');
+
+					// Remover o projeto da array
+					removeProject(projects.find(project => project.name === projectElement.querySelector('.project-title').textContent));
+
+					// Remover o elemento do DOM
+					projectsDiv.removeChild(project);
+
+					const taskHeader = document.querySelector('.task-header');
+					const taskHeaderProj = document.querySelector('.task-header-proj');
+
+					if (
+						(taskDiv.innerHTML === '') ||
+						((taskHeader !== null) && (taskHeader.innerText === projectTitle.textContent)) ||
+						((taskHeaderProj !== null) && (taskHeaderProj.innerText === projectTitle.textContent))
+					) {
+						taskDiv.innerHTML = '';
+						console.log(projects);
+					} else if (taskHeader.innerText === 'All Tasks') {
+						allTasksButton.click(); console.log('dentro do task');
+					} else if (taskHeader.innerText === 'Today!') {
+						todayButton.click();
+					} else if (taskHeader.innerText === 'Next 7 days') {
+						next7Button.click();
+					} else if (taskHeader.innerText === 'Important!') {
+						importantButton.click();
+					}
+					saveTasksToLocal();
+				});
+
+				// Append the title and the delete-button to the project div
+				project.appendChild(projectSvg);
+				project.appendChild(projectTitle);
+				project.appendChild(deleteProject);
+
+
+				project.addEventListener('click', () => addTask(projectTitle.textContent, projectTitle));
+
 				saveTasksToLocal();
-			});
 
-			return importantTask;
-		}
+				return project;
+			}
 
-		function addRemoveTask(task, project, taskDiv, specificTask) {
-			const removeTask = document.createElement('div');
-			removeTask.innerHTML = `<img src="img/cancel.svg" alt="Ícone SVG" class="cancel-svg" />`;
-			removeTask.classList.add('remove-task');
-			removeTask.addEventListener('click', () => {
-				const taskIndex = project.tasks.indexOf(task);
+			function addTask(projectName, projectTitle) {
+				// Clear existing content in taskDiv
+				taskDiv.innerHTML = '';
 
-				if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1); }
+				const specificTask = document.createElement('div');
+				specificTask.classList.add('specific-task');
 
-				taskDiv.removeChild(specificTask);
-				saveTasksToLocal();
-			});
+				const taskHeader = document.createElement('h1');
+				taskHeader.classList.add('task-header-proj');
+				taskHeader.textContent = projectName;
 
-			return removeTask;
-		}
+				taskHeader.addEventListener('click', () => {
+					const project = projects.find(proj => proj.name === projectName);
+					if (project) {
+						const newProjectName = promptWithMaxLength("Digite o novo nome do projeto: (máx. 10 caracteres) ", 10);
+						if (newProjectName !== null) {
+							taskHeader.textContent = newProjectName;
+							projectTitle.textContent = newProjectName;
+							project.name = newProjectName;
+							saveTasksToLocal();
+						}
+					}
 
-		function specificTaskAppend(specificTask, div, dateInput, removeTask, importantTask) {
-			specificTask.appendChild(div);
-			specificTask.appendChild(dateInput);
-			specificTask.appendChild(removeTask);
-			specificTask.appendChild(importantTask);
-		}
+				});
 
-		function specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask) {
-				specificTask.removeChild(newDiv);
-				specificTask.removeChild(dateInput);
-				specificTask.removeChild(importantTask);
-				specificTask.removeChild(removeTask);
-		}
+				// Create a new div for "Add Task"
+				const addTaskDiv = addNewElement('div', 'add-task', '+ Add Task', 'addTask');
+				addTaskDiv.addEventListener('click', () => {
+					const project = projects.find(proj => proj.name === projectName);
+					if (project) {
+						const newTask = prompt("Digite a nova tarefa: ");
+						if (newTask) {
 
-		function addNewElement(tipo, classe, textContent, id) {
-		    const newElement = document.createElement(tipo);
-		    newElement.classList.add(classe);
-		    newElement.textContent = textContent;
-		    newElement.id = id;
+							const specificTask = addNewElement('div', 'specific-task');
 
-		    return newElement;
-		}
+							// adicionei o "isTaskWithinSevenDays"
+							const newTaskObject = { task: newTask, taskDate: null, isTaskImportant: false, isTaskWithinSevenDays: false };
+							project.tasks.push(newTaskObject);
 
-		function createProject(index) {
-		    const project = document.createElement('div');
-		    project.classList.add('project');
-		    project.classList.add('toggle-btn');
+							// Adiciona um "important" button
+							const importantTask = addImportantTask(newTaskObject);
 
-		    // Create a new h2 element for the project
-		    const projectTitle = document.createElement('h2');
-		    projectTitle.classList.add('project-title');
+							const removeTask = addRemoveTask(newTaskObject, project, taskDiv, specificTask);
 
-		    projectTitle.textContent = projects[index].name;
-		    console.log(projectTitle.textContent);
+							// Adiciona a nova task
+							const newDiv = addNewElement('div', 'new-div-task', newTask);
 
-			const projectSvg = document.createElement('div');
-			projectSvg.classList.add('project-svg');
-			projectSvg.innerHTML = `<img src="img/tasks.svg" alt="Ícone SVG" class="tasks-svg" />`;
+							newDiv.addEventListener('click', () => {
+								const editTaskPrompt = prompt("Edite o nome da tarefa: ");
 
-		    const deleteProject = document.createElement('div');
-		    deleteProject.classList.add('delete-project');
-	     	deleteProject.innerHTML = `<img src="img/trash_svg.svg" alt="Ícone SVG" class="trash-svg" />`;
-		    deleteProject.addEventListener('click', () => {
-		        // Encontrar o projeto pai do botão delete
-		        const projectElement = event.target.closest('.project');
+								if (editTaskPrompt !== null) {
+									newDiv.textContent = editTaskPrompt;
+									newTaskObject.task = editTaskPrompt;
+								}
 
-		        // Remover o projeto da array
-		        removeProject(projects.find(project => project.name === projectElement.querySelector('.project-title').textContent));
+								saveTasksToLocal();
+							});
 
-		        // Remover o elemento do DOM
-		        projectsDiv.removeChild(project);
 
-		        const taskHeader = document.querySelector('.task-header');
-		        const taskHeaderProj = document.querySelector('.task-header-proj');
+							// Adiciona o "no-date"
+							const dateInput = document.createElement('input');
+							dateInput.type = 'date';
+							dateInput.addEventListener('change', () => {
+								// Acesse a data selecionada usando o valor do campo
+								const selectedDate = dateInput.value;
 
-		        if (
-		            (taskDiv.innerHTML === '') ||
-		            ((taskHeader !== null) && (taskHeader.innerText === projectTitle.textContent)) ||
-		            ((taskHeaderProj !== null) && (taskHeaderProj.innerText === projectTitle.textContent))
-		        ) {
-		            taskDiv.innerHTML = '';
-		            console.log(projects);
-		        } else if (taskHeader.innerText === 'All Tasks') {
-		            allTasksButton.click(); console.log('dentro do task');
-		        } else if (taskHeader.innerText === 'Today!') {
-		            todayButton.click();
-		        } else if (taskHeader.innerText === 'Next 7 days') {
-		            next7Button.click();
-		        } else if (taskHeader.innerText === 'Important!') {
-		            importantButton.click();
-		        }
-				saveTasksToLocal();
-		    });
+								// Atualize a data no objeto da tarefa
+								newTaskObject.taskDate = selectedDate;
 
-		    // Append the title and the delete-button to the project div
-		    project.appendChild(projectSvg);
-			project.appendChild(projectTitle);
-		    project.appendChild(deleteProject);
-			
+								let firstCompare = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
 
-		    project.addEventListener('click', () => addTask(projectTitle.textContent, projectTitle));
+								if (firstCompare === 0) {
+									newTaskObject.isTaskWithinSevenDays = true;
+									saveTasksToLocal();
+								} else if (firstCompare === 1 || firstCompare === 0) {
+									let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
+									newTaskObject.isTaskWithinSevenDays = true;
+									saveTasksToLocal();
+									if (secondCompare === 1 || secondCompare === 0) {
+										console.log('a data está dentro dos 7 dias!');
+										newTaskObject.isTaskWithinSevenDays = true;
+										saveTasksToLocal();
+									} else {
+										newTaskObject.isTaskWithinSevenDays = false;
+										saveTasksToLocal();
+									}
+								} else {
+									newTaskObject.isTaskWithinSevenDays = false;
+									saveTasksToLocal();
+								}
 
-			saveTasksToLocal();
+							});
 
-		    return project;
-		}
+							specificTaskAppend(specificTask, newDiv, dateInput, removeTask, importantTask);
 
-		function addTask(projectName, projectTitle) {
-		    // Clear existing content in taskDiv
-		    taskDiv.innerHTML = '';
+							taskDiv.appendChild(specificTask);
 
-			const specificTask = document.createElement('div');
-			specificTask.classList.add('specific-task');
+							saveTasksToLocal();
+						}
+					}
+				});
 
-		    const taskHeader = document.createElement('h1');
-		    taskHeader.classList.add('task-header-proj');
-		    taskHeader.textContent = projectName;
+				// Create a separate div for each task
+				const addedTaskDiv = addNewElement('div', 'task-div');
 
-		    taskHeader.addEventListener('click', () => {
-		        const project = projects.find(proj => proj.name === projectName);
-		        if (project) {
-		            const newProjectName = promptWithMaxLength("Digite o novo nome do projeto: (máx. 10 caracteres) ", 10);
-		            if (newProjectName !== null) {
-		                taskHeader.textContent = newProjectName;
-		                projectTitle.textContent = newProjectName;
-		                project.name = newProjectName;
-						saveTasksToLocal();
-		            }
-		        }
+				addedTaskDiv.appendChild(taskHeader);
+				addedTaskDiv.appendChild(addTaskDiv);
 
-		    });
+				// Append the addedTaskDiv to the taskDiv
+				taskDiv.appendChild(addedTaskDiv);
 
-		    // Create a new div for "Add Task"
-		    const addTaskDiv = addNewElement('div', 'add-task', '+ Add Task', 'addTask');
-		    addTaskDiv.addEventListener('click', () => {
-		        const project = projects.find(proj => proj.name === projectName);
-		        if (project) {
-		            const newTask = prompt("Digite a nova tarefa: ");
-		            if (newTask) {
+				const project = projects.find(proj => proj.name === projectName);
+				if (project && project.tasks.length > 0) {
+					project.tasks.forEach((task, taskIndex) => {
 
 						const specificTask = addNewElement('div', 'specific-task');
 
-		                // adicionei o "isTaskWithinSevenDays"
-		                const newTaskObject = { task: newTask, taskDate: null, isTaskImportant: false, isTaskWithinSevenDays: false };
-		                project.tasks.push(newTaskObject);
+						const newTaskDiv = addNewElement('div', 'new-div-task', task.task);
 
-		                // Adiciona um "important" button
-		                const importantTask = addImportantTask(newTaskObject);
+						newTaskDiv.addEventListener('click', () => {
+							// Lógica para edição ou outras ações desejadas ao clicar na tarefa 
+							const editTaskPrompt = prompt("Edite o nome da tarefa: ");
 
-						const removeTask = addRemoveTask(newTaskObject, project, taskDiv, specificTask);
-
-		                // Adiciona a nova task
-		                const newDiv = addNewElement('div', 'new-div-task', newTask);
-
-		                newDiv.addEventListener('click', () => {
-		                    const editTaskPrompt = prompt("Edite o nome da tarefa: ");
-
-		                    if (editTaskPrompt !== null) {
-		                        newDiv.textContent = editTaskPrompt;
-		                        newTaskObject.task = editTaskPrompt;
-		                    }
-
+							if (editTaskPrompt !== null) {
+								newTaskDiv.textContent = editTaskPrompt;
+								project.tasks[taskIndex].task = editTaskPrompt;
+							}
 							saveTasksToLocal();
-		                });
+						});
+
+						// Adiciona um "important" button
+						const importantTask = addImportantTask(project.tasks[taskIndex]);
+						//newImportantTask.classList.add('new-important-task');
+
+						const newDateInput = document.createElement('input');
+						newDateInput.type = 'date';
+						if (task.taskDate) { newDateInput.value = task.taskDate; }
+						newDateInput.addEventListener('change', () => {
+							// Acesse a data selecionada usando o valor do campo
+							const selectedDate = newDateInput.value;
+
+							// Atualize a data no objeto da tarefa
+							project.tasks[taskIndex].taskDate = selectedDate;
 
 
-		                // Adiciona o "no-date"
-		                const dateInput = document.createElement('input');
-		                dateInput.type = 'date';
-		                dateInput.addEventListener('change', () => {
-		                    // Acesse a data selecionada usando o valor do campo
-		                    const selectedDate = dateInput.value;
+							let firstCompare = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
 
-		                    // Atualize a data no objeto da tarefa
-		                    newTaskObject.taskDate = selectedDate;
-
-		                    let firstCompare = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
-
-		                    if (firstCompare === 0) {
-		                        newTaskObject.isTaskWithinSevenDays = true;
+							if (firstCompare === 0) {
+								task.isTaskWithinSevenDays = true;
 								saveTasksToLocal();
-		                    } else if (firstCompare === 1 || firstCompare === 0) {
-		                        let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
-		                        newTaskObject.isTaskWithinSevenDays = true;
+							} else if (firstCompare === 1 || firstCompare === 0) {
+								let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
+								task.isTaskWithinSevenDays = true;
 								saveTasksToLocal();
-		                        if (secondCompare === 1 || secondCompare === 0) {
-		                            console.log('a data está dentro dos 7 dias!');
-		                            newTaskObject.isTaskWithinSevenDays = true;
+								if (secondCompare === 1 || secondCompare === 0) {
+									console.log('a data está dentro dos 7 dias!');
+									task.isTaskWithinSevenDays = true;
 									saveTasksToLocal();
-		                        } else {
-		                            newTaskObject.isTaskWithinSevenDays = false;
+								} else {
+									task.isTaskWithinSevenDays = false;
 									saveTasksToLocal();
-		                        }
-		                    } else {
-		                        newTaskObject.isTaskWithinSevenDays = false;
+								}
+							} else {
+								console.log('a data selecionada está no passado!');
+								task.isTaskWithinSevenDays = false;
 								saveTasksToLocal();
-		                    }
+							}
 
-		                });
-					
-						specificTaskAppend(specificTask, newDiv, dateInput, removeTask, importantTask);
+							console.log('Data selecionada:', selectedDate);
+							saveTasksToLocal();
+						});
+
+						const newRemoveTask = addRemoveTask(task, project, taskDiv, specificTask);
+
+						specificTaskAppend(specificTask, newTaskDiv, newDateInput, newRemoveTask, importantTask);
 
 						taskDiv.appendChild(specificTask);
 
 						saveTasksToLocal();
-		            }
-		        }
-		    });
 
-		    // Create a separate div for each task
-		    const addedTaskDiv = addNewElement('div', 'task-div');
+					});
+				}
 
-		    addedTaskDiv.appendChild(taskHeader);
-			addedTaskDiv.appendChild(addTaskDiv);
+				saveTasksToLocal();
+			}
 
-		    // Append the addedTaskDiv to the taskDiv
-		    taskDiv.appendChild(addedTaskDiv);
+			function removeProject(project) {
+				const projectIndex = projects.indexOf(project);
 
-		    const project = projects.find(proj => proj.name === projectName);
-		    if (project && project.tasks.length > 0) {
-		        project.tasks.forEach((task, taskIndex) => {
+				if (projectIndex !== -1) {
+					projects.splice(projectIndex, 1);
+				}
 
-					const specificTask = addNewElement('div', 'specific-task');
+				saveTasksToLocal();
+			}
 
-					const newTaskDiv = addNewElement('div', 'new-div-task', task.task);
+			function promptWithMaxLength(message, maxLength) {
+				let userInput;
 
-		            newTaskDiv.addEventListener('click', () => {
-		                // Lógica para edição ou outras ações desejadas ao clicar na tarefa 
-		                const editTaskPrompt = prompt("Edite o nome da tarefa: ");
+				do {
+					userInput = prompt(message);
+					if (userInput && userInput.length > maxLength) {
+						alert(`O texto não pode ter mais que ${maxLength} caracteres. Por favor, tente novamente.`);
+					}
+				} while (userInput && userInput.length > maxLength);
 
-		                if (editTaskPrompt !== null) {
-		                    newTaskDiv.textContent = editTaskPrompt;
-		                    project.tasks[taskIndex].task = editTaskPrompt;
-		                }
-						saveTasksToLocal();
-		            });
+				return userInput;
+			}
 
-		            // Adiciona um "important" button
-		            const importantTask = addImportantTask(project.tasks[taskIndex]);
-		            //newImportantTask.classList.add('new-important-task');
+			function createNoTasksYay() {
+				const noTasksMessage = document.createElement('h2');
+				noTasksMessage.textContent = 'Yay, no tasks!';
+				noTasksMessage.classList.add('no-tasks-msg');
+				taskDiv.appendChild(noTasksMessage);
+			}
 
-		            const newDateInput = document.createElement('input');
-		            newDateInput.type = 'date';
-		            if (task.taskDate) { newDateInput.value = task.taskDate; }
-		            newDateInput.addEventListener('change', () => {
-		                // Acesse a data selecionada usando o valor do campo
-		                const selectedDate = newDateInput.value;
+			function buttonClickFirst(name) {
+				// Limpa o conteúdo atual em taskDiv
+				taskDiv.innerHTML = '';
 
-		                // Atualize a data no objeto da tarefa
-		                project.tasks[taskIndex].taskDate = selectedDate;
+				let taskHeader = document.createElement('h1');
+				taskHeader.classList.add('task-header');
+				taskHeader.textContent = `${name}`;
+				taskHeader.id = `${name}-id`;
 
+				taskDiv.appendChild(taskHeader);
+			}
 
-		                let firstCompare = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
+			function buttonClickForEach(checkWithinSevenDays) {
 
-		                if (firstCompare === 0) {
-		                    task.isTaskWithinSevenDays = true;
-							saveTasksToLocal();
-		                } else if (firstCompare === 1 || firstCompare === 0) {
-		                    let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
-		                    task.isTaskWithinSevenDays = true;
-							saveTasksToLocal();
-		                    if (secondCompare === 1 || secondCompare === 0) {
-		                        console.log('a data está dentro dos 7 dias!');
-		                        task.isTaskWithinSevenDays = true;
+				let tasksExist = false;
+				let taskHeader = document.querySelector('.task-header');
+
+				projects.forEach(project => {
+					project.tasks.forEach(task => {
+						if (
+							(!checkWithinSevenDays) ||
+							(checkWithinSevenDays && task.isTaskWithinSevenDays && taskHeader.innerText === "Next 7 days") ||
+							(checkWithinSevenDays && task.taskDate === getTodayDate() && taskHeader.innerText === "Today!") ||
+							(task.isTaskImportant && taskHeader.innerText === "Important!")
+						) {
+
+							const specificTask = addNewElement('div', 'specific-task');
+
+							const newDiv = addNewElement('div', 'new-div-task', task.task);
+
+							newDiv.addEventListener('click', () => {
+								const editTaskPrompt = prompt("Edite o nome da tarefa: ");
+
+								if (editTaskPrompt !== null) {
+									newDiv.textContent = editTaskPrompt;
+									task.task = editTaskPrompt;
+								}
 								saveTasksToLocal();
-		                    } else {
-		                        task.isTaskWithinSevenDays = false;
-								saveTasksToLocal();
-		                    }
-		                } else {
-		                    console.log('a data selecionada está no passado!');
-		                    task.isTaskWithinSevenDays = false;
-							saveTasksToLocal();
-		                }
+							});
 
-		                console.log('Data selecionada:', selectedDate);
-						saveTasksToLocal();
-		            });
+							const dateInput = document.createElement('input');
+							dateInput.type = 'date';
+							dateInput.value = task.taskDate || '';
+							dateInput.addEventListener('change', () => {
+								const selectedDate = dateInput.value;
+								task.taskDate = selectedDate;
+								console.log('Data selecionada:', selectedDate);
 
-					const newRemoveTask = addRemoveTask(task, project, taskDiv, specificTask);
+								let firstCompare = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
 
-					specificTaskAppend(specificTask, newTaskDiv, newDateInput, newRemoveTask, importantTask);
+								let taskHeader = document.querySelector('.task-header');
 
-					taskDiv.appendChild(specificTask);
-
-					saveTasksToLocal();
-
-		        });
-		    }
-
-			saveTasksToLocal();
-		}
-
-		function removeProject(project) {
-		    const projectIndex = projects.indexOf(project);
-
-		    if (projectIndex !== -1) {
-		        projects.splice(projectIndex, 1);
-		    }
-
-			saveTasksToLocal();
-		}
-
-		function promptWithMaxLength(message, maxLength) {
-		    let userInput;
-
-		    do {
-		        userInput = prompt(message);
-		        if (userInput && userInput.length > maxLength) {
-		            alert(`O texto não pode ter mais que ${maxLength} caracteres. Por favor, tente novamente.`);
-		        }
-		    } while (userInput && userInput.length > maxLength);
-
-		    return userInput;
-		}
-
-		function createNoTasksYay() {
-		    const noTasksMessage = document.createElement('h2');
-		    noTasksMessage.textContent = 'Yay, no tasks!';
-			noTasksMessage.classList.add('no-tasks-msg');
-		    taskDiv.appendChild(noTasksMessage);
-		}
-
-		function buttonClickFirst(name) {
-		    // Limpa o conteúdo atual em taskDiv
-		    taskDiv.innerHTML = '';
-
-		    let taskHeader = document.createElement('h1');
-		    taskHeader.classList.add('task-header');
-		    taskHeader.textContent = `${name}`;
-		    taskHeader.id = `${name}-id`;
-
-		    taskDiv.appendChild(taskHeader);
-		}
-
-		function buttonClickForEach(checkWithinSevenDays) {
-
-		    let tasksExist = false;
-		    let taskHeader = document.querySelector('.task-header');
-
-		    projects.forEach(project => {
-		        project.tasks.forEach(task => {
-		            if (
-		                (!checkWithinSevenDays) ||
-		                (checkWithinSevenDays && task.isTaskWithinSevenDays && taskHeader.innerText === "Next 7 days") ||
-		                (checkWithinSevenDays && task.taskDate === getTodayDate() && taskHeader.innerText === "Today!") ||
-		                (task.isTaskImportant && taskHeader.innerText === "Important!")
-		            ) {
-
-		            	const specificTask = addNewElement('div', 'specific-task');
-
-		                const newDiv = addNewElement('div', 'new-div-task', task.task);
-
-		                newDiv.addEventListener('click', () => {
-		                    const editTaskPrompt = prompt("Edite o nome da tarefa: ");
-
-		                    if (editTaskPrompt !== null) {
-		                        newDiv.textContent = editTaskPrompt;
-		                        task.task = editTaskPrompt;
-		                    }
-							saveTasksToLocal();
-		                });
-
-		                const dateInput = document.createElement('input');
-		                dateInput.type = 'date';
-		                dateInput.value = task.taskDate || '';
-		                dateInput.addEventListener('change', () => {
-		                    const selectedDate = dateInput.value;
-		                    task.taskDate = selectedDate;
-		                    console.log('Data selecionada:', selectedDate);
-
-		                    let firstCompare = compareAsc(new Date(selectedDate), new Date(getTodayDate()));
-
-		                    let taskHeader = document.querySelector('.task-header');
-
-		                    if (taskHeader.textContent === 'Next 7 days') {
-		                        if (firstCompare === 0) {
-		                            task.isTaskWithinSevenDays = true;
-									saveTasksToLocal();
-		                        } else if (firstCompare === -1) {
-									specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);
-
-									taskDiv.removeChild(specificTask);
-
-									task.isTaskWithinSevenDays = false;
-									saveTasksToLocal();
-								} else if (firstCompare === 1 || firstCompare === 0) {
-		                            let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
-		                            task.isTaskWithinSevenDays = true;
-									saveTasksToLocal();
-
-		                            if (secondCompare === 1 || secondCompare === 0) {
-		                                console.log('a data está dentro dos 7 dias!');
-		                                task.isTaskWithinSevenDays = true;
+								if (taskHeader.textContent === 'Next 7 days') {
+									if (firstCompare === 0) {
+										task.isTaskWithinSevenDays = true;
 										saveTasksToLocal();
-		                            } else {
-		                                task.isTaskWithinSevenDays = false;
-
+									} else if (firstCompare === -1) {
 										specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);
 
 										taskDiv.removeChild(specificTask);
+
+										task.isTaskWithinSevenDays = false;
 										saveTasksToLocal();
-		                            }
-		                        } else {
-		                            task.isTaskWithinSevenDays = false;
-		                            createNoTasksYay();
-
-									specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);								
-
-									taskDiv.removeChild(specificTask);
-
-		                            console.log('a data selecionada está no passado!');
-									saveTasksToLocal();
-		                        }
-		                    }
-		                    else if (taskHeader.textContent === 'All Tasks') {
-		                        if (firstCompare === 0) {
-		                            task.isTaskWithinSevenDays = true;
-									saveTasksToLocal();
-		                        } else if (firstCompare === 1 || firstCompare === 0) {
-		                            let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
-		                            task.isTaskWithinSevenDays = true;
-									saveTasksToLocal();
-		                            if (secondCompare === 1 || secondCompare === 0) {
-		                                console.log('a data está dentro dos 7 dias!');
-		                                task.isTaskWithinSevenDays = true;
+									} else if (firstCompare === 1 || firstCompare === 0) {
+										let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
+										task.isTaskWithinSevenDays = true;
 										saveTasksToLocal();
-		                            } else {
-		                                task.isTaskWithinSevenDays = false;
+
+										if (secondCompare === 1 || secondCompare === 0) {
+											console.log('a data está dentro dos 7 dias!');
+											task.isTaskWithinSevenDays = true;
+											saveTasksToLocal();
+										} else {
+											task.isTaskWithinSevenDays = false;
+
+											specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);
+
+											taskDiv.removeChild(specificTask);
+											saveTasksToLocal();
+										}
+									} else {
+										task.isTaskWithinSevenDays = false;
+										createNoTasksYay();
+
+										specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);								
+
+										taskDiv.removeChild(specificTask);
+
+										console.log('a data selecionada está no passado!');
 										saveTasksToLocal();
-		                            }
-		                        } else {
-		                            task.isTaskWithinSevenDays = false;
-		                            console.log('a data selecionada está no passado!');
-									saveTasksToLocal();
-		                        }
-		                    }
-		                    else if (taskHeader.textContent === "Today!") {
-		                        if (firstCompare === 0) {
-		                            task.isTaskWithinSevenDays = true;
-									saveTasksToLocal();
-		                        } else if (firstCompare === -1) {
+									}
+								}
+								else if (taskHeader.textContent === 'All Tasks') {
+									if (firstCompare === 0) {
+										task.isTaskWithinSevenDays = true;
+										saveTasksToLocal();
+									} else if (firstCompare === 1 || firstCompare === 0) {
+										let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
+										task.isTaskWithinSevenDays = true;
+										saveTasksToLocal();
+										if (secondCompare === 1 || secondCompare === 0) {
+											console.log('a data está dentro dos 7 dias!');
+											task.isTaskWithinSevenDays = true;
+											saveTasksToLocal();
+										} else {
+											task.isTaskWithinSevenDays = false;
+											saveTasksToLocal();
+										}
+									} else {
+										task.isTaskWithinSevenDays = false;
+										console.log('a data selecionada está no passado!');
+										saveTasksToLocal();
+									}
+								}
+								else if (taskHeader.textContent === "Today!") {
+									if (firstCompare === 0) {
+										task.isTaskWithinSevenDays = true;
+										saveTasksToLocal();
+									} else if (firstCompare === -1) {
 
-									specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);							
+										specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);							
 
-									taskDiv.removeChild(specificTask);
+										taskDiv.removeChild(specificTask);
 
-									task.isTaskWithinSevenDays = false;
-									saveTasksToLocal();
-								} else if (firstCompare === 1 || firstCompare === 0) {
-									let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
-									task.isTaskWithinSevenDays = true;
+										task.isTaskWithinSevenDays = false;
+										saveTasksToLocal();
+									} else if (firstCompare === 1 || firstCompare === 0) {
+										let secondCompare = compareAsc(new Date(dataSeteDiasFormat), new Date(selectedDate));
+										task.isTaskWithinSevenDays = true;
 
-									specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);								
+										specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);								
 
-									taskDiv.removeChild(specificTask);
+										taskDiv.removeChild(specificTask);
 
-									saveTasksToLocal();
+										saveTasksToLocal();
 
-									if (secondCompare === 1 || secondCompare === 0) {
-										console.log('a data está dentro dos 7 dias!');
+										if (secondCompare === 1 || secondCompare === 0) {
+											console.log('a data está dentro dos 7 dias!');
+											task.isTaskWithinSevenDays = true;
+											saveTasksToLocal();
+										} else {
+											task.isTaskWithinSevenDays = false;
+
+											specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);
+
+											taskDiv.removeChild(specificTask);
+
+											saveTasksToLocal();
+
+										}
+									}
+								}
+								else if (taskHeader.textContent === "Important!") {
+									if (firstCompare === 0) {
 										task.isTaskWithinSevenDays = true;
 										saveTasksToLocal();
 									} else {
 										task.isTaskWithinSevenDays = false;
-
-										specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);
-
-										taskDiv.removeChild(specificTask);
-
 										saveTasksToLocal();
-
 									}
-		                        }
-		                    }
-		                    else if (taskHeader.textContent === "Important!") {
-		                        if (firstCompare === 0) {
-		                            task.isTaskWithinSevenDays = true;
+								}
+
+							});
+
+							const removeTask = addRemoveTask(task, project, taskDiv, specificTask);
+
+							const importantTask = addImportantTask(task);
+							importantTask.classList.add('important-task');
+
+							importantTask.addEventListener('click', () => {
+								const taskHeader = document.querySelector('.task-header');
+
+								if (
+									((taskHeader !== null) && (task.isTaskImportant === false) && (taskHeader.textContent === "Important!"))
+								) {
+									console.log(task.isTaskImportant);
+
+									specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);							
+
+									taskDiv.removeChild(specificTask);
 									saveTasksToLocal();
-		                        } else {
-		                            task.isTaskWithinSevenDays = false;
-									saveTasksToLocal();
-		                        }
-		                    }
+								}
+							});
 
-		                });
+							specificTaskAppend(specificTask, newDiv, dateInput, removeTask, importantTask);
 
-						const removeTask = addRemoveTask(task, project, taskDiv, specificTask);
+							taskDiv.appendChild(specificTask);
 
-		                const importantTask = addImportantTask(task);
-		                importantTask.classList.add('important-task');
+							tasksExist = true;
+							saveTasksToLocal();
+						}
+					});
 
-		                importantTask.addEventListener('click', () => {
-		                    const taskHeader = document.querySelector('.task-header');
+					saveTasksToLocal();
+				});
 
-		                    if (
-		                        ((taskHeader !== null) && (task.isTaskImportant === false) && (taskHeader.textContent === "Important!"))
-		                    ) {
-		                        console.log(task.isTaskImportant);
+				if (!tasksExist) {
+					createNoTasksYay();
+				}
 
-								specificTaskRemove(specificTask, newDiv, dateInput, importantTask, removeTask);							
+			}
 
-								taskDiv.removeChild(specificTask);
-								saveTasksToLocal();
-		                    }
-		                });
+			allTasksButton.addEventListener('click', () => {
+				buttonClickFirst('All Tasks');
+				buttonClickForEach(false);
+			});
 
-						specificTaskAppend(specificTask, newDiv, dateInput, removeTask, importantTask);
+			next7Button.addEventListener('click', () => {
+				buttonClickFirst('Next 7 days');
+				buttonClickForEach(true);
+			});
 
-						taskDiv.appendChild(specificTask);
+			todayButton.addEventListener('click', () => {
+				buttonClickFirst('Today!');
+				buttonClickForEach(true);
+			});
 
-		                tasksExist = true;
-						saveTasksToLocal();
-		            }
-		        });
+			importantButton.addEventListener('click', () => {
+				buttonClickFirst('Important!');
+				buttonClickForEach(true);
+			});
 
-				saveTasksToLocal();
-		    });
 
-		    if (!tasksExist) {
-		        createNoTasksYay();
-		    }
-
-		}
-
-		allTasksButton.addEventListener('click', () => {
-		    buttonClickFirst('All Tasks');
-		    buttonClickForEach(false);
-		});
-
-		next7Button.addEventListener('click', () => {
-		    buttonClickFirst('Next 7 days');
-		    buttonClickForEach(true);
-		});
-
-		todayButton.addEventListener('click', () => {
-		    buttonClickFirst('Today!');
-		    buttonClickForEach(true);
-		});
-
-		importantButton.addEventListener('click', () => {
-		    buttonClickFirst('Important!');
-		    buttonClickForEach(true);
-		});
 
 	</script>
 
