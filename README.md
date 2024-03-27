@@ -22,3 +22,5 @@
 ## Projeto de criação de um jogo-da-velha
 ![tic-tac-toe](https://github.com/hectorhmsp/OdinProject/assets/132489902/163fdb1b-bcf3-4882-a344-a6401ea76236)
 
+## Projeto de criação de um to-do-list (com armazenamento de dados no localStorage)
+![tdl](https://github.com/hectorhmsp/OdinProject/assets/132489902/139d0bfd-0dfa-4c18-9882-edb5c6ba0b10)
