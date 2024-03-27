@@ -45,12 +45,7 @@
 	    <div class="tasks" id="tasks"></div>
 	</div>
  
-	<footer class="footer">
-		Created by hectorhmsp
-		<a href="https://github.com/hectorhmsp/OdinProject">
-			<img src="img/github.svg" alt="Ícone SVG" class="github-svg" />
-		</a>
-	</footer>
+
 
 
 
@@ -567,6 +562,7 @@
 		function createNoTasksYay() {
 		    const noTasksMessage = document.createElement('h2');
 		    noTasksMessage.textContent = 'Yay, no tasks!';
+			noTasksMessage.classList.add('no-tasks-msg');
 		    taskDiv.appendChild(noTasksMessage);
 		}
 
@@ -795,4 +791,10 @@
 	</script>
 
 </body>
+<footer class="footer">
+	Created by hectorhmsp
+	<a href="https://github.com/hectorhmsp/OdinProject">
+		<img src="img/github.svg" alt="Ícone SVG" class="github-svg" />
+	</a>
+</footer>
 </html>

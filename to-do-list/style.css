@@ -19,10 +19,9 @@ body {
     gap: 10px;
     width: 100%;
     background-color: #ead7c3;
-    font-size: 25px;
-    padding-top: 20px;
+    font-size: 20px;
+    padding-top: 15px;
     padding-bottom: 20px;
-    height: 10px;
 }
 
 .header {
@@ -55,7 +54,6 @@ body {
 
 .tasks {
     background-color: #fbf6ef;
-
     width: 100vw;
 }
 
@@ -243,4 +241,8 @@ body {
 
 footer {
     flex-shrink: 0;
+}
+
+.no-tasks-msg {
+    margin-left: 50px;
 }
