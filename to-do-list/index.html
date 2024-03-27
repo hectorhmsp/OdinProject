@@ -254,7 +254,7 @@
 			removeTask.addEventListener('click', () => {
 				const taskIndex = project.tasks.indexOf(task);
 
-				if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1) }
+				if (taskIndex !== -1) { project.tasks.splice(taskIndex, 1); }
 
 				taskDiv.removeChild(specificTask);
 				saveTasksToLocal();
@@ -486,7 +486,7 @@
 
 		            const newDateInput = document.createElement('input');
 		            newDateInput.type = 'date';
-		            if (task.taskDate) { newDateInput.value = task.taskDate };
+		            if (task.taskDate) { newDateInput.value = task.taskDate; }
 		            newDateInput.addEventListener('change', () => {
 		                // Acesse a data selecionada usando o valor do campo
 		                const selectedDate = newDateInput.value;
@@ -756,7 +756,7 @@
 
 		                tasksExist = true;
 						saveTasksToLocal();
-		            };
+		            }
 		        });
 
 				saveTasksToLocal();
@@ -764,7 +764,7 @@
 
 		    if (!tasksExist) {
 		        createNoTasksYay();
-		    };
+		    }
 
 		}
 
