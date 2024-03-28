@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dropdown Menu</title>
+<style>
+    .dropdown-toggle {
+        background-color: #3498db;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        min-width: 160px;
+    }
+
+    .dropdown-content {
+        position: absolute;
+        background-color: #75acb8;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #f1f1f1;
+    }
+</style>
+</head>
+<body>
+
+<button class="dropdown-toggle" onclick="toggleDropdown()">Dropdown</button>
+<div class="dropdown-content" id="dropdownContent">
+    <a href="#">Item 1</a>
+    <a href="#">Item 2</a>
+    <a href="#">Item 3</a>
+    <a href="#">Item 4</a>
+    <a href="#">Item 5</a>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const dropdownContent = document.getElementById("dropdownContent");
+        dropdownContent.style.display = "none"; // Definindo inicialmente como 'none'
+    });
+
+    function toggleDropdown() {
+        const dropdownContent = document.getElementById("dropdownContent");
+        dropdownContent.style.display === "none" ? dropdownContent.style.display = "block" : dropdownContent.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+        const dropdownContent = document.getElementById("dropdownContent");
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        if (!event.target.matches('.dropdown-toggle')) {
+            if (dropdownContent.style.display === 'block') {
+                dropdownContent.style.display = 'none';
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
