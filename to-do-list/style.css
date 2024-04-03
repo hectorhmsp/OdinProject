@@ -12,20 +12,30 @@ body {
     margin: 0;
 }
 
+.footer, .header, .add-project-button, .project, .toggle-btn, .all-tasks-button, .today-button, .next-7-button, .important-button, .specific-task {
+    background-color: #394867;
+}
+
+.sidebar, .home {
+    background-color: #9BA4B4;
+}
+
+.tasks {
+    background-color: #D3D8DB;
+}
+
 .footer {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
     width: 100%;
-    background-color: #ead7c3;
     font-size: 20px;
     padding-top: 15px;
     padding-bottom: 20px;
 }
 
 .header {
-    background-color: #ead7c3;
     height: 10vh;
     width: 100%;
     margin: 0;
@@ -48,18 +58,15 @@ body {
 }
 
 .sidebar {
-    background-color: #dce0d9;
     width: 30%;
 }
 
 .tasks {
-    background-color: #fbf6ef;
     width: 100vw;
 }
 
 .home {
     height: 30vh;
-    background-color: #dce0d9;
     display: flex;
     flex-direction: column;
 }
@@ -71,7 +78,6 @@ body {
     margin-top: 10px;
     border: solid 1px black;
     border-radius: 4px;
-    background: #ead7c3;
     font-family: "Inter", sans-serif;
     font-size: 17px;
     height: 35px;
@@ -80,7 +86,6 @@ body {
 .project {
     height: 40px;
     border: solid 1px black;
-    background-color: #ead7c3;
     margin: 10px 21px;
     position: relative;
     border-radius: 3px;
@@ -133,13 +138,10 @@ body {
     margin-bottom: 20px;
 }
 
-.toggle-btn {
-    background-color: #ead7c3;
-}
 
 .all-tasks-button:hover, .today-button:hover, .next-7-button:hover, .important-button:hover {
     cursor: pointer;
-    background-color: #c7ab8d;
+    background-color: #7384a0;
     width: 90%;
     border: solid 0.5px black;
     border-radius: 3px;
@@ -151,7 +153,6 @@ body {
     width: 90%;
     align-self: center;
     margin-top: 10px;
-    background-color: #ead7c3;
     font-size: 15px;
     border: solid 0.5px black;
     display: flex;
@@ -164,7 +165,7 @@ body {
 
 .toggle-btn.clicked {
     cursor: pointer;
-    background-color: #978d7f;
+    background-color: #5b74a7;
     border-radius: 3px;
 }
 
@@ -196,7 +197,6 @@ body {
     margin-right: auto;
     margin-bottom: 20px;
     padding: 5px;
-    background: #ead7c3;
     border-radius: 3px;
 }
 
