@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Form validation: Task 1</title>
+
+    <style>
+
+        body {
+            background-color: #fff;
+            color: #333;
+            font: 1em / 1.4 Helvetica Neue, Helvetica, Arial, sans-serif;
+            padding: 1em;
+            margin: 0;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        /* This is our style for the invalid fields */
+        input:invalid {
+            border-color: #900;
+            background-color: #fdd;
+        }
+
+        input:focus:invalid {
+            outline: none;
+        }
+
+        /* This is the style of our error messages */
+        .error {
+            width: 100%;
+            padding: 0;
+
+            font-size: 80%;
+            color: white;
+            background-color: #900;
+            border-radius: 0 0 5px 5px;
+
+            box-sizing: border-box;
+        }
+
+        .error.active {
+            padding: 0.3em;
+        }
+        
+    </style>
+
+  </head>
+  <body>
+    <form novalidate>
+      <h2>Enter your support query</h2>
+      <ul>
+        <li>
+          <label for="uname">User name:</label>
+          <input type="text" name="uname" id="uname" required minlength="5" maxlength="20">
+        </li>
+        <li>
+          <label for="email">Email address:</label>
+          <input type="email" name="email" id="email" required minlength="8">
+          <span class="error" aria-live="polite"></span>  
+        </li>
+        <li>
+          <label for="phone">Phone number:</label>
+          <input type="number" name="phone" id="phone" required maxlength="15">
+          <span class="error" aria-live="polite"></span>  
+        </li>
+        <li>
+          <label for="comment">Comment:</label>
+          <textarea name="comment" id="comment" required maxlength="200">
+          </textarea>
+          <span class="error" aria-live="polite"></span>
+        </li>
+        <li>
+          <button>Submit comment</button>
+        </li>
+      </ul>
+    </form>
+
+    <script>
+
+        /*
+        1. Make all of the input fields mandatory to complete before the form can be submitted. (CHECK!)
+
+        2. Change the type of the "Email address" and "Phone number" fields to make the browser apply 
+            some more specific validation suitable for the data being asked for. (CHECK!)
+
+        3. Give the "User name" field a required length of between 5 and 20 characters, the "Phone number" 
+            field a maximum length of 15 characters, and the "Comment" field a maximum length of 200 characters. (CHECK!)
+        */
+
+        const form = document.querySelector("form");
+        const uname = document.getElementById("uname");
+        const email = document.getElementById("email");
+        const phone = document.getElementById("phone");
+        const comment = document.getElementById("comment");
+
+
+        form.addEventListener("submit", (event) => {
+        if (
+                !uname.validity.valid ||
+                !email.validity.valid ||
+                !phone.validity.valid ||
+                !comment.validity.valid
+            ) {
+                event.preventDefault();
+                showError();
+            }
+        });    
+
+        function showError () {
+            return console.log('error');
+        };
+
+        /*
+        const form = document.querySelector("form");
+        const email = document.getElementById("mail");
+        const emailError = document.querySelector("#mail + span.error");
+
+        email.addEventListener("input", (event) => {
+        // Each time the user types something, we check if the
+        // form fields are valid.
+
+        if (email.validity.valid) {
+            // In case there is an error message visible, if the field
+            // is valid, we remove the error message.
+            emailError.textContent = ""; // Reset the content of the message
+            emailError.className = "error"; // Reset the visual state of the message
+        } else {
+            // If there is still an error, show the correct error
+            showError();
+        }
+        });
+
+        form.addEventListener("submit", (event) => {
+        // if the email field is valid, we let the form submit
+        if (!email.validity.valid) {
+            // If it isn't, we display an appropriate error message
+            showError();
+            // Then we prevent the form from being sent by canceling the event
+            event.preventDefault();
+        }
+        });
+
+        function showError() {
+        if (email.validity.valueMissing) {
+            // If the field is empty,
+            // display the following error message.
+            emailError.textContent = "You need to enter an email address.";
+        } else if (email.validity.typeMismatch) {
+            // If the field doesn't contain an email address,
+            // display the following error message.
+            emailError.textContent = "Entered value needs to be an email address.";
+        } else if (email.validity.tooShort) {
+            // If the data is too short,
+            // display the following error message.
+            emailError.textContent = `Email should be at least ${email.minLength} characters; you entered ${email.value.length}.`;
+        }
+
+        // Set the styling appropriately
+        emailError.className = "error active";
+        }        
+        */
+    
+    </script>
+  </body>
+</html>
