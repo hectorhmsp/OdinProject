@@ -20,7 +20,7 @@ phone_number = "(51) 3465.5513"
 website_link = "www.mpautomacao.com.br"
 
 # Número inicial para os arquivos de QR code
-numero_inicial = 2001
+numero_inicial = '''your number here'''
 
 # Loop para criar um QR code para cada link na lista
 for i, link in enumerate(links):
