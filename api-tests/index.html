@@ -3,18 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <title>Document</title>
+  <style></style>
 </head>
 <body>
-  <img src="#">
+  <input class="input" type="text" id="title" placeholder="Title" required maxlength="50" />
+  <button class="submit-btn">Submit</button>
+  <img src="#" alt="Default Image">
+
+
   <script>
     const img = document.querySelector('img');
-    fetch('https://api.giphy.com/v1/gifs/translate?api_key=KoFhPqHIHIMX0or6apU1inZDfoVihDvx&s=dogs', {mode: 'cors'})
+    const submitButton = document.querySelector('.submit-btn');
+    
+
+    submitButton.addEventListener('click', () => {
+      const searchValue = document.querySelector('input').value;
+      fetch(`https://api.giphy.com/v1/gifs/translate?api_key=KoFhPqHIHIMX0or6apU1inZDfoVihDvx&s=${searchValue}`, {mode: 'cors'})
         .then(function(response) {
-            return response.json();
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
         })
         .then(function(response) {
+          if (response.data.images) {
             img.src = response.data.images.original.url;
+          } else {
+            throw new Error('No gifs found');
+          }
+        })
+        .catch(function(error) {
+          img.src = 'default-image-url.jpg'; // Set default image
+          console.error('Error:', error.message);
         });
+
+      console.log(searchValue);
+    })
+
   </script>
 </body>
 </html>
