@@ -26,9 +26,15 @@ const server = {
 
 async function getPersonsInfo(name) {
   const people = await server.getPeople();
-  const person = people.find(person => { return person.name === name });
-  return person;
+  const person = await people.find(person => { return person.name === name });
+  return console.log(person);
 }
+
+getPersonsInfo("Thor");
+
+/*
+
+OR: 
 
 async function fetchData(name) {
   try {
@@ -42,8 +48,7 @@ async function fetchData(name) {
 
 fetchData("Thor");
 
-/* 
-or:
+OR:
 
 getPersonsInfo("Thor")
   .then(person => {
