@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Weather App
+  </title>
+  <style></style>
+</head>
+<body>
+    <input class="input" type="text" id="title" placeholder="Title" required maxlength="50" />
+    <button class="submit-btn">Submit</button>
+    <div></div>
+
+    <script>
+    // http://api.weatherapi.com/v1/current.json?key=a8361c2199b2472e859114108241004&q=canoas
+        const div = document.querySelector('div');
+        const input = document.querySelector('input');
+        const submitButton = document.querySelector('.submit-btn');
+    
+        async function getData(inputValue) {
+            const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=a8361c2199b2472e859114108241004&q=${inputValue}`, { mode: 'cors' });
+            const responseData = await response.json();
+
+            // Verificando se a requisição foi bem sucedida
+            if (response.ok) {
+                // Limpa o conteúdo anterior
+                div.innerHTML = '';
+                console.log(responseData);
+                // Itera sobre os dados da localização
+                for (const key in responseData.location) {
+                    
+                    const newElement = document.createElement('p');
+                    newElement.textContent = `${key}: ${responseData.location[key]}`;
+                    div.appendChild(newElement);
+                }
+            } else {
+                console.error('Erro:', response.status);
+            }
+        }
+
+        submitButton.addEventListener('click', () => {
+            const searchValue = input.value;
+            getData(searchValue);
+        });
+
+
+</script>
+</body>
+</html>
