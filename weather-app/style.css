@@ -1,0 +1,44 @@
+html {
+    min-height: 100%;
+}
+
+body {
+    background: linear-gradient(to bottom, #178bad, #184f77);
+    background-image: linear-gradient(rgb(84 203 237), rgb(203 207 184));
+    background-position-x: initial;
+    background-position-y: initial;
+    background-size: initial;
+    background-repeat: initial;
+    background-attachment: initial;
+    background-origin: initial;
+    background-clip: initial;
+    background-color: initial;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* altura mínima de 100% da viewport */
+}
+
+.search-div {
+    height: 10vh;
+}
+
+.container-div {
+    display: grid;
+    grid-template-columns: 45% 45% 10%;
+}
+
+.location-div, .hours-div, .days-div {
+    border: solid 1px black;
+    margin: 0;
+    padding: 0;
+    min-height: calc(100vh - 10vh - 2px);
+}
+
+.days-div {
+    display: grid;
+    grid-template-rows: 33% 33% 34%;
+}
+
+.today, .tomorrow, .overmorrow {
+    border: solid 1px black;
+}

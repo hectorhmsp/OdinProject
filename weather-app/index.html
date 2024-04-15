@@ -4,87 +4,25 @@
   <meta charset="UTF-8">
   <title>Weather App
   </title>
-  <style>
-    .location-div {
-        border: solid 1px black;
-        margin-bottom: 15px;
-    }
-
-    .current-div {
-        border: solid 1px black;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <input class="input" type="text" id="title" placeholder="Title" required maxlength="50" />
-    <button class="submit-btn">Submit</button>
-    <div class="container-div">
-        <div class="location-div"></div>
-        <div class="current-div"></div>
+    <div class="search-div">
+        <input class="input" type="text" id="title" placeholder="Title" required maxlength="50" />
+        <button class="submit-btn">Submit</button>
     </div>
 
+    <div class="container-div">
+        <div class="location-div">local</div>
+        <div class="hours-div"></div>
+        <div class="days-div">
+            <div class="today" id="today">today</div>
+            <div class="tomorrow" id="tomorrow">tomorrow</div>
+            <div class="overmorrow" id="overmorrow">after tomorrow</div>
+        </div>
+    </div>
 
-    <script>
-    // http://api.weatherapi.com/v1/current.json?key=a8361c2199b2472e859114108241004&q=canoas
-    //  Dados a serem recolhidos: { 
-    //      cidade; estado; diaHoje; diaAmanha; diaDepoisAmanha; horaLocal;
-    //      temperaturaAtual; umidade; pressão; velVento; sensacaoTerm; precipitacaoChuva;
-    //      temperaturaMax; temperaturaMin;
-    //  }  
-        const containerDiv = document.querySelector('.container-div');
-        const locationDiv = document.querySelector('.location-div');
-        const currentDiv = document.querySelector('.current-div');
-        const input = document.querySelector('input');
-        const submitButton = document.querySelector('.submit-btn');
-    
-        async function getData(inputValue) {
-            const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=a8361c2199b2472e859114108241004&q=${inputValue}`, { mode: 'cors' });
-            const responseData = await response.json();
-            containerDiv.innerHTML = '';
-
-            // Verificando se a requisição foi bem sucedida
-            if (response.ok) {
-                locationDiv.innerHTML = '';
-                currentDiv.innerHTML = '';
-                
-                // Limpa o conteúdo anterior
-                console.log(responseData.location);
-                console.log(responseData.current)
-                // Itera sobre os dados da localização
-
-                const locationElement = document.createElement('p');
-                locationElement.innerHTML = `City: ${responseData.location.name}<br> 
-                    State: ${responseData.location.region}`;
-                locationDiv.appendChild(locationElement);
-
-                const currentStatusElement = document.createElement('p');
-                currentStatusElement.innerHTML = `Last Updated: ${responseData.current.last_updated}<br>
-                    Temperature: ${responseData.current.temp_c}°C<br>
-                    Wind Speed: ${responseData.current.wind_kph} km/h<br>
-                    Wind Direction: ${responseData.current.wind_dir}<br>
-                    Pressure: ${responseData.current.pressure_mb} mb<br>
-                    Precipitation: ${responseData.current.precip_mm} mm<br>
-                    Humidity: ${responseData.current.humidity}%<br>
-                    Cloud Cover: ${responseData.current.cloud}%<br>
-                    Feels Like: ${responseData.current.feelslike_c}°C`;
-                currentDiv.appendChild(currentStatusElement);
-
-
-                
-
-                containerDiv.appendChild(locationDiv);
-                containerDiv.appendChild(currentDiv);
-            } else {
-                console.error('Erro:', response.status);
-            }
-        }
-
-        submitButton.addEventListener('click', () => {
-            const searchValue = input.value;
-            getData(searchValue);
-        });
-
-
-</script>
+    <script src="script.js">
+    </script>
 </body>
 </html>
