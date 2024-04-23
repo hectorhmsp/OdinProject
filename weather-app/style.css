@@ -34,6 +34,11 @@ body {
     min-height: calc(100vh - 10vh - 2px);
 }
 
+.location-div {
+    display: grid;
+    grid-template-rows: 50% 50%;
+}
+
 .days-div {
     display: grid;
     grid-template-rows: 33% 33% 34%;
@@ -41,4 +46,15 @@ body {
 
 .today, .tomorrow, .overmorrow {
     border: solid 1px black;
+}
+
+#cityElement {
+    font-size: 50px;
+    margin: 15px;
+    margin-bottom: 0px;
+}
+
+#stateElement {
+    margin: 0;
+    margin-left: 25px;
 }
