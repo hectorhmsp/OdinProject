@@ -17,24 +17,28 @@ const submitButton = document.querySelector('.submit-btn');
 const today = document.querySelector('.today');
 const tomorrow = document.querySelector('.tomorrow');
 const overmorrow = document.querySelector('.overmorrow');
-
+const mainElementsDiv = document.querySelector('.main-elements');
+const secondaryElementsDiv = document.querySelector('.secondary-elements');
+const mainElements01 = document.querySelector('.main-elements-01');
+const mainElements02 = document.querySelector('.main-elements-02');
 
 
 async function getData(inputValue) {
     const response = await fetch(`http://api.weatherapi.com/v1/current.json?key=a8361c2199b2472e859114108241004&q=${inputValue}`, { mode: 'cors' });
     const responseData = await response.json();
-    //containerDiv.innerHTML = '';
 
     const forecast = await fetch(`http://api.weatherapi.com/v1/forecast.json?key=a8361c2199b2472e859114108241004&q=${inputValue}&days=3`, { mode: 'cors' });
     const forecastData = await forecast.json();
 
     // Verificando se a requisição foi bem sucedida
     if (response.ok) {
-        locationDiv.innerHTML = '';
+        mainElements01.innerHTML = '';
+        mainElements02.innerHTML = '';
+        secondaryElementsDiv.innerHTML = '';
         
         // Limpa o conteúdo anterior
         console.log(responseData.location);
-        console.log(responseData.current)
+        console.log(responseData.current);
 
         console.log(forecastData.forecast.forecastday[0]);
         console.log(forecastData.forecast.forecastday[1]);
@@ -62,12 +66,16 @@ async function getData(inputValue) {
         const humidityElement = createAndSetElement('p', `Humidity: ${responseData.current.humidity}%`, 'humidityElement');
         const cloudCoverElement = createAndSetElement('p', `Cloud cover: ${responseData.current.cloud}%`, 'cloudCoverElement');
         const feelsLikeElement = createAndSetElement('p', `FeelsLike: ${responseData.current.feelslike_c} ºC`, 'feelsLikeElement');
-        
+        const conditionTextElement = createAndSetElement('p', `${responseData.current.condition.text}`, 'conditionTextElement');
+
+        const iconElement = document.createElement('img');
+        iconElement.src = responseData.current.condition.icon;
+
         hoursDiv.innerHTML = '';
 
         for (let i=0; i<(forecastData.forecast.forecastday[0].hour).length; i++) {
             hoursDiv.innerHTML += `${(forecastData.forecast.forecastday[0].hour[i].time).slice(11,16)} ---
-                ${(forecastData.forecast.forecastday[0].hour[i].precip_mm).toFixed(2)} ----
+                ${(forecastData.forecast.forecastday[0].hour[i].precip_mm).toFixed(2)} mm ----
                 ${(forecastData.forecast.forecastday[0].hour[i].temp_c).toFixed(2)} ºC <br>`; 
         }
 
@@ -80,41 +88,22 @@ async function getData(inputValue) {
         overmorrow.innerHTML = `Overmorrow: <br> <br> ${forecastData.forecast.forecastday[2].day.maxtemp_c} /
             ${forecastData.forecast.forecastday[2].day.mintemp_c}`;
 
-        const mainElements = document.createElement('div');
-        const secundaryElements = document.createElement('div');
+        mainElements01.appendChild(cityElement);
+        mainElements01.appendChild(stateElement);
+        mainElements01.appendChild(lastUpdatedElement);
 
-        locationDiv.appendChild(mainElements);
-        locationDiv.appendChild(secundaryElements);
-
+        mainElements02.appendChild(iconElement);
+        mainElements02.appendChild(temperatureElement);
+        mainElements02.appendChild(conditionTextElement);
         
-        mainElements.appendChild(cityElement);
-        mainElements.appendChild(stateElement);
-        mainElements.appendChild(temperatureElement);
-        mainElements.appendChild(lastUpdatedElement);
-        
-        secundaryElements.appendChild(windSpeedElement);
-        secundaryElements.appendChild(windDirectionElement);
-        secundaryElements.appendChild(pressureElement);
-        secundaryElements.appendChild(precipitationElement);
-        secundaryElements.appendChild(humidityElement);
-        secundaryElements.appendChild(cloudCoverElement);
-        secundaryElements.appendChild(feelsLikeElement);
+        secondaryElementsDiv.appendChild(windSpeedElement);
+        secondaryElementsDiv.appendChild(windDirectionElement);
+        secondaryElementsDiv.appendChild(pressureElement);
+        secondaryElementsDiv.appendChild(precipitationElement);
+        secondaryElementsDiv.appendChild(humidityElement);
+        secondaryElementsDiv.appendChild(cloudCoverElement);
+        secondaryElementsDiv.appendChild(feelsLikeElement);
 
-            /*
-            City: ${cityElement.innerText}<br> 
-            State: ${stateElement.innerText};<br>
-            Last Updated: ${lastUpdatedElement.innerText}<br>
-            Temperature: ${temperatureElement.innerText}°C<br>
-            Wind Speed: ${windSpeedElement.innerText} km/h<br>
-            Wind Direction: ${windDirectionElement.innerText}<br>
-            Pressure: ${pressureElement.innerText} mb<br>
-            Precipitation: ${precipitationElement.innerText} mm<br>
-            Humidity: ${humidityElement.innerText}%<br>
-            Cloud Cover: ${cloudCoverElement.innerText}%<br>
-            Feels Like: ${feelsLikeElement.innerText}°C`;
-            */
-
-        locationDiv.appendChild(locationElement);
 
         daysDiv.addEventListener('click', (event) => {
             hoursDiv.innerHTML = '';
@@ -131,8 +120,8 @@ async function getData(inputValue) {
 
             for (let i=0; i<(forecastData.forecast.forecastday[dayNumber].hour).length; i++) {
                     hoursDiv.innerHTML += `${(forecastData.forecast.forecastday[0].hour[i].time).slice(11,16)} ---
-                        ${(forecastData.forecast.forecastday[dayNumber].hour[i].precip_mm).toFixed(2)} ----
-                        ${(forecastData.forecast.forecastday[dayNumber].hour[i].temp_c).toFixed(2)} ºC <br>`; 
+                        ${(forecastData.forecast.forecastday[dayNumber].hour[i].precip_mm).toFixed(2)} mm ----
+                        ${(forecastData.forecast.forecastday[dayNumber].hour[i].temp_c).toFixed(3)} ºC <br>`; 
             }
         })
 

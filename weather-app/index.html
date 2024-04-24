@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Weather App
-  </title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <title>Weather App
+    </title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="search-div">
@@ -13,13 +16,23 @@
     </div>
 
     <div class="container-div">
-        <div class="location-div">local</div>
+        <div class="location-div">
+            <div class="main-elements">
+                <div class="main-elements-01"></div>
+                <div class="main-elements-02"></div>
+            </div>
+
+            <div class="secondary-elements"></div>
+        </div>
+
         <div class="hours-div"></div>
+
         <div class="days-div">
             <div class="today" id="today">today</div>
             <div class="tomorrow" id="tomorrow">tomorrow</div>
             <div class="overmorrow" id="overmorrow">after tomorrow</div>
         </div>
+
     </div>
 
     <script src="script.js">

@@ -1,5 +1,12 @@
 html {
     min-height: 100%;
+    font-family: "Nunito", sans-serif;
+}
+
+p#lastUpdatedElement {
+    font-size: 13px;
+    margin: 0;
+    margin-left: 25px;
 }
 
 body {
@@ -27,18 +34,6 @@ body {
     grid-template-columns: 45% 45% 10%;
 }
 
-.location-div, .hours-div, .days-div {
-    border: solid 1px black;
-    margin: 0;
-    padding: 0;
-    min-height: calc(100vh - 10vh - 2px);
-}
-
-.location-div {
-    display: grid;
-    grid-template-rows: 50% 50%;
-}
-
 .days-div {
     display: grid;
     grid-template-rows: 33% 33% 34%;
@@ -49,12 +44,86 @@ body {
 }
 
 #cityElement {
-    font-size: 50px;
+    font-size: 45px;
     margin: 15px;
     margin-bottom: 0px;
+    color: white;
+    margin-left: 25px;
+    margin-top: 35px;
 }
 
 #stateElement {
     margin: 0;
     margin-left: 25px;
+    color: grey;
+    font-size: 20px;
+};
+
+.location-div {
+    display: grid;
+    grid-template-rows: 30% 70%;
+}
+
+.main-elements {
+    display: flex;
+    flex-direction: row;
+}
+
+.secondary-elements {
+    margin: 25px;
+    margin-top: 60px;
+}
+
+
+.location-div, .hours-div, .days-div {
+    border: solid 1px black;
+    margin: 0;
+    padding: 0;
+    min-height: calc(100vh - 10vh - 2px);
+}
+
+button.submit-btn {
+    width: 75px;
+    height: 30px;
+}
+
+input#title {
+    margin: 15px;
+    height: 25px;
+    width: 200px;
+    border-radius: 10px;
+    border: solid 1px black;
+    margin-right: 0;
+    padding-left: 20px;
+}
+
+img {
+    height: 100px;
+    margin-top: 20px;
+    width: 100px;
+}
+
+.main-elements-02 {
+    display: grid;
+    grid-template-rows: min-content min-content;
+    grid-template-columns: min-content 200px;
+}
+
+.main-elements-01 {
+    width: 275px;
+}
+
+p#conditionTextElement {
+    margin: 0;
+    font-size: 16px;
+    justify-self: center;
+    grid-column: 1 / span 2;
+    color: white;
+}
+
+p#temperatureElement {
+    margin: 0;
+    color: white;
+    font-size: 55px;
+    margin-top: 35px;
 }
