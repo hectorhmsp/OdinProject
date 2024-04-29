@@ -7,11 +7,11 @@ p#lastUpdatedElement {
     font-size: 13px;
     margin: 0;
     margin-left: 25px;
+    color: #9f9f9f;
 }
 
 body {
-    background: linear-gradient(to bottom, #178bad, #184f77);
-    background-image: linear-gradient(rgb(84 203 237), rgb(203 207 184));
+    background-image: linear-gradient(rgb(0 89 165), rgb(62 39 73));
     background-position-x: initial;
     background-position-y: initial;
     background-size: initial;
@@ -22,7 +22,7 @@ body {
     background-color: initial;
     margin: 0;
     padding: 0;
-    min-height: 100vh; /* altura mínima de 100% da viewport */
+    min-height: 100vh;
 }
 
 .search-div {
@@ -40,7 +40,17 @@ body {
 }
 
 .today, .tomorrow, .overmorrow {
-    border: solid 1px black;
+    border: none;
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+    flex-direction: column; 
+    text-align: center;
+    margin-top: 20px;
+}
+
+.overmorrow {
+    border: none;
 }
 
 #cityElement {
@@ -49,13 +59,13 @@ body {
     margin-bottom: 0px;
     color: white;
     margin-left: 25px;
-    margin-top: 35px;
+    margin-top: 70px;
 }
 
 #stateElement {
     margin: 0;
     margin-left: 25px;
-    color: grey;
+    color: rgb(255, 255, 255);
     font-size: 20px;
 };
 
@@ -71,15 +81,15 @@ body {
 
 .secondary-elements {
     margin: 25px;
-    margin-top: 60px;
+    margin-top: 0;
 }
 
 
 .location-div, .hours-div, .days-div {
-    border: solid 1px black;
     margin: 0;
     padding: 0;
     min-height: calc(100vh - 10vh - 2px);
+    color: white;
 }
 
 button.submit-btn {
@@ -125,5 +135,108 @@ p#temperatureElement {
     margin: 0;
     color: white;
     font-size: 55px;
-    margin-top: 35px;
+    margin-top: 70px;
+}
+
+.svg-icon {
+    height: 50px;
+    width: 50px;
+}
+
+p.text-element {
+    color: #FFFFFF;
+    margin: 0;
+    font-size: 20px;
+}
+
+p#feelsLikeElement {
+    font-size: 25px;
+    margin-bottom: 5px;
+    color: #FFFFFF;
+    margin-top: 70px;
+}
+
+img.forecast-icon {
+    height: 90px;
+    width: 90px;
+    margin: 0;
+    border-bottom: solid 1px rgb(184, 184, 184);
+}
+
+.hours-div {
+    overflow-y: auto;
+    font-size: 20px;
+    max-height: 100px;
+    min-height: 520px;
+    border: solid 1px #ababab;
+    width: 500px;
+    padding: 20px;
+    border-radius: 5px;
+    position: absolute;
+    right: 200px;
+    top: 30px;
+}
+
+.overmorrow-icon {
+    border: none;
+    height: 90px;
+    width: 90px;
+    margin: 0;
+}
+
+img.main-icon {
+    margin-top: 50px;
+}
+
+
+/* Para navegadores baseados em Webkit (como Chrome e Safari) */
+::-webkit-scrollbar {
+    width: 10px; /* Largura do scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Cor de fundo do scrollbar */
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* Cor do thumb (o indicador móvel) */
+    border-radius: 5px; /* Arredondamento do thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Cor do thumb quando hover */
+}
+
+/* Adiciona arredondamento ao canto do scrollbar */
+::-webkit-scrollbar-corner {
+    background: #f1f1f1; /* Cor de fundo do canto do scrollbar */
+    border-radius: 5px; /* Arredondamento do canto do scrollbar */
+}
+  
+.days-div {
+    position: absolute;
+    right: 20px;
+    top: 0;
+    margin-top: 10px;
+}
+  
+.container-inside {
+    display: flex;
+    width: 500px;
+    justify-content: space-between;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+
+.property-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+span.date {
+    font-size: 12px;
+    margin-bottom: 8px;
 }

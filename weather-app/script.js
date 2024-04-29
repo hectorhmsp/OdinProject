@@ -59,34 +59,88 @@ async function getData(inputValue) {
         const stateElement = createAndSetElement('p', `${responseData.location.region}`, 'stateElement');
         const lastUpdatedElement = createAndSetElement('p', `Last Updated: ${responseData.current.last_updated}`, 'lastUpdatedElement');
         const temperatureElement = createAndSetElement('p', `${responseData.current.temp_c} ºC`, 'temperatureElement');
-        const windSpeedElement = createAndSetElement('p', `Wind Speed: ${responseData.current.wind_kph} km/h`, 'windSpeedElement');
-        const windDirectionElement = createAndSetElement('p', `Wind Direction: ${responseData.current.wind_dir}`, 'windDirectionElement');
-        const pressureElement = createAndSetElement('p', `Pressure: ${responseData.current.pressure_mb} mb`, 'pressureElement');
-        const precipitationElement = createAndSetElement('p', `Precipitation: ${responseData.current.precip_mm} mm`, 'precipitationElement');
-        const humidityElement = createAndSetElement('p', `Humidity: ${responseData.current.humidity}%`, 'humidityElement');
-        const cloudCoverElement = createAndSetElement('p', `Cloud cover: ${responseData.current.cloud}%`, 'cloudCoverElement');
-        const feelsLikeElement = createAndSetElement('p', `FeelsLike: ${responseData.current.feelslike_c} ºC`, 'feelsLikeElement');
+        const feelsLikeElement = createAndSetElement('p', `Feels Like ${responseData.current.feelslike_c} ºC`, 'feelsLikeElement');
         const conditionTextElement = createAndSetElement('p', `${responseData.current.condition.text}`, 'conditionTextElement');
 
         const iconElement = document.createElement('img');
+        iconElement.classList.add('main-icon');
         iconElement.src = responseData.current.condition.icon;
 
         hoursDiv.innerHTML = '';
 
-        for (let i=0; i<(forecastData.forecast.forecastday[0].hour).length; i++) {
-            hoursDiv.innerHTML += `${(forecastData.forecast.forecastday[0].hour[i].time).slice(11,16)} ---
-                ${(forecastData.forecast.forecastday[0].hour[i].precip_mm).toFixed(2)} mm ----
-                ${(forecastData.forecast.forecastday[0].hour[i].temp_c).toFixed(2)} ºC <br>`; 
+        const agora = new Date();
+        const horaAtual = agora.getHours();
+        
+        for (let i = 0; i < forecastData.forecast.forecastday[0].hour.length; i++) {
+            const horaPrevisao = parseInt(forecastData.forecast.forecastday[0].hour[i].time.slice(11, 13), 10);
+        
+            if (horaPrevisao >= horaAtual) {
+                hoursDiv.innerHTML += `${(forecastData.forecast.forecastday[0].hour[i].time).slice(11, 16)} ---
+                    ${(forecastData.forecast.forecastday[0].hour[i].precip_mm).toFixed(2)} mm ----
+                    ${(forecastData.forecast.forecastday[0].hour[i].temp_c).toFixed(1)} ºC <br>`;
+            }
         }
 
-        today.innerHTML = `Today: <br> <br>${forecastData.forecast.forecastday[0].day.maxtemp_c} / 
-            ${forecastData.forecast.forecastday[0].day.mintemp_c}`;
+        const forecastIcon01 = document.createElement('img');
+        const forecastIcon02 = document.createElement('img');
+        const forecastIcon03 = document.createElement('img');
 
-        tomorrow.innerHTML = `Tomorrow: <br> <br> ${forecastData.forecast.forecastday[1].day.maxtemp_c} /
-            ${forecastData.forecast.forecastday[1].day.mintemp_c}`;
+        forecastIcon01.src = forecastData.forecast.forecastday[0].day.condition.icon;
+        forecastIcon02.src = forecastData.forecast.forecastday[1].day.condition.icon;
+        forecastIcon03.src = forecastData.forecast.forecastday[2].day.condition.icon;
 
-        overmorrow.innerHTML = `Overmorrow: <br> <br> ${forecastData.forecast.forecastday[2].day.maxtemp_c} /
-            ${forecastData.forecast.forecastday[2].day.mintemp_c}`;
+        forecastIcon01.classList.add('forecast-icon');
+        forecastIcon02.classList.add('forecast-icon');
+        forecastIcon03.classList.add('overmorrow-icon');
+
+        function obterDiaEMes(data) {
+            const dia = data.getDate();
+            const mes = data.getMonth() + 1; // Adicionando 1 para ajustar o índice baseado em zero
+        
+            // Formatando para garantir que tenhamos dois dígitos no dia e no mês
+            const diaFormatado = dia < 10 ? `0${dia}` : dia;
+            const mesFormatado = mes < 10 ? `0${mes}` : mes;
+        
+            return `${diaFormatado}/${mesFormatado}`;
+        }
+
+        function obterDiaSemana(data) {
+            const diasSemana = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            const diaSemanaIndex = data.getDay();
+            return diasSemana[diaSemanaIndex];
+        }
+        
+        const hoje = new Date();
+        const amanha = new Date();
+        const depoisDeAmanha = new Date();
+        amanha.setDate(amanha.getDate() + 1);
+        depoisDeAmanha.setDate(depoisDeAmanha.getDate() + 2);
+
+        today.innerHTML = `
+        <span class="day-of-week">${obterDiaSemana(hoje)}</span> 
+        <span class="date">${obterDiaEMes(hoje)}</span> 
+        ${(forecastData.forecast.forecastday[0].day.maxtemp_c).toFixed(0)} ºC <br> 
+        ${forecastData.forecast.forecastday[0].day.mintemp_c} ºC 
+        `;
+        today.appendChild(forecastIcon01);
+        
+        tomorrow.innerHTML = `
+            <span class="day-of-week">${obterDiaSemana(amanha)}</span> 
+            <span class="date">${obterDiaEMes(amanha)}</span> 
+            ${(forecastData.forecast.forecastday[1].day.maxtemp_c).toFixed(0)} ºC <br> 
+            ${forecastData.forecast.forecastday[1].day.mintemp_c} ºC
+        `;
+        tomorrow.appendChild(forecastIcon02);
+        
+        overmorrow.innerHTML = `
+            <span class="day-of-week">${obterDiaSemana(depoisDeAmanha)}</span> 
+            <span class="date">${obterDiaEMes(depoisDeAmanha)}</span> 
+            ${(forecastData.forecast.forecastday[2].day.maxtemp_c).toFixed(0)} ºC <br>
+            ${forecastData.forecast.forecastday[2].day.mintemp_c} ºC
+        `;
+        overmorrow.appendChild(forecastIcon03);
+    
+
 
         mainElements01.appendChild(cityElement);
         mainElements01.appendChild(stateElement);
@@ -95,21 +149,65 @@ async function getData(inputValue) {
         mainElements02.appendChild(iconElement);
         mainElements02.appendChild(temperatureElement);
         mainElements02.appendChild(conditionTextElement);
-        
-        secondaryElementsDiv.appendChild(windSpeedElement);
-        secondaryElementsDiv.appendChild(windDirectionElement);
-        secondaryElementsDiv.appendChild(pressureElement);
-        secondaryElementsDiv.appendChild(precipitationElement);
-        secondaryElementsDiv.appendChild(humidityElement);
-        secondaryElementsDiv.appendChild(cloudCoverElement);
+               
         secondaryElementsDiv.appendChild(feelsLikeElement);
+
+        // Função para criar um contêiner com texto e imagem SVG
+        function createPropertyContainer(property, value, svgSrc) {
+            const container = document.createElement('div');
+            container.classList.add(`property-container`);
+            
+            const nameTextElement = document.createElement('p');
+            nameTextElement.textContent = `${property}`;
+            nameTextElement.classList.add('text-element');
+            
+            const valueTextElement = document.createElement('p');
+            valueTextElement.textContent = `${value}`;
+            valueTextElement.classList.add('text-element');
+
+            const svgElement = document.createElement('img');
+            svgElement.src = svgSrc;
+            svgElement.classList.add('svg-icon'); // Adicione uma classe para estilização
+
+            container.appendChild(svgElement);
+            container.appendChild(nameTextElement);
+            container.appendChild(valueTextElement);
+
+            return container;
+        }
+
+        const containerInsideContainer = document.createElement('div');
+        containerInsideContainer.classList.add('container-inside');
+
+        if (responseData.current.precip_mm > 1) {
+            const secondaryContainer = createPropertyContainer('Precipitation', `${responseData.current.precip_mm}mm`, 'img/precip.svg');
+            containerInsideContainer.appendChild(secondaryContainer);
+        } else {
+            const secondaryContainer = createPropertyContainer('Humidity', `${responseData.current.humidity}%`, 'img/drops.svg');
+            containerInsideContainer.appendChild(secondaryContainer);  
+        }
+
+        // Exemplo de utilização para várias propriedades
+        const properties = [
+            { name: 'Pressure', value: `${responseData.current.pressure_mb}mb`, svgSrc: 'img/pressure.svg' },
+            { name: 'Wind Speed', value: `${responseData.current.wind_kph} km/h`, svgSrc: 'img/wind.svg' }
+            // Adicione mais propriedades conforme necessário
+        ];
+
+        // Loop para criar contêineres para cada propriedade e adicioná-los ao elemento principal
+        properties.forEach(property => {
+            const container = createPropertyContainer(property.name, property.value, property.svgSrc);
+            containerInsideContainer.appendChild(container);
+        });
+
+        secondaryElementsDiv.appendChild(containerInsideContainer);
 
 
         daysDiv.addEventListener('click', (event) => {
             hoursDiv.innerHTML = '';
-
+        
             let dayNumber = 0;
-
+        
             if (event.target.id === 'today') {
                 dayNumber = 0;
             } else if (event.target.id === 'tomorrow') {
@@ -117,13 +215,17 @@ async function getData(inputValue) {
             } else if (event.target.id === 'overmorrow') {
                 dayNumber = 2;
             }
-
-            for (let i=0; i<(forecastData.forecast.forecastday[dayNumber].hour).length; i++) {
-                    hoursDiv.innerHTML += `${(forecastData.forecast.forecastday[0].hour[i].time).slice(11,16)} ---
+        
+            for (let i = 0; i < (forecastData.forecast.forecastday[dayNumber].hour).length; i++) {
+                const horaPrevisao = parseInt(forecastData.forecast.forecastday[dayNumber].hour[i].time.slice(11, 13), 10);
+        
+                if (horaPrevisao >= horaAtual) {
+                    hoursDiv.innerHTML += `${(forecastData.forecast.forecastday[0].hour[i].time).slice(11, 16)} ---
                         ${(forecastData.forecast.forecastday[dayNumber].hour[i].precip_mm).toFixed(2)} mm ----
-                        ${(forecastData.forecast.forecastday[dayNumber].hour[i].temp_c).toFixed(3)} ºC <br>`; 
+                        ${(forecastData.forecast.forecastday[dayNumber].hour[i].temp_c).toFixed(1)} ºC <br>`;
+                }
             }
-        })
+        });
 
     } else {
         console.error('Erro:', response.status);
