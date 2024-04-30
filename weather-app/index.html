@@ -11,9 +11,12 @@
 </head>
 <body>
     <div class="search-div">
-        <input class="input" type="text" id="title" placeholder="Title" required maxlength="50" />
-        <button class="submit-btn">Submit</button>
+        <div class="search-container">
+            <input class="input" type="text" id="title" placeholder="Search..." required maxlength="50" />
+            <button class="submit-btn"><img src="img/lens.svg" alt="Search"></button>
+        </div>
     </div>
+    
 
     <div class="container-div">
         <div class="location-div">
@@ -28,8 +31,10 @@
         <div class="hours-div"></div>
 
         <div class="days-div">
-            <div class="today" id="today">today</div>
+            <div class="today active" id="today">today</div>
+            <div class="border"></div>
             <div class="tomorrow" id="tomorrow">tomorrow</div>
+            <div class="border"></div>
             <div class="overmorrow" id="overmorrow">after tomorrow</div>
         </div>
 

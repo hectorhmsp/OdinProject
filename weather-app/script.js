@@ -71,15 +71,51 @@ async function getData(inputValue) {
         const agora = new Date();
         const horaAtual = agora.getHours();
         
-        for (let i = 0; i < forecastData.forecast.forecastday[0].hour.length; i++) {
-            const horaPrevisao = parseInt(forecastData.forecast.forecastday[0].hour[i].time.slice(11, 13), 10);
+        function renderHourForecast(hourData, container, dayNumber) {
+            for (let i = 0; i < hourData.length; i++) {
+                const horaPrevisao = parseInt(hourData[i].time.slice(11, 13), 10);
+                
+                if (((dayNumber === 0) && (horaPrevisao >= horaAtual)) || ((dayNumber === 1) || (dayNumber === 2))) {
+                    const littleForecastIcon = document.createElement('img');
+                    littleForecastIcon.src = hourData[i].condition.icon;
+                    littleForecastIcon.classList.add('little-forecast-icon');
         
-            if (horaPrevisao >= horaAtual) {
-                hoursDiv.innerHTML += `${(forecastData.forecast.forecastday[0].hour[i].time).slice(11, 16)} ---
-                    ${(forecastData.forecast.forecastday[0].hour[i].precip_mm).toFixed(2)} mm ----
-                    ${(forecastData.forecast.forecastday[0].hour[i].temp_c).toFixed(1)} ºC <br>`;
+                    const littlePrecip = document.createElement('span');
+                    const littleHour = document.createElement('span');
+                    const littleTemp = document.createElement('span');
+                    const littlePrecipIcon = document.createElement('img');
+                    littlePrecipIcon.src = 'img/little-precip-icon.svg';
+        
+                    littlePrecip.classList.add('little-precip');
+                    littleHour.classList.add('little-hour');
+                    littleTemp.classList.add('little-temp');
+                    littlePrecipIcon.classList.add('little-precip-icon');
+        
+                    littleHour.innerHTML = `${hourData[i].time.slice(11, 16)}`;
+                    littlePrecip.innerHTML = `${hourData[i].precip_mm.toFixed(2)} mm`;
+                    littleTemp.innerHTML = `${hourData[i].temp_c.toFixed(1)} ºC`;
+        
+                    const rowBorder = document.createElement('div');
+        
+                    if (i === (hourData.length - 1)) {
+                        rowBorder.classList.add('row-border-last');
+                    } else {
+                        rowBorder.classList.add('row-border');
+                    }
+
+                    container.appendChild(littleHour);
+                    container.appendChild(littleForecastIcon);
+                    container.appendChild(littlePrecipIcon);
+                    container.appendChild(littlePrecip);
+                    container.appendChild(littleTemp);
+                    container.appendChild(rowBorder);
+                }
+
+                
             }
         }
+
+        renderHourForecast(forecastData.forecast.forecastday[0].hour, hoursDiv, 0);
 
         const forecastIcon01 = document.createElement('img');
         const forecastIcon02 = document.createElement('img');
@@ -120,7 +156,7 @@ async function getData(inputValue) {
         <span class="day-of-week">${obterDiaSemana(hoje)}</span> 
         <span class="date">${obterDiaEMes(hoje)}</span> 
         ${(forecastData.forecast.forecastday[0].day.maxtemp_c).toFixed(0)} ºC <br> 
-        ${forecastData.forecast.forecastday[0].day.mintemp_c} ºC 
+        ${(forecastData.forecast.forecastday[0].day.mintemp_c).toFixed(0)} ºC 
         `;
         today.appendChild(forecastIcon01);
         
@@ -128,7 +164,7 @@ async function getData(inputValue) {
             <span class="day-of-week">${obterDiaSemana(amanha)}</span> 
             <span class="date">${obterDiaEMes(amanha)}</span> 
             ${(forecastData.forecast.forecastday[1].day.maxtemp_c).toFixed(0)} ºC <br> 
-            ${forecastData.forecast.forecastday[1].day.mintemp_c} ºC
+            ${(forecastData.forecast.forecastday[1].day.mintemp_c).toFixed(0)} ºC
         `;
         tomorrow.appendChild(forecastIcon02);
         
@@ -136,7 +172,7 @@ async function getData(inputValue) {
             <span class="day-of-week">${obterDiaSemana(depoisDeAmanha)}</span> 
             <span class="date">${obterDiaEMes(depoisDeAmanha)}</span> 
             ${(forecastData.forecast.forecastday[2].day.maxtemp_c).toFixed(0)} ºC <br>
-            ${forecastData.forecast.forecastday[2].day.mintemp_c} ºC
+            ${(forecastData.forecast.forecastday[2].day.mintemp_c).toFixed(0)} ºC
         `;
         overmorrow.appendChild(forecastIcon03);
     
@@ -206,30 +242,46 @@ async function getData(inputValue) {
         daysDiv.addEventListener('click', (event) => {
             hoursDiv.innerHTML = '';
         
-            let dayNumber = 0;
+            let targetElement = event.target;
         
-            if (event.target.id === 'today') {
-                dayNumber = 0;
-            } else if (event.target.id === 'tomorrow') {
-                dayNumber = 1;
-            } else if (event.target.id === 'overmorrow') {
-                dayNumber = 2;
+            // Procura pelo elemento pai com a classe 'today', 'tomorrow' ou 'overmorrow'
+            while (targetElement && !targetElement.classList.contains('today') && !targetElement.classList.contains('tomorrow') && !targetElement.classList.contains('overmorrow')) {
+                targetElement = targetElement.parentElement;
             }
         
-            for (let i = 0; i < (forecastData.forecast.forecastday[dayNumber].hour).length; i++) {
-                const horaPrevisao = parseInt(forecastData.forecast.forecastday[dayNumber].hour[i].time.slice(11, 13), 10);
+            if (targetElement) {
+                let dayNumber = 0;
         
-                if (horaPrevisao >= horaAtual) {
-                    hoursDiv.innerHTML += `${(forecastData.forecast.forecastday[0].hour[i].time).slice(11, 16)} ---
-                        ${(forecastData.forecast.forecastday[dayNumber].hour[i].precip_mm).toFixed(2)} mm ----
-                        ${(forecastData.forecast.forecastday[dayNumber].hour[i].temp_c).toFixed(1)} ºC <br>`;
+                if (targetElement.classList.contains('today')) {
+                    dayNumber = 0;
+                } else if (targetElement.classList.contains('tomorrow')) {
+                    dayNumber = 1;
+                } else if (targetElement.classList.contains('overmorrow')) {
+                    dayNumber = 2;
                 }
+
+                renderHourForecast(forecastData.forecast.forecastday[dayNumber].hour, hoursDiv, dayNumber);
             }
         });
+        
 
     } else {
         console.error('Erro:', response.status);
     }
+
+    // Adiciona um event listener para cada botão de dia
+    document.querySelectorAll('.today, .tomorrow, .overmorrow').forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove a classe 'active' de todos os botões de dia
+            document.querySelectorAll('.today, .tomorrow, .overmorrow').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            // Adiciona a classe 'active' apenas ao botão clicado
+            button.classList.add('active');
+        });
+    });
+
+
 }
 
 submitButton.addEventListener('click', () => {
