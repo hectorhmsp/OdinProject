@@ -1,0 +1,12 @@
+{
+  "name": "odinproject",
+  "version": "1.0.0",
+  "description": "![dashboard](https://github.com/hectorhmsp/OdinProject/assets/132489902/980590cc-43da-40ec-9107-e632e4d1f3fb)",
+  "main": "jest_test.js",
+  "scripts": {
+    "test": "jest --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
