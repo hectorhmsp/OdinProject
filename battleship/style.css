@@ -1,0 +1,23 @@
+.tile {
+    border: solid 1px black;
+    height: 50px;
+    width: 50px;
+}
+
+#board {
+    display: grid;
+    width: fit-content;
+    margin: 0;
+}
+
+#horizontal-button {
+    border: solid 1px black;
+    width: 100px;
+    height: 30px;
+    background-color: aquamarine;
+    margin-bottom: 5px;
+}
+
+h1 {
+    margin-bottom: 0;
+}

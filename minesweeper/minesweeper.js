@@ -1,17 +1,3 @@
-// ** TASKS ** //
-//
-// add a condition to not have more than 5 mine surrounding a square, maybe? like, the numbers should go from 1 to 5 only...right?;
-// add classes to the mines, numbered-squares, etc. for better readability;
-// add a "victory" condition (when the player clicked all of the squares without bombs or something);
-// add docummentation;
-// create a "better" alert than the "alert('something')". maybe a div container or something?;
-
-// (cols x rows) = ? mines
-// 8x8 = 10 mines   (easy)
-// 16x16 = 40 mines (medium)
-// 30x16 = 99 mines (hard)
-
-
 divBoard = document.getElementById('board');
 easyButton = document.getElementById('easy');
 mediumButton = document.getElementById('medium');
@@ -26,7 +12,7 @@ let counter;
 let mineFound = 0;
 let gameOver = false;
 let flag = false;
-let revealedSquares = { count: 0};
+let revealedSquares = { count: 0 };
 let allEmptySquares;
 
 easyButton.addEventListener('click', () => {
