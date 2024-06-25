@@ -25,6 +25,7 @@ let isHorizontal = true;
 
 isHorizontalButton.addEventListener('click', () => {
     isHorizontal = !isHorizontal;
+    isHorizontalButton.innerHTML = !isHorizontal ? 'Vertical' : 'Horizontal';
 })
 
 function Ship(length) {
