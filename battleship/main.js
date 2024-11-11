@@ -1,7 +1,7 @@
 //------------------------------
 // ----------- TASKS -----------
 //------------------------------
-// 
+// TESTE
 // 3) colocar para que, no próximo turno do PC, se ele acertou um navio, continue atacando de forma "lógica";
 // 4) alterar os estilos (background, imagens, etc.)
 // 5) ajustar para que, quando eu ataque e acerte um navio, fique vermelho-escuro com um X, e quando errar, ficar azul
@@ -587,6 +587,5 @@ function getShipCoordinates(gameBoardArray) {
     
     return formattedOutput;
 }
-
 
 playGame();
